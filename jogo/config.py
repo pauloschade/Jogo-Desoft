@@ -6,7 +6,7 @@ img_dir = path.join(path.dirname(__file__), 'assets', 'img')
 # Dados gerais do jogo.
 TITULO = 'A jornada do oxi'
 WIDTH = 400 # Largura da tela
-HEIGHT = 720 # Altura da tela
+HEIGHT = 720 # Altura da tela 
 TILE_SIZE = 40 # Tamanho de cada tile 
 
 
@@ -16,7 +16,9 @@ PLAYER_HEIGHT = int(TILE_SIZE * 1.5)
 FPS = 60 # Frames por segundo
 
 
-#futuro tamanho da escada
+# dados do inimigo
+inimigo_width = PLAYER_WIDTH
+inimigo_height = PLAYER_HEIGHT
 
 
 # tamanho de projetil?

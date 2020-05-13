@@ -1,7 +1,7 @@
 import random
 import pygame
-from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, img_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING
-from assets import load_assets, PLAYER_IMG_W, BACKGROUND_E, BLOCK, EMPTY, MAP
+from config import FPS, WIDTH, inimigo_width, inimigo_height, HEIGHT, BLACK, YELLOW, RED, img_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING
+from assets import load_assets, PLAYER_IMG_W, BACKGROUND_E, BLOCK, EMPTY, MAP, INIMIGO_IMG
 
 # Class que representa os blocos do cenário
 class Tile(pygame.sprite.Sprite):
@@ -112,3 +112,64 @@ class Player(pygame.sprite.Sprite):
         if self.state == STILL:
             self.speedy -= JUMP_SIZE
             self.state = JUMPING
+
+# Classe inimigo
+class inimigo(pygame.sprite.Sprite):
+
+    # Construtor da classe.
+    def __init__(self, inimigo_img, row, column, blocks):
+
+        # Construtor da classe pai (Sprite).
+        pygame.sprite.Sprite.__init__(self)
+
+        self.image = inimigo_img
+        # ajusta o tamanho do inimigo
+        inimigo_img = pygame.transform.scale(inimigo_img, (inimigo_width, inimigo_height))
+        self.mask = pygame.mask.from_surface(self.image)
+        self.rect = self.image.get_rect()
+        self.rect.x = 0
+        self.rect.y = 0
+        self.rect.bottom =  row * TILE_SIZE
+        self.speedx = 5
+        self.speedy = GRAVITY
+        # Guarda o grupo de blocos para tratar as colisões
+        self.blocks = blocks
+    def update (self):
+        # Atualizando a posição do inimigo
+        self.rect.x += self.speedx
+        self.rect.y += self.speedy
+        # Se o inimigo bater no final da tela, muda o lado do movimento
+        # Tenta andar em x
+        self.rect.x += self.speedx
+        # Corrige a posição caso tenha passado do tamanho da janela
+        if self.rect.right >= WIDTH:
+            self.rect.right = WIDTH - 1
+            self.speedx = -5
+        elif self.rect.left < 0:
+            self.rect.left = 0
+            self.speedx = 0
+
+
+        # Se colidiu com algum bloco, volta para o ponto antes da colisão
+        collisions_ini = pygame.sprite.spritecollide(self, self.blocks, False)
+        # Corrige a posição do personagem para antes da colisão
+        for collision in collisions_ini:
+            # Estava indo para baixo
+            if self.speedy > 0:
+                self.rect.bottom = collision.rect.top
+                # Se colidiu com algo, para de cair
+                self.speedy = 0
+
+         # Se colidiu com algum bloco, volta para o ponto antes da colisão e muda de sentido
+        collisions_ini = pygame.sprite.spritecollide(self, self.blocks, False)
+        # Corrige a posição do personagem para antes da colisão
+        for collision in collisions_ini:
+            # Estava indo para a direita
+            if self.speedx > 0:
+                self.rect.right = collision.rect.left
+                self.speedx = -5
+            # Estava indo para a esquerda
+            elif self.speedx < 0:
+                self.rect.left = collision.rect.right
+                self.speedx = 5
+        
