@@ -200,7 +200,7 @@ def game_screen(screen):
     # Cria Sprite do jogador
     player = Player(assets[PLAYER_IMG], 12, 2, blocks)
 
-    BACKGROUND = pygame.image.load(path.join(img_dir, '')).convert()
+    BACKGROUND = pygame.image.load(path.join(img_dir, 'earth_land_em_pe.png')).convert()
     
 
     # Cria tiles de acordo com o mapa
@@ -256,6 +256,7 @@ def game_screen(screen):
 
         # A cada loop, redesenha o fundo e os sprites
         screen.fill(BLACK)
+        screen.blit (BACKGROUND, (0,0))
         all_sprites.draw(screen)
 
         # Depois de desenhar tudo, inverte o display.
@@ -270,7 +271,6 @@ pygame.mixer.init()
 # Tamanho da tela.
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 BACKGROUND = pygame.image.load(path.join(img_dir, 'earth_land_em_pe.png')).convert()
-screen.blit
 # Nome do jogo
 pygame.display.set_caption(TITULO)
 

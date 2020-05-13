@@ -2,6 +2,9 @@ import pygame
 import random
 from os import path
 
+
+#teste
+
 imagens = path.join(path.dirname(__file__), "assets/img")
 
 
