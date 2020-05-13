@@ -257,7 +257,7 @@ def game_screen(screen):
         all_sprites.update()
 
         # A cada loop, redesenha o fundo e os sprites
-        screen.blit(BACKGROUND, (0, 0))
+        screen.blit(BACKGROUND, (0, -50))
         all_sprites.draw(screen)
 
         # Depois de desenhar tudo, inverte o display.
