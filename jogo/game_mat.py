@@ -9,7 +9,7 @@ from os import path
 img_dir = path.join(path.dirname(__file__), 'assets/img')
 
 # Dados gerais do jogo.
-TITULO = 'Exemplo de Pulo com obstáculos'
+TITULO = 'MAT'
 WIDTH = 400 # Largura da tela
 HEIGHT = 720 # Altura da tela
 TILE_SIZE = 40 # Tamanho de cada tile (cada tile é um quadrado)
@@ -19,6 +19,7 @@ FPS = 60 # Frames por segundo
 
 # Imagens
 PLAYER_IMG = 'player_img'
+ATTACK = 'attack'
 
 # Define algumas variáveis com as cores básicas
 WHITE = (255, 255, 255)
@@ -92,7 +93,7 @@ class Tile(pygame.sprite.Sprite):
 class Player(pygame.sprite.Sprite):
 
     # Construtor da classe.
-    def __init__(self, player_img, row, column, blocks):
+    def __init__(self, groups, assets, row, column, blocks):
 
         # Construtor da classe pai (Sprite).
         pygame.sprite.Sprite.__init__(self)
@@ -102,7 +103,7 @@ class Player(pygame.sprite.Sprite):
         self.state = STILL
 
         # Ajusta o tamanho da imagem
-        player_img = pygame.transform.scale(player_img, (PLAYER_WIDTH, PLAYER_HEIGHT))
+        player_img = pygame.transform.scale(assets[PLAYER_IMG], (PLAYER_WIDTH, PLAYER_HEIGHT))
 
         # Define a imagem do sprite. Nesse exemplo vamos usar uma imagem estática (não teremos animação durante o pulo)
         self.image = player_img
@@ -116,9 +117,17 @@ class Player(pygame.sprite.Sprite):
         # row é o índice da linha embaixo do personagem
         self.rect.x = column * TILE_SIZE
         self.rect.bottom = row * TILE_SIZE
+        self.rect.centery = PLAYER_HEIGHT / 2
 
         self.speedx = 0
         self.speedy = 0
+
+        self.groups = groups
+        self.assets = assets
+
+        self.last_attack = pygame.time.get_ticks()
+        self.attack_ticks = 500
+
 
     # Metodo que atualiza a posição do personagem
     def update(self):
@@ -177,12 +186,52 @@ class Player(pygame.sprite.Sprite):
             self.speedy -= JUMP_SIZE
             self.state = JUMPING
 
+    def attack(self):
+        # Verifica se pode atirar
+        now = pygame.time.get_ticks()
+        # Verifica quantos ticks se passaram desde o último tiro.
+        elapsed_ticks = now - self.last_attack
+
+        # Se já pode atirar novamente...
+        if elapsed_ticks > self.attack_ticks:
+            # Marca o tick da nova imagem.
+            self.last_attack = now
+            # A nova bala vai ser criada logo acima e no centro horizontal da nave
+            new_attack = Attack(self.assets, self.rect.centery, self.rect.right)
+            self.groups['all_sprites'].add(new_attack)
+            self.groups['all_bullets'].add(new_attack)
+
+class Attack(pygame.sprite.Sprite):
+    # Construtor da classe.
+    def __init__(self, assets, centery, right):
+        # Construtor da classe mãe (Sprite).
+        pygame.sprite.Sprite.__init__(self)
+
+        self.image = assets[ATTACK]
+        self.mask = pygame.mask.from_surface(self.image)
+        self.rect = self.image.get_rect()
+
+        # Coloca no lugar inicial definido em x, y do constutor
+        self.rect.centery = centery
+        self.speedx = 5  # Velocidade fixa para cima
+        self.rect.x = right - 10
+
+    def update(self):
+        # A bala só se move no eixo x
+        self.rect.x += self.speedx
+
+        # Se o tiro passar do inicio da tela, morre.
+        if self.rect.right > WIDTH:
+            self.kill()
+
 
 # Carrega todos os assets de uma vez.
 def load_assets(img_dir):
     assets = {}
     assets[PLAYER_IMG] = pygame.image.load(path.join(img_dir, 'wakanda.png')).convert_alpha()
     assets[BLOCK] = pygame.image.load(path.join(img_dir, 'tile.png')).convert()
+    attack_img = pygame.image.load(path.join(img_dir, 'right_attack.png')).convert_alpha()
+    assets[ATTACK] = pygame.transform.scale(attack_img, (40, 26))
     
     return assets
 
@@ -196,12 +245,16 @@ def game_screen(screen):
 
     # Cria um grupo de todos os sprites.
     all_sprites = pygame.sprite.Group()
+    all_bullets = pygame.sprite.Group()
+    groups = {}
+    groups['all_sprites'] = all_sprites
+    groups['all_bullets'] = all_bullets
     # Cria um grupo somente com os sprites de bloco.
     # Sprites de block são aqueles que impedem o movimento do jogador
     blocks = pygame.sprite.Group()
 
     # Cria Sprite do jogador
-    player = Player(assets[PLAYER_IMG], 12, 2, blocks)
+    player = Player(groups, assets, 12, 2, blocks)
 
     
 
@@ -241,8 +294,10 @@ def game_screen(screen):
                     player.speedx -= SPEED_X
                 elif event.key == pygame.K_RIGHT:
                     player.speedx += SPEED_X
-                elif event.key == pygame.K_UP or event.key == pygame.K_SPACE:
+                elif event.key == pygame.K_UP:
                     player.jump()
+                elif event.key == pygame.K_SPACE:
+                    player.attack()
 
             # Verifica se soltou alguma tecla.
             if event.type == pygame.KEYUP:
