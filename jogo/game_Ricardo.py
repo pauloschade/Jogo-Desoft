@@ -1,37 +1,32 @@
 import pygame
-import random
+from config import FPS, TITULO, WIDTH, HEIGHT, BLACK, YELLOW, RED, img_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING
+from game_screen import game_screen
 from os import path
 
 
-imagens = path.join(path.dirname(__file__), "assets/img")
 pygame.init()
+pygame.mixer.init()
 
-dimns = (1200, 410)
-window = pygame.display.set_mode(dimns)
-player_HEIGHT = 81
-player_WIDTH = 81
-font = pygame.font.SysFont(None, 48)
-pygame.display.set_caption('Jogo do Mat')
-earth_land = pygame.image.load('assets/img/earth_land.png').convert()
-background1 = pygame.transform.scale(earth_land,dimns)
-player_img = pygame.image.load(path.join(imagens, 'wakanda.png')).convert_alpha()
-player_img_small =  pygame.transform.scale(player_img, (player_WIDTH, player_HEIGHT))
-player_x = 600
-player_y = 270
+# Define estados possíveis do jogador
+STILL = 0
+JUMPING = 1
+FALLING = 2
 
-game = True
+# Tamanho da tela.
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+bg = pygame.image.load(path.join(img_dir, 'earth_land_em_pe.png')).convert()
+BACKGROUND_E = pygame.transform.scale(bg, (WIDTH, HEIGHT))
+# Nome do jogo
+pygame.display.set_caption(TITULO)
 
-while game:
-    for event in pygame.event.get():
-        if event.type == pygame.KEYUP:
-            game = False
+# Imprime instruções
+print('*' * len(TITULO))
+print(TITULO.upper())
+print('*' * len(TITULO))
+print('Utilize as setas do teclado para andar e pular.')
 
-    window.fill((0, 0, 0))
-    window.blit(background1, (0, 0))
-    window.blit(player_img_small, (player_x, player_y))
-
-    pygame.display.update()
-
-pygame.quit()
-
-
+# Comando para evitar travamentos.
+try:
+    game_screen(screen)
+finally:
+    pygame.quit()

@@ -34,3 +34,16 @@ YELLOW = (255, 255, 0)
 INIT = 0
 GAME = 1
 QUIT = 2
+
+# Define a aceleração da gravidade
+GRAVITY = 5
+# Define a velocidade inicial no pulo
+JUMP_SIZE = TILE_SIZE
+# Define a velocidade em x
+SPEED_X = 5
+
+
+# Define estados possíveis do jogador
+STILL = 0
+JUMPING = 1
+FALLING = 2
