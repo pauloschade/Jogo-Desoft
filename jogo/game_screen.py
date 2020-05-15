@@ -20,11 +20,11 @@ def game_screen(screen):
     blocks = pygame.sprite.Group()
 
     # Cria Sprite do jogador
-    player = Player(assets[PLAYER_IMG_W], 12, 2, blocks)
+    player = Player(assets[PLAYER_IMG_W], 16, 4, blocks)
 
     # Criando os inimigos
     for i in range(4):
-        inimigoss = inimigo(assets[INIMIGO_IMG], 16, 4, blocks)
+        inimigoss = inimigo(assets[INIMIGO_IMG], 12, 2, blocks)
         all_sprites.add(inimigoss)
         all_inimigos.add(inimigoss)
 
