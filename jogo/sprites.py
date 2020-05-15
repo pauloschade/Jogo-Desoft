@@ -1,7 +1,7 @@
 import random
 import pygame
-from config import FPS, WIDTH, inimigo_width, inimigo_height, HEIGHT, BLACK, YELLOW, RED, img_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING
-from assets import load_assets, PLAYER_IMG_W, BACKGROUND_E, BLOCK, EMPTY, MAP, INIMIGO_IMG
+from config import FPS, WIDTH, inimigo_width, inimigo_height, HEIGHT, BLACK, YELLOW, RED, img_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING, VILAO_WIDHT, VILAO_HEIGHT
+from assets import load_assets, PLAYER_IMG_W, BACKGROUND_E, BLOCK, EMPTY, MAP, INIMIGO_IMG, VILAO_IMG
 
 # Class que representa os blocos do cenário
 class Tile(pygame.sprite.Sprite):
@@ -172,4 +172,34 @@ class inimigo(pygame.sprite.Sprite):
             elif self.speedx < 0:
                 self.rect.left = collision.rect.right
                 self.speedx = 5
-        
+
+
+
+
+       
+
+
+
+class Vilao(pygame.sprite.Sprite):
+
+    def __init__(self, vilao_img):
+
+        # Construtor da classe pai (Sprite).
+        pygame.sprite.Sprite.__init__(self)
+
+        # Define estado atual
+        # Usamos o estado para decidir se o jogador pode ou não pular
+        self.state = STILL
+
+        # Ajusta o tamanho da imagem
+        vilao_img = pygame.transform.scale(vilao_img, (VILAO_WIDHT, VILAO_HEIGHT))
+
+        # Define a imagem do sprite. Nesse exemplo vamos usar uma imagem estática (não teremos animação durante o pulo)
+        self.image = vilao_img
+        # Detalhes sobre o posicionamento.
+        self.rect = self.image.get_rect()
+
+        # Posiciona o personagem
+        # row é o índice da linha embaixo do personagem
+        self.rect.centerx = WIDTH/2
+        self.rect.y = 100

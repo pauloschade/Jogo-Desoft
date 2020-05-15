@@ -1,7 +1,7 @@
 import pygame
 from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, img_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING
-from assets import load_assets, PLAYER_IMG_W, BACKGROUND_E, BLOCK, EMPTY, MAP, INIMIGO_IMG
-from sprites import Tile, Player, inimigo
+from assets import load_assets, PLAYER_IMG_W, BACKGROUND_E, BLOCK, EMPTY, MAP, INIMIGO_IMG, VILAO_IMG
+from sprites import Tile, Player, inimigo, Vilao
 from os import path
 
 def game_screen(screen):
@@ -30,6 +30,12 @@ def game_screen(screen):
 
     BACKGROUND_E = pygame.image.load(path.join(img_dir, 'earth_land_em_pe.png')).convert()
     BACKGROUND_E = pygame.transform.scale(BACKGROUND_E, (WIDTH, HEIGHT))
+
+    #cria Vilao
+    vilao = Vilao(assets[VILAO_IMG])
+    all_sprites.add(vilao)
+
+
     
 
     # Cria tiles de acordo com o mapa

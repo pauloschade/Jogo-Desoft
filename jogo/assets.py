@@ -1,11 +1,12 @@
 import pygame
 import os
-from config import PLAYER_WIDTH, PLAYER_HEIGHT, img_dir, TILE_SIZE, inimigo_height, inimigo_width
+from config import PLAYER_WIDTH, PLAYER_HEIGHT, img_dir, TILE_SIZE, inimigo_height, inimigo_width, VILAO_HEIGHT, VILAO_WIDHT
 
 #imagens
 BACKGROUND_E = 'background'
 PLAYER_IMG_W = 'player_img'
 INIMIGO_IMG = 'perry'
+VILAO_IMG = "vilao_img"
 
 
 #tipo de tile
@@ -40,4 +41,5 @@ def load_assets():
     enemy= pygame.image.load(os.path.join(img_dir, 'perry.png')).convert_alpha()
     assets[INIMIGO_IMG] = pygame.transform.scale(enemy, (inimigo_width, inimigo_height))
     assets[BLOCK] = pygame.image.load(os.path.join(img_dir, 'tile.png')).convert()
+    assets[VILAO_IMG] = pygame.image.load(os.path.join(img_dir, 'astrotoshi.png')).convert_alpha()
     return assets

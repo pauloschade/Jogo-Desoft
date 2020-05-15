@@ -20,6 +20,9 @@ FPS = 60 # Frames por segundo
 inimigo_width = PLAYER_WIDTH
 inimigo_height = PLAYER_HEIGHT
 
+#dados vilao
+VILAO_WIDHT = int(PLAYER_WIDTH * 1.5)
+VILAO_HEIGHT = int (PLAYER_HEIGHT * 1.5)
 
 # tamanho de projetil?
 
