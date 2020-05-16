@@ -1,7 +1,7 @@
 import pygame
 from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, img_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING
 from assets import load_assets, PLAYER_IMG_W, BACKGROUND_E, BLOCK, EMPTY, MAP, INIMIGO_IMG, VILAO_IMG
-from sprites import Tile, Player, inimigo, Vilao
+from sprites import Tile, Player, inimigo, Vilao, Attack
 from os import path
 
 def game_screen(screen):
@@ -15,16 +15,20 @@ def game_screen(screen):
     # Cria um grupo de todos os sprites.
     all_sprites = pygame.sprite.Group()
     all_inimigos = pygame.sprite.Group()
+    all_bullets = pygame.sprite.Group() 
     # Cria um grupo somente com os sprites de bloco.
     # Sprites de block são aqueles que impedem o movimento do jogador
     blocks = pygame.sprite.Group()
+    groups = {}
+    groups['all_sprites'] = all_sprites
+    groups['all_bullets'] = all_bullets
 
     # Cria Sprite do jogador
-    player = Player(assets[PLAYER_IMG_W], 16, 4, blocks)
+    player = Player(assets[PLAYER_IMG_W], groups, assets, 40, 2, blocks)
 
     # Criando os inimigos
     for i in range(4):
-        inimigoss = inimigo(assets[INIMIGO_IMG], 12, 2, blocks)
+        inimigoss = inimigo(assets[INIMIGO_IMG], 0, 0, blocks)
         all_sprites.add(inimigoss)
         all_inimigos.add(inimigoss)
 
@@ -74,8 +78,10 @@ def game_screen(screen):
                     player.speedx -= SPEED_X
                 elif event.key == pygame.K_RIGHT:
                     player.speedx += SPEED_X
-                elif event.key == pygame.K_UP or event.key == pygame.K_SPACE:
+                elif event.key == pygame.K_UP:
                     player.jump()
+                elif event.key == event.key == pygame.K_SPACE:
+                    player.attack()
 
             # Verifica se soltou alguma tecla.
             if event.type == pygame.KEYUP:
@@ -91,7 +97,12 @@ def game_screen(screen):
 
         if state == PLAYING:
             # Verifica se houve colisão entre tiro e meteoro
-            hits = pygame.sprite.spritecollide(player, all_inimigos, True, pygame.sprite.collide_mask)
+            hits = pygame.sprite.groupcollide(all_inimigos, all_bullets, True, True, pygame.sprite.collide_mask)
+            for inimigoss in hits: # As chaves são os elementos do primeiro grupo (meteoros) que colidiram com alguma bala
+                # O meteoro e destruido e precisa ser recriado
+                i =  inimigo(assets[INIMIGO_IMG], 0, 0, blocks)
+                all_sprites.add(inimigoss)
+                all_inimigos.add(inimigoss)
 
         # A cada loop, redesenha o fundo e os sprites
         screen.fill(BLACK)
