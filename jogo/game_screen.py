@@ -24,7 +24,7 @@ def game_screen(screen):
     groups['all_bullets'] = all_bullets
 
     # Cria Sprite do jogador
-    player = Player(assets[PLAYER_IMG_W], groups, assets, 40, 2, blocks)
+    player = Player(assets[PLAYER_IMG_W], groups, assets, 10 , 5, blocks)
 
     # Criando os inimigos
     for i in range(4):
@@ -36,7 +36,7 @@ def game_screen(screen):
     BACKGROUND_E = pygame.transform.scale(BACKGROUND_E, (WIDTH, HEIGHT))
 
     #cria Vilao
-    vilao = Vilao(assets[VILAO_IMG])
+    vilao = Vilao(assets[VILAO_IMG], 10, 1)
     all_sprites.add(vilao)
 
 
