@@ -101,11 +101,11 @@ def game_screen(screen):
         if state == PLAYING:
             # Verifica se houve colisão entre tiro e meteoro
             hits = pygame.sprite.groupcollide(all_inimigos, all_bullets, True, True, pygame.sprite.collide_mask)
-            # for inimigoss in hits: # As chaves são os elementos do primeiro grupo (meteoros) que colidiram com alguma bala
-            #     # O meteoro e destruido e precisa ser recriado
-            #     i = inimigo(assets[INIMIGO_IMG], 0, 0, blocks)
-            #     all_sprites.add(i)
-            #     all_inimigos.add(i)
+            #for inimigoss in hits: # As chaves são os elementos do primeiro grupo (meteoros) que colidiram com alguma bala
+                # O meteoro e destruido e precisa ser recriado
+                #inimigoss = inimigo(assets[INIMIGO_IMG], 0, 0, blocks)
+                #all_sprites.add(inimigoss)
+                #all_inimigos.add(inimigoss)
 
         # A cada loop, redesenha o fundo e os sprites
         screen.fill(BLACK)
