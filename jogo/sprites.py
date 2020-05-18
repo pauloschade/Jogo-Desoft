@@ -50,8 +50,8 @@ class Player(pygame.sprite.Sprite):
 
         # Posiciona o personagem
         # row é o índice da linha embaixo do personagem
-        self.rect.x = column * TILE_SIZE
-        self.rect.bottom = row * TILE_SIZE
+        self.rect.x = 40
+        self.rect.bottom =  640
         self.rect.centery = PLAYER_HEIGHT / 2
 
         self.speedx = 0
@@ -143,7 +143,7 @@ class inimigo(pygame.sprite.Sprite):
     # Construtor da classe.
     def __init__(self, inimigo_img, row, column, blocks):
 
-        # Construtor da classe pai (Sprite).
+        # Construtor da classe (Sprite).
         pygame.sprite.Sprite.__init__(self)
 
         self.image = inimigo_img
@@ -235,7 +235,7 @@ class Attack(pygame.sprite.Sprite):
 
 class Vilao(pygame.sprite.Sprite):
 
-    def __init__(self, vilao_img):
+    def __init__(self, vilao_img, row, column):
 
         # Construtor da classe pai (Sprite).
         pygame.sprite.Sprite.__init__(self)
@@ -254,5 +254,5 @@ class Vilao(pygame.sprite.Sprite):
 
         # Posiciona o personagem
         # row é o índice da linha embaixo do personagem
-        self.rect.centerx = WIDTH/2
-        self.rect.y = 100
+        self.rect.centerx = row * TILE_SIZE
+        self.rect.y = column * TILE_SIZE
