@@ -22,21 +22,27 @@ def game_screen(screen):
     groups = {}
     groups['all_sprites'] = all_sprites
     groups['all_bullets'] = all_bullets
+    groups['all_inimigos'] = all_inimigos
 
     # Cria Sprite do jogador
-    player = Player(assets[PLAYER_IMG_W], groups, assets, 10 , 5, blocks)
+    player = Player(assets[PLAYER_IMG_W], groups, assets, 16, 1, blocks)
 
     # Criando os inimigos
     for i in range(4):
-        inimigoss = inimigo(assets[INIMIGO_IMG], 0, 0, blocks)
-        all_sprites.add(inimigoss)
-        all_inimigos.add(inimigoss)
+        if i == 1:
+            inimigoss = inimigo(assets[INIMIGO_IMG], 7 , -1, blocks)
+            all_sprites.add(inimigoss)
+            all_inimigos.add(inimigoss)
+        else:
+            inimigoss = inimigo(assets[INIMIGO_IMG], 5*i , -1, blocks)
+            all_sprites.add(inimigoss)
+            all_inimigos.add(inimigoss)
 
     BACKGROUND_E = pygame.image.load(path.join(img_dir, 'earth_land_em_pe.png')).convert()
     BACKGROUND_E = pygame.transform.scale(BACKGROUND_E, (WIDTH, HEIGHT))
 
     #cria Vilao
-    vilao = Vilao(assets[VILAO_IMG], 10, 1)
+    vilao = Vilao(assets[VILAO_IMG], 1, 5, blocks)
     all_sprites.add(vilao)
 
 
@@ -80,7 +86,7 @@ def game_screen(screen):
                     player.speedx += SPEED_X
                 elif event.key == pygame.K_UP:
                     player.jump()
-                elif event.key == event.key == pygame.K_SPACE:
+                elif event.key == pygame.K_SPACE:
                     player.attack()
 
             # Verifica se soltou alguma tecla.
@@ -100,7 +106,7 @@ def game_screen(screen):
             hits = pygame.sprite.groupcollide(all_inimigos, all_bullets, True, True, pygame.sprite.collide_mask)
             for inimigoss in hits: # As chaves são os elementos do primeiro grupo (meteoros) que colidiram com alguma bala
                 # O meteoro e destruido e precisa ser recriado
-                i =  inimigo(assets[INIMIGO_IMG], 0, 0, blocks)
+                i = inimigo(assets[INIMIGO_IMG], 0, 0, blocks)
                 all_sprites.add(inimigoss)
                 all_inimigos.add(inimigoss)
 

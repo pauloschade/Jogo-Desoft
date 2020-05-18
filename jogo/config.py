@@ -11,13 +11,13 @@ TILE_SIZE = 40 # Tamanho de cada tile
 
 
 #tamanho jogador
-PLAYER_WIDTH = TILE_SIZE
+PLAYER_WIDTH = TILE_SIZE - 1
 PLAYER_HEIGHT = int(TILE_SIZE * 1.5)
 FPS = 60 # Frames por segundo
 
 
 # dados do inimigo
-inimigo_width = PLAYER_WIDTH
+inimigo_width = PLAYER_WIDTH - 5
 inimigo_height = PLAYER_HEIGHT
 
 #dados vilao
