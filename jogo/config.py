@@ -22,7 +22,7 @@ inimigo_height = PLAYER_HEIGHT
 
 #dados vilao
 VILAO_WIDHT = int(PLAYER_WIDTH * 1.5)
-VILAO_HEIGHT = int (PLAYER_HEIGHT * 1.5)
+VILAO_HEIGHT = int (PLAYER_HEIGHT * 2)
 
 # tamanho de projetil
 ATTACK_WIDTH = 40
