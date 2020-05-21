@@ -41,9 +41,11 @@ MAP = [
 def load_assets():
     assets = {}
     assets[BACKGROUND_E] =  pygame.image.load(os.path.join(img_dir, 'earth_land_em_pe.png')).convert()
-    assets[PLAYER_IMG_R] = pygame.image.load(os.path.join(img_dir, 'wakanda.png')).convert_alpha()
-    assets[PLAYER_IMG_L] = pygame.image.load(os.path.join(img_dir, 'wakanda_l.png')).convert_alpha()
-    enemy= pygame.image.load(os.path.join(img_dir, 'perry.png')).convert_alpha()
+    player_r = pygame.image.load(os.path.join(img_dir, 'wakanda.png')).convert_alpha()
+    assets[PLAYER_IMG_R] = pygame.transform.scale(player_r, (PLAYER_WIDTH, PLAYER_HEIGHT))
+    player_l = pygame.image.load(os.path.join(img_dir, 'wakanda_l.png')).convert_alpha()
+    assets[PLAYER_IMG_L] = pygame.transform.scale(player_l, (PLAYER_WIDTH, PLAYER_HEIGHT))
+    enemy = pygame.image.load(os.path.join(img_dir, 'perry.png')).convert_alpha()
     assets[INIMIGO_IMG] = pygame.transform.scale(enemy, (inimigo_width, inimigo_height))
     assets[BLOCK] = pygame.image.load(os.path.join(img_dir, 'tile.png')).convert_alpha()
     assets[VILAO_IMG] = pygame.image.load(os.path.join(img_dir, 'astrotoshi.png')).convert_alpha()
