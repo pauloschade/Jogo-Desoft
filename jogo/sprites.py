@@ -1,6 +1,6 @@
 import random
 import pygame
-from config import FPS, WIDTH, inimigo_width, inimigo_height, HEIGHT, BLACK, YELLOW, RED, img_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING, RIGHT, LEFT, VILAO_WIDHT, VILAO_HEIGHT, ATTACK_HEIGHT, ATTACK_WIDTH
+from config import FPS, WIDTH, inimigo_width, inimigo_height, HEIGHT, BLACK, YELLOW, RED, img_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING, VILAO_WIDHT, VILAO_HEIGHT, ATTACK_HEIGHT, ATTACK_WIDTH
 from assets import load_assets, BACKGROUND_E, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, BLOCK, EMPTY, MAP
 
 # Class que representa os blocos do cenário
@@ -37,9 +37,6 @@ class Player(pygame.sprite.Sprite):
         # Usamos o estado para decidir se o jogador pode ou não pular
         self.state = STILL
 
-        # Ajusta o tamanho da imagem
-        player_img = pygame.transform.scale(player_img, (PLAYER_WIDTH, PLAYER_HEIGHT))
-
         # Define a imagem do sprite. Nesse exemplo vamos usar uma imagem estática (não teremos animação durante o pulo)
         self.image = player_img
         # Detalhes sobre o posicionamento.
@@ -61,7 +58,7 @@ class Player(pygame.sprite.Sprite):
 
 
         self.last_attack = pygame.time.get_ticks()
-        self.attack_ticks = 1000
+        self.attack_ticks = 3000
 
 
     # Metodo que atualiza a posição do personagem
@@ -95,10 +92,6 @@ class Player(pygame.sprite.Sprite):
                 self.speedy = 0
                 # Atualiza o estado para parado
                 self.state = STILL
-        if self.speedx > 0:
-            self.state = RIGHT
-        elif self.speedx < 0:
-            self.state = LEFT
 
         # Tenta andar em x
         self.rect.x += self.speedx
@@ -124,7 +117,8 @@ class Player(pygame.sprite.Sprite):
         if self.state == STILL:
             self.speedy -= JUMP_SIZE
             self.state = JUMPING
-    def attack(self):
+
+    def attack_right(self):
     # Verifica se pode atirar
         now = pygame.time.get_ticks()
     # Verifica quantos ticks se passaram desde o último tiro.
@@ -135,7 +129,22 @@ class Player(pygame.sprite.Sprite):
         # Marca o tick da nova imagem.
             self.last_attack = now
         # A nova bala vai ser criada logo acima e no centro horizontal da nave
-            new_attack = Attack(self.assets, self.rect.centery, self.rect.right)
+            new_attack = Attack_right(self.assets, self.rect.centery, self.rect.right)
+            self.groups['all_sprites'].add(new_attack)
+            self.groups['all_bullets'].add(new_attack)
+
+    def attack_left(self):
+    # Verifica se pode atirar
+        now = pygame.time.get_ticks()
+    # Verifica quantos ticks se passaram desde o último tiro.
+        elapsed_ticks = now - self.last_attack
+
+    # Se já pode atirar novamente...
+        if elapsed_ticks > self.attack_ticks:
+        # Marca o tick da nova imagem.
+            self.last_attack = now
+        # A nova bala vai ser criada logo acima e no centro horizontal da nave
+            new_attack = Attack_left(self.assets, self.rect.centery, self.rect.right)
             self.groups['all_sprites'].add(new_attack)
             self.groups['all_bullets'].add(new_attack)
 
@@ -161,6 +170,7 @@ class inimigo(pygame.sprite.Sprite):
         self.speedy = 0
         # Guarda o grupo de blocos para tratar as colisões
         self.blocks = blocks
+
     def update (self):
 
         self.speedy += GRAVITY
@@ -205,7 +215,7 @@ class inimigo(pygame.sprite.Sprite):
 
 
 
-class Attack(pygame.sprite.Sprite):
+class Attack_right(pygame.sprite.Sprite):
     # Construtor da classe.
     def __init__(self, assets, centery, right):
         # Construtor da classe mãe (Sprite).
@@ -218,7 +228,7 @@ class Attack(pygame.sprite.Sprite):
         # Coloca no lugar inicial definido em x, y do constutor
         self.rect.centery = centery
         self.speedx = 12  
-        self.rect.x = right - 10
+        self.rect.x = right - 20
 
     def update(self):
         # A bala só se move no eixo x
@@ -228,7 +238,28 @@ class Attack(pygame.sprite.Sprite):
         if self.rect.right > WIDTH:
             self.kill()
 
+class Attack_left(pygame.sprite.Sprite):
+    # Construtor da classe.
+    def __init__(self, assets, centery, right):
+        # Construtor da classe mãe (Sprite).
+        pygame.sprite.Sprite.__init__(self)
 
+        self.image = assets[LEFT_ATTACK]
+        self.mask = pygame.mask.from_surface(self.image)
+        self.rect = self.image.get_rect()
+
+        # Coloca no lugar inicial definido em x, y do constutor
+        self.rect.centery = centery
+        self.speedx = 12  
+        self.rect.x = right - 50
+
+    def update(self):
+        # A bala só se move no eixo x
+        self.rect.x -= self.speedx
+
+        # Se o tiro passar do inicio da tela, morre.
+        if self.rect.right > WIDTH:
+            self.kill()
 
 
 

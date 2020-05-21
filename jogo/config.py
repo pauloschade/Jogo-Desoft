@@ -17,12 +17,12 @@ FPS = 60 # Frames por segundo
 
 
 # dados do inimigo
-inimigo_width = PLAYER_WIDTH - 5
-inimigo_height = PLAYER_HEIGHT
+inimigo_width = TILE_SIZE - 5
+inimigo_height = PLAYER_HEIGHT - 10
 
 #dados vilao
 VILAO_WIDHT = int(PLAYER_WIDTH * 1.5)
-VILAO_HEIGHT = int (PLAYER_HEIGHT * 1.5)
+VILAO_HEIGHT = int (PLAYER_HEIGHT * 2)
 
 # tamanho de projetil
 ATTACK_WIDTH = 40
@@ -54,5 +54,3 @@ SPEED_X = 5
 STILL = 0
 JUMPING = 1
 FALLING = 2
-RIGHT = 3
-LEFT = 4

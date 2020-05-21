@@ -1,7 +1,7 @@
 import pygame
-from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, img_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING, RIGHT, LEFT
+from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, img_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING
 from assets import load_assets, BACKGROUND_E, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, BLOCK, EMPTY, MAP
-from sprites import Tile, Player, inimigo, Vilao, Attack
+from sprites import Tile, Player, inimigo, Vilao, Attack_right, Attack_left
 from os import path
 
 def game_screen(screen):
@@ -14,6 +14,7 @@ def game_screen(screen):
 
     # Cria um grupo de todos os sprites.
     all_sprites = pygame.sprite.Group()
+    all_players = pygame.sprite.Group()
     all_inimigos = pygame.sprite.Group()
     all_bullets = pygame.sprite.Group() 
     # Cria um grupo somente com os sprites de bloco.
@@ -21,13 +22,13 @@ def game_screen(screen):
     blocks = pygame.sprite.Group()
     groups = {}
     groups['all_sprites'] = all_sprites
+    groups['all_players'] = all_players
     groups['all_bullets'] = all_bullets
     groups['all_inimigos'] = all_inimigos
 
     # Cria Sprite do jogador
     player = Player(assets[PLAYER_IMG_R], groups, assets, 16, 1, blocks)
-    if player.state == LEFT:
-        player = Player(assets[PLAYER_IMG_L], groups, assets, 16, 1, blocks)
+
 
     # Criando os inimigos
     for i in range(4):
@@ -56,6 +57,7 @@ def game_screen(screen):
 
     # Adiciona o jogador no grupo de sprites por último para ser desenhado por
     # cima dos blocos
+    all_players.add(player)
     all_sprites.add(player)
 
     PLAYING = 0
@@ -79,20 +81,26 @@ def game_screen(screen):
                 # Dependendo da tecla, altera o estado do jogador.
                 if event.key == pygame.K_LEFT:
                     player.speedx -= SPEED_X
+                    player.image = assets[PLAYER_IMG_L]
                 elif event.key == pygame.K_RIGHT:
                     player.speedx += SPEED_X
+                    player.image = assets[PLAYER_IMG_R]
                 elif event.key == pygame.K_UP:
                     player.jump()
-                elif event.key == pygame.K_SPACE:
-                    player.attack()
+                elif event.key == pygame.K_x:
+                    player.attack_right()
+                elif event.key == pygame.K_z:
+                    player.attack_left()
 
             # Verifica se soltou alguma tecla.
             if event.type == pygame.KEYUP:
                 # Dependendo da tecla, altera o estado do jogador.
                 if event.key == pygame.K_LEFT:
                     player.speedx += SPEED_X
+                    player.image = assets[PLAYER_IMG_L]
                 elif event.key == pygame.K_RIGHT:
                     player.speedx -= SPEED_X
+                    player.image = assets[PLAYER_IMG_R]
 
         # Depois de processar os eventos.
         # Atualiza a acao de cada sprite. O grupo chama o método update() de cada Sprite dentre dele.
@@ -101,6 +109,7 @@ def game_screen(screen):
         if state == PLAYING:
             # Verifica se houve colisão entre tiro e meteoro
             hits = pygame.sprite.groupcollide(all_inimigos, all_bullets, True, True, pygame.sprite.collide_mask)
+            hits2 = pygame.sprite.groupcollide(all_inimigos, all_players, False, True, pygame.sprite.collide_mask)
             #for inimigoss in hits: # As chaves são os elementos do primeiro grupo (meteoros) que colidiram com alguma bala
                 # O meteoro e destruido e precisa ser recriado
                 #inimigoss = inimigo(assets[INIMIGO_IMG], 0, 0, blocks)
