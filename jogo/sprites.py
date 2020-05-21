@@ -58,7 +58,7 @@ class Player(pygame.sprite.Sprite):
 
 
         self.last_attack = pygame.time.get_ticks()
-        self.attack_ticks = 1000
+        self.attack_ticks = 3000
 
 
     # Metodo que atualiza a posição do personagem
@@ -170,7 +170,7 @@ class inimigo(pygame.sprite.Sprite):
         self.speedy = 0
         # Guarda o grupo de blocos para tratar as colisões
         self.blocks = blocks
-        
+
     def update (self):
 
         self.speedy += GRAVITY
