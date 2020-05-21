@@ -211,7 +211,7 @@ class Attack(pygame.sprite.Sprite):
         # Construtor da classe mãe (Sprite).
         pygame.sprite.Sprite.__init__(self)
 
-        self.image = assets[ATTACK]
+        self.image = assets[RIGHT_ATTACK]
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
 
