@@ -28,6 +28,11 @@ VILAO_HEIGHT = int (PLAYER_HEIGHT * 2)
 ATTACK_WIDTH = 40
 ATTACK_HEIGHT = 26
 
+# ataque do Toshi
+T_ATTACK_WIDTH = 40
+T_ATTACK_HEIGHT = 26
+
+
 
 # algumas variáveis com as cores básicas
 WHITE = (255, 255, 255)

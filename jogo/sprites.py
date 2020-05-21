@@ -1,7 +1,7 @@
 import random
 import pygame
 from config import FPS, WIDTH, inimigo_width, inimigo_height, HEIGHT, BLACK, YELLOW, RED, img_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING, VILAO_WIDHT, VILAO_HEIGHT, ATTACK_HEIGHT, ATTACK_WIDTH
-from assets import load_assets, BACKGROUND_E, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, BLOCK, EMPTY, MAP
+from assets import load_assets, BACKGROUND_E, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, BLOCK, EMPTY, MAP, TOSHI_ATTACK
 
 # Class que representa os blocos do cenário
 class Tile(pygame.sprite.Sprite):
@@ -58,7 +58,7 @@ class Player(pygame.sprite.Sprite):
 
 
         self.last_attack = pygame.time.get_ticks()
-        self.attack_ticks = 3000
+        self.attack_ticks = 1000
 
 
     # Metodo que atualiza a posição do personagem
@@ -333,3 +333,32 @@ class Vilao(pygame.sprite.Sprite):
             elif self.speedx < 0:
                 self.rect.left = collision.rect.right
                 self.speedx = 1
+
+class ataque_vilao (pygame.sprite.Sprite):
+
+    def __init__(self, assets):
+
+        # Construtor da classe pai (Sprite).
+        pygame.sprite.Sprite.__init__(self)
+
+        self.image = assets[TOSHI_ATTACK]
+        self.mask = pygame.mask.from_surface(self.image)
+        self.rect = self.image.get_rect()
+        # Posiciona o personagem
+        # row é o índice da linha embaixo do personagem
+        self.rect.x = 200
+        self.rect.y = 240
+        self.speedx = random.randint(-3, 3)
+        self.speedy = random.randint(2, 4)
+
+    def update (self):
+
+        self.rect.x += self.speedx
+        self.rect.y += self.speedy
+         # Se o ataque passar do final da tela, volta para cima e sorteia
+        # novas posições e velocidades
+        if self.rect.top > HEIGHT or self.rect.right < 0 or self.rect.left > WIDTH:
+            self.rect.x = 200
+            self.rect.y = 240
+            self.speedx = random.randint(-2, 2)
+            self.speedy = random.randint(2, 4)
