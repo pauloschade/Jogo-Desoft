@@ -1,6 +1,6 @@
 import pygame
 import os
-from config import PLAYER_WIDTH, PLAYER_HEIGHT, img_dir, TILE_SIZE, inimigo_height, inimigo_width, VILAO_HEIGHT, VILAO_WIDHT, ATTACK_HEIGHT, ATTACK_WIDTH
+from config import PLAYER_WIDTH, PLAYER_HEIGHT, img_dir, TILE_SIZE, inimigo_height, inimigo_width, VILAO_HEIGHT, VILAO_WIDHT, ATTACK_HEIGHT, ATTACK_WIDTH, T_ATTACK_HEIGHT, T_ATTACK_WIDTH
 
 #imagens
 BACKGROUND_E = 'background'
@@ -10,6 +10,7 @@ INIMIGO_IMG = 'perry'
 VILAO_IMG = "vilao_img"
 RIGHT_ATTACK = 'right_attack'
 LEFT_ATTACK = 'left_attack'
+TOSHI_ATTACK = 'toshi attack'
 
 
 #tipo de tile
@@ -53,4 +54,6 @@ def load_assets():
     assets[RIGHT_ATTACK] = pygame.transform.scale(right_attack_img, (ATTACK_WIDTH, ATTACK_HEIGHT))
     left_attack_img = pygame.image.load(os.path.join(img_dir, 'left_attack.png')).convert_alpha()
     assets[LEFT_ATTACK] = pygame.transform.scale(left_attack_img, (ATTACK_WIDTH, ATTACK_HEIGHT))
+    toshi_attack_img = pygame.image.load(os.path.join(img_dir, 'dito.png')).convert_alpha()
+    assets[TOSHI_ATTACK] = pygame.transform.scale(toshi_attack_img, (T_ATTACK_WIDTH, T_ATTACK_HEIGHT))
     return assets

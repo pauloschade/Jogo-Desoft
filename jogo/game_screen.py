@@ -1,7 +1,7 @@
 import pygame
 from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, img_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING
 from assets import load_assets, BACKGROUND_E, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, BLOCK, EMPTY, MAP
-from sprites import Tile, Player, inimigo, Vilao, Attack_right, Attack_left
+from sprites import Tile, Player, inimigo, Vilao, Attack_right, Attack_left, ataque_vilao
 from os import path
 
 def game_screen(screen):
@@ -17,6 +17,7 @@ def game_screen(screen):
     all_players = pygame.sprite.Group()
     all_inimigos = pygame.sprite.Group()
     all_bullets = pygame.sprite.Group() 
+    all_toshi_attacks = pygame.sprite.Group()  
     # Cria um grupo somente com os sprites de bloco.
     # Sprites de block são aqueles que impedem o movimento do jogador
     blocks = pygame.sprite.Group()
@@ -25,6 +26,7 @@ def game_screen(screen):
     groups['all_players'] = all_players
     groups['all_bullets'] = all_bullets
     groups['all_inimigos'] = all_inimigos
+    groups['all_toshi_attacks'] = all_toshi_attacks
 
     # Cria Sprite do jogador
     player = Player(assets[PLAYER_IMG_R], groups, assets, 16, 1, blocks)
@@ -43,7 +45,10 @@ def game_screen(screen):
     vilao = Vilao(assets[VILAO_IMG], 1, 5, blocks)
     all_sprites.add(vilao)
 
-
+    for i in range(2):
+        ataquess= ataque_vilao(assets)
+        all_sprites.add(ataquess)
+        all_toshi_attacks.add(ataquess)
     
 
     # Cria tiles de acordo com o mapa
@@ -110,6 +115,7 @@ def game_screen(screen):
             # Verifica se houve colisão entre tiro e meteoro
             hits = pygame.sprite.groupcollide(all_inimigos, all_bullets, True, True, pygame.sprite.collide_mask)
             hits2 = pygame.sprite.groupcollide(all_inimigos, all_players, False, True, pygame.sprite.collide_mask)
+            hits3 = pygame.sprite.groupcollide(all_toshi_attacks, all_players, True, True, pygame.sprite.collide_mask)
             #for inimigoss in hits: # As chaves são os elementos do primeiro grupo (meteoros) que colidiram com alguma bala
                 # O meteoro e destruido e precisa ser recriado
                 #inimigoss = inimigo(assets[INIMIGO_IMG], 0, 0, blocks)
