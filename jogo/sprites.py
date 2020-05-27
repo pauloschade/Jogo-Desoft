@@ -1,7 +1,7 @@
 import random
 import pygame
 from config import FPS, WIDTH, inimigo_width, inimigo_height, HEIGHT, BLACK, YELLOW, RED, img_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING, VILAO_WIDHT, VILAO_HEIGHT, ATTACK_HEIGHT, ATTACK_WIDTH
-from assets import load_assets, BACKGROUND_E, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, BLOCK, EMPTY, MAP, TOSHI_ATTACK
+from assets import load_assets, BACKGROUND_E, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, BLOCK, EMPTY, MAP, TOSHI_ATTACK, FLAG
 
 # Class que representa os blocos do cenário
 class Tile(pygame.sprite.Sprite):
@@ -362,3 +362,26 @@ class ataque_vilao (pygame.sprite.Sprite):
             self.rect.y = 240
             self.speedx = random.randint(-2, 2)
             self.speedy = random.randint(2, 4)
+class flag (pygame.sprite.Sprite):
+    
+    
+    def __init__(self, assets):
+
+        # Construtor da classe pai (Sprite).
+        pygame.sprite.Sprite.__init__(self)
+
+        self.image = assets[FLAG]
+        self.mask = pygame.mask.from_surface(self.image)
+        self.rect = self.image.get_rect()
+        self.rect.x = 100
+        self.rect.y = 240
+        self.speedx = 0
+        self.speedy = 0
+    def update (self):
+
+        self.rect.x = 100
+        self.rect.y = 240
+        self.speedx = 0
+        self.speedy = 0
+
+

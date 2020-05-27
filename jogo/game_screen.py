@@ -1,7 +1,7 @@
 import pygame
 from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, img_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING
 from assets import load_assets, BACKGROUND_E, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, BLOCK, EMPTY, MAP
-from sprites import Tile, Player, inimigo, Vilao, Attack_right, Attack_left, ataque_vilao
+from sprites import Tile, Player, inimigo, Vilao, Attack_right, Attack_left, ataque_vilao, flag
 from os import path
 
 def game_screen(screen):
@@ -14,19 +14,21 @@ def game_screen(screen):
 
     # Cria um grupo de todos os sprites.
     all_sprites = pygame.sprite.Group()
-    all_players = pygame.sprite.Group()
+    # all_players = pygame.sprite.Group()
     all_inimigos = pygame.sprite.Group()
     all_bullets = pygame.sprite.Group() 
     all_toshi_attacks = pygame.sprite.Group()  
+    all_flags = pygame.sprite.Group() 
     # Cria um grupo somente com os sprites de bloco.
     # Sprites de block são aqueles que impedem o movimento do jogador
     blocks = pygame.sprite.Group()
     groups = {}
     groups['all_sprites'] = all_sprites
-    groups['all_players'] = all_players
+    # groups['all_players'] = all_players
     groups['all_bullets'] = all_bullets
     groups['all_inimigos'] = all_inimigos
     groups['all_toshi_attacks'] = all_toshi_attacks
+    groups['all_flags'] = all_flags
 
     # Cria Sprite do jogador
     player = Player(assets[PLAYER_IMG_R], groups, assets, 16, 1, blocks)
@@ -62,14 +64,22 @@ def game_screen(screen):
 
     # Adiciona o jogador no grupo de sprites por último para ser desenhado por
     # cima dos blocos
-    all_players.add(player)
+    # all_players.add(player)
     all_sprites.add(player)
 
+    # adiciona bandeira
+    Flag = flag(assets)
+    all_sprites.add(Flag)
+    all_flags.add(Flag)
     PLAYING = 0
     DONE = 1
+    WIN = 2
+    lives = 3
 
+    c = 0
+    all_hits = 0
     state = PLAYING
-    while state != DONE:
+    while state == PLAYING:
 
         # Ajusta a velocidade do jogo.
         clock.tick(FPS)
@@ -114,8 +124,24 @@ def game_screen(screen):
         if state == PLAYING:
             # Verifica se houve colisão entre tiro e meteoro
             hits = pygame.sprite.groupcollide(all_inimigos, all_bullets, True, True, pygame.sprite.collide_mask)
-            hits2 = pygame.sprite.groupcollide(all_inimigos, all_players, False, True, pygame.sprite.collide_mask)
-            hits3 = pygame.sprite.groupcollide(all_toshi_attacks, all_players, True, True, pygame.sprite.collide_mask)
+            hits2 = pygame.sprite.spritecollide(player, all_inimigos, True, pygame.sprite.collide_mask)
+            hits3 = pygame.sprite.spritecollide(player, all_toshi_attacks, True, pygame.sprite.collide_mask)
+            hits4 = pygame.sprite.spritecollide(player, all_flags, False, pygame.sprite.collide_mask)
+            all_hits = len(hits2) + len(hits3)
+            if all_hits > 0:  
+                lives -= 1
+                player.kill()
+                if lives == 0:
+                    state = DONE
+                else:
+                    state = PLAYING
+                    player = Player(assets[PLAYER_IMG_R], groups, assets, 16, 1, blocks)
+                    all_sprites.add(player)
+            if len(hits4) > 0:
+                state = WIN
+            
+
+
             #for inimigoss in hits: # As chaves são os elementos do primeiro grupo (meteoros) que colidiram com alguma bala
                 # O meteoro e destruido e precisa ser recriado
                 #inimigoss = inimigo(assets[INIMIGO_IMG], 0, 0, blocks)
@@ -129,3 +155,8 @@ def game_screen(screen):
 
         # Depois de desenhar tudo, inverte o display.
         pygame.display.flip()
+
+    if state == DONE:
+        return 0
+    elif state == WIN:
+        return 1
