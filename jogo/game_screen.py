@@ -1,6 +1,6 @@
 import pygame
 from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, img_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING
-from assets import load_assets, BACKGROUND_E, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, BLOCK, EMPTY, MAP
+from assets import load_assets, BACKGROUND_E, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, BLOCK, EMPTY, MAP, SCORE_FONT
 from sprites import Tile, Player, inimigo, Vilao, Attack_right, Attack_left, ataque_vilao, flag
 from os import path
 
@@ -71,12 +71,12 @@ def game_screen(screen):
     Flag = flag(assets)
     all_sprites.add(Flag)
     all_flags.add(Flag)
+    keys_down = {}
     PLAYING = 0
     DONE = 1
     WIN = 2
     lives = 3
-
-    c = 0
+    score = 0
     all_hits = 0
     state = PLAYING
     while state == PLAYING:
@@ -93,6 +93,7 @@ def game_screen(screen):
 
             # Verifica se apertou alguma tecla.
             if event.type == pygame.KEYDOWN:
+                keys_down[event.key] = True
                 # Dependendo da tecla, altera o estado do jogador.
                 if event.key == pygame.K_LEFT:
                     player.speedx -= SPEED_X
@@ -110,12 +111,13 @@ def game_screen(screen):
             # Verifica se soltou alguma tecla.
             if event.type == pygame.KEYUP:
                 # Dependendo da tecla, altera o estado do jogador.
-                if event.key == pygame.K_LEFT:
-                    player.speedx += SPEED_X
-                    player.image = assets[PLAYER_IMG_L]
-                elif event.key == pygame.K_RIGHT:
-                    player.speedx -= SPEED_X
-                    player.image = assets[PLAYER_IMG_R]
+                if event.key in keys_down and keys_down[event.key]:
+                    if event.key == pygame.K_LEFT:
+                        player.speedx += SPEED_X
+                        player.image = assets[PLAYER_IMG_L]
+                    elif event.key == pygame.K_RIGHT:
+                        player.speedx -= SPEED_X
+                        player.image = assets[PLAYER_IMG_R]
 
         # Depois de processar os eventos.
         # Atualiza a acao de cada sprite. O grupo chama o método update() de cada Sprite dentre dele.
@@ -131,6 +133,7 @@ def game_screen(screen):
             if all_hits > 0:  
                 lives -= 1
                 player.kill()
+                keys_down = {}
                 if lives == 0:
                     state = DONE
                 else:
@@ -139,19 +142,36 @@ def game_screen(screen):
                     all_sprites.add(player)
             if len(hits4) > 0:
                 state = WIN
-            
+            for inimigoss in hits:
+                score += 100
+                if score == 1000:
+                    lives += 1
+            for ataquess in hits3:
+                ataquess= ataque_vilao(assets)
+                all_sprites.add(ataquess)
+                all_toshi_attacks.add(ataquess)
+            for inimigoss in hits2:
+                inimigoss = inimigo(assets[INIMIGO_IMG], 0 , 0, blocks)
+                all_sprites.add(inimigoss)
+                all_inimigos.add(inimigoss)
 
-
-            #for inimigoss in hits: # As chaves são os elementos do primeiro grupo (meteoros) que colidiram com alguma bala
-                # O meteoro e destruido e precisa ser recriado
-                #inimigoss = inimigo(assets[INIMIGO_IMG], 0, 0, blocks)
-                #all_sprites.add(inimigoss)
-                #all_inimigos.add(inimigoss)
 
         # A cada loop, redesenha o fundo e os sprites
         screen.fill(BLACK)
         screen.blit(BACKGROUND_E, (0,-50))
         all_sprites.draw(screen)
+
+        # desenha o score
+        text_surface = assets[SCORE_FONT].render("{:08d}".format(score), True, YELLOW)
+        text_rect = text_surface.get_rect()
+        text_rect.midtop = (WIDTH / 2, 10)
+        screen.blit(text_surface, text_rect)
+
+        # Desenhando as vidas
+        text_surface = assets[SCORE_FONT].render(chr(9829) * lives, True, RED)
+        text_rect = text_surface.get_rect()
+        text_rect.bottomleft = (10, HEIGHT - 10)
+        screen.blit(text_surface, text_rect)
 
         # Depois de desenhar tudo, inverte o display.
         pygame.display.flip()

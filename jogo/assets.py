@@ -12,6 +12,7 @@ RIGHT_ATTACK = 'right_attack'
 LEFT_ATTACK = 'left_attack'
 TOSHI_ATTACK = 'toshi attack'
 FLAG = 'flag'
+SCORE_FONT = 'score_font'
 
 
 #tipo de tile
@@ -59,4 +60,5 @@ def load_assets():
     assets[TOSHI_ATTACK] = pygame.transform.scale(toshi_attack_img, (T_ATTACK_WIDTH, T_ATTACK_HEIGHT))
     flag_img = pygame.image.load(os.path.join(img_dir, 'flag-end.png')).convert_alpha()
     assets[FLAG] = pygame.transform.scale(flag_img, (FLAG_WIDTH, FLAG_HEIGHT))
+    assets[SCORE_FONT] = pygame.font.Font(os.path.join(img_dir, 'PressStart2P.ttf'), 28)
     return assets
