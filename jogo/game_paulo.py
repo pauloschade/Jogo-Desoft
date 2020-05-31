@@ -1,6 +1,7 @@
 import pygame
 from config import FPS, TITULO, WIDTH, HEIGHT, BLACK, YELLOW, RED, img_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING, inimigo_height, inimigo_width
 from game_screen import game_screen
+from game_screen2 import game_screen2
 from os import path
 from random import randint
 
@@ -28,6 +29,9 @@ print('Utilize as setas do teclado para andar e pular.')
 
 # Comando para evitar travamentos.
 try:
-    game_screen(screen)
+   
+    #if game_screen(screen) == 1:
+    game_screen2(screen)
+
 finally:
     pygame.quit()

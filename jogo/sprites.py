@@ -1,7 +1,7 @@
 import random
 import pygame
 from config import FPS, WIDTH, inimigo_width, inimigo_height, HEIGHT, BLACK, YELLOW, RED, img_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING, VILAO_WIDHT, VILAO_HEIGHT, ATTACK_HEIGHT, ATTACK_WIDTH
-from assets import load_assets, BACKGROUND_E, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, BLOCK, EMPTY, MAP, TOSHI_ATTACK, FLAG
+from assets import load_assets, BACKGROUND_E, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, BLOCK, EMPTY, MAP, TOSHI_ATTACK, FLAG, MAP2
 
 # Class que representa os blocos do cenário
 class Tile(pygame.sprite.Sprite):
@@ -358,8 +358,8 @@ class ataque_vilao (pygame.sprite.Sprite):
          # Se o ataque passar do final da tela, volta para cima e sorteia
         # novas posições e velocidades
         if self.rect.top > HEIGHT or self.rect.right < 0 or self.rect.left > WIDTH:
-            self.rect.x = 200
-            self.rect.y = 240
+            self.rect.x = 180
+            self.rect.y = 150
             self.speedx = random.randint(-2, 2)
             self.speedy = random.randint(2, 4)
 class flag (pygame.sprite.Sprite):

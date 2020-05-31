@@ -1,10 +1,10 @@
 import pygame
 from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, img_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING
-from assets import load_assets, BACKGROUND_E, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, BLOCK, EMPTY, MAP, SCORE_FONT
+from assets import load_assets, BACKGROUND_E, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, BLOCK, EMPTY, SCORE_FONT, MAP2
 from sprites import Tile, Player, inimigo, Vilao, Attack_right, Attack_left, ataque_vilao, flag
 from os import path
 
-def game_screen(screen):
+def game_screen2(screen):
     # Variável para o ajuste de velocidade
     clock = pygame.time.Clock()
 
@@ -40,8 +40,8 @@ def game_screen(screen):
         all_sprites.add(inimigoss)
         all_inimigos.add(inimigoss)
 
-    BACKGROUND_E = pygame.image.load(path.join(img_dir, 'earth_land_em_pe.png')).convert()
-    BACKGROUND_E = pygame.transform.scale(BACKGROUND_E, (WIDTH, HEIGHT))
+    BACKGROUND_L = pygame.image.load(path.join(img_dir, 'earth_land_em_pe.png')).convert()
+    BACKGROUND_L = pygame.transform.scale(BACKGROUND_L, (WIDTH, HEIGHT))
 
     #cria Vilao
     vilao = Vilao(assets[VILAO_IMG], 1, 5, blocks)
@@ -54,9 +54,9 @@ def game_screen(screen):
     
 
     # Cria tiles de acordo com o mapa
-    for row in range(len(MAP)):
-        for column in range(len(MAP[row])):
-            tile_type = MAP[row][column]
+    for row in range(len(MAP2)):
+        for column in range(len(MAP2[row])):
+            tile_type = MAP2[row][column]
             if tile_type == BLOCK:
                 tile = Tile(assets[tile_type], row, column)
                 all_sprites.add(tile)
@@ -142,7 +142,6 @@ def game_screen(screen):
                     all_sprites.add(player)
             if len(hits4) > 0:
                 state = WIN
-                return 1
             for inimigoss in hits:
                 score += 100
                 if score == 1000:
@@ -159,7 +158,7 @@ def game_screen(screen):
 
         # A cada loop, redesenha o fundo e os sprites
         screen.fill(BLACK)
-        screen.blit(BACKGROUND_E, (0,-50))
+        screen.blit(BACKGROUND_L, (0,-50))
         all_sprites.draw(screen)
 
         # desenha o score
