@@ -30,8 +30,8 @@ print('Utilize as setas do teclado para andar e pular.')
 # Comando para evitar travamentos.
 try:
    
-    #if game_screen(screen) == 1:
-    game_screen2(screen)
+    if game_screen(screen) == 1:
+        game_screen2(screen)
 
 finally:
     pygame.quit()

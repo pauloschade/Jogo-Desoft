@@ -79,6 +79,9 @@ def game_screen2(screen):
     score = 0
     all_hits = 0
     state = PLAYING
+    
+    pygame.mixer.music.play(loops=-1)
+
     while state == PLAYING:
 
         # Ajusta a velocidade do jogo.
