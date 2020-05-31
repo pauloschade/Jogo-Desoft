@@ -13,6 +13,7 @@ LEFT_ATTACK = 'left_attack'
 TOSHI_ATTACK = 'toshi attack'
 FLAG = 'flag'
 SCORE_FONT = 'score_font'
+BACKGROUND_L = "lava_1"
 
 
 #tipo de tile
@@ -66,7 +67,8 @@ MAP = [
 
 def load_assets():
     assets = {}
-    assets[BACKGROUND_E] =  pygame.image.load(os.path.join(img_dir, 'earth_land_em_pe.png')).convert()
+    assets[BACKGROUND_E] =  pygame.image.load(os.path.join(img_dir, 'earth_land_em_pe.png')).convert_alpha()
+    assets[BACKGROUND_L] =  pygame.image.load(os.path.join(img_dir, 'lava_1.png')).convert_alpha()
     player_r = pygame.image.load(os.path.join(img_dir, 'wakanda.png')).convert_alpha()
     assets[PLAYER_IMG_R] = pygame.transform.scale(player_r, (PLAYER_WIDTH, PLAYER_HEIGHT))
     player_l = pygame.image.load(os.path.join(img_dir, 'wakanda_l.png')).convert_alpha()
