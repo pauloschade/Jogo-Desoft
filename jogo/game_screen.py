@@ -79,6 +79,9 @@ def game_screen(screen):
     score = 0
     all_hits = 0
     state = PLAYING
+
+    pygame.mixer.music.play(loops=-1)
+    
     while state == PLAYING:
 
         # Ajusta a velocidade do jogo.
@@ -132,6 +135,7 @@ def game_screen(screen):
             all_hits = len(hits2) + len(hits3)
             if all_hits > 0:  
                 lives -= 1
+                score -= 100
                 player.kill()
                 keys_down = {}
                 if lives == 0:
@@ -145,7 +149,7 @@ def game_screen(screen):
                 return 1
             for inimigoss in hits:
                 score += 100
-                if score == 1000:
+                if score == 800:
                     lives += 1
             for ataquess in hits3:
                 ataquess= ataque_vilao(assets)
@@ -176,7 +180,7 @@ def game_screen(screen):
 
         # Depois de desenhar tudo, inverte o display.
         pygame.display.flip()
-
+    
     if state == DONE:
         return 0
     elif state == WIN:

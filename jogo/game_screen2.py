@@ -1,7 +1,7 @@
 import pygame
 from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, img_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING
 from assets import load_assets, BACKGROUND_L, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, BLOCK, EMPTY, SCORE_FONT, MAP2
-from sprites import Tile, Player, inimigo, Vilao, Attack_right, Attack_left, ataque_vilao, flag
+from sprites import Tile, Player, inimigo, Vilao, Attack_right, Attack_left, ataque_vilao, flag 
 from os import path
 
 def game_screen2(screen):
@@ -36,7 +36,7 @@ def game_screen2(screen):
 
     # Criando os inimigos
     for i in range(4):
-        inimigoss = inimigo(assets[INIMIGO_IMG], 4 + 3 * i , -1, blocks)
+        inimigoss = inimigo(assets[INIMIGO_IMG], 4 + 3 * i , i, blocks)
         all_sprites.add(inimigoss)
         all_inimigos.add(inimigoss)
 
@@ -75,10 +75,13 @@ def game_screen2(screen):
     PLAYING = 0
     DONE = 1
     WIN = 2
+    all_hits = 0
     lives = 3
     score = 0
-    all_hits = 0
     state = PLAYING
+    
+    pygame.mixer.music.play(loops=-1)
+
     while state == PLAYING:
 
         # Ajusta a velocidade do jogo.
@@ -132,6 +135,7 @@ def game_screen2(screen):
             all_hits = len(hits2) + len(hits3)
             if all_hits > 0:  
                 lives -= 1
+                score -= 100
                 player.kill()
                 keys_down = {}
                 if lives == 0:
@@ -144,7 +148,7 @@ def game_screen2(screen):
                 state = WIN
             for inimigoss in hits:
                 score += 100
-                if score == 1000:
+                if score == 800:
                     lives += 1
             for ataquess in hits3:
                 ataquess= ataque_vilao(assets)

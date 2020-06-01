@@ -163,7 +163,7 @@ class inimigo(pygame.sprite.Sprite):
         inimigo_img = pygame.transform.scale(inimigo_img, (inimigo_width, inimigo_height))
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
-        self.rect.x = 0
+        self.rect.x = column * TILE_SIZE
         self.rect.y = 0
         self.rect.bottom =  row * TILE_SIZE
         self.speedx = 1
