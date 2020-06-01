@@ -4,7 +4,7 @@ from assets import load_assets, BACKGROUND_L, PLAYER_IMG_R, PLAYER_IMG_L, INIMIG
 from sprites import Tile, Player, inimigo, Vilao, Attack_right, Attack_left, ataque_vilao, flag 
 from os import path
 
-def game_screen2(screen):
+def game_screen2(screen, bank):
     # Variável para o ajuste de velocidade
     clock = pygame.time.Clock()
 
@@ -75,9 +75,9 @@ def game_screen2(screen):
     PLAYING = 0
     DONE = 1
     WIN = 2
+    lives = bank[0] + 10
+    score = bank[1]
     all_hits = 0
-    lives = 3
-    score = 0
     state = PLAYING
     
     pygame.mixer.music.play(loops=-1)
@@ -181,6 +181,6 @@ def game_screen2(screen):
         pygame.display.flip()
 
     if state == DONE:
-        return 0
+        return 0, [lives, score]
     elif state == WIN:
-        return 1
+        return 1, [lives, score]

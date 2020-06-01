@@ -1,10 +1,10 @@
 import pygame
 from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, img_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING
-from assets import load_assets, BACKGROUND_E, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, BLOCK, EMPTY, MAP, SCORE_FONT
-from sprites import Tile, Player, inimigo, Vilao, Attack_right, Attack_left, ataque_vilao, flag
+from assets import load_assets, BACKGROUND_L, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, BLOCK, EMPTY, SCORE_FONT, MAP2
+from sprites import Tile, Player, inimigo, Vilao, Attack_right, Attack_left, ataque_vilao, flag 
 from os import path
 
-def game_screen(screen, lives, score):
+def game_screen3(screen, bank2):
     # Variável para o ajuste de velocidade
     clock = pygame.time.Clock()
 
@@ -36,12 +36,12 @@ def game_screen(screen, lives, score):
 
     # Criando os inimigos
     for i in range(4):
-        inimigoss = inimigo(assets[INIMIGO_IMG], 4 + 3 * i , -1, blocks)
+        inimigoss = inimigo(assets[INIMIGO_IMG], 4 + 3 * i , i, blocks)
         all_sprites.add(inimigoss)
         all_inimigos.add(inimigoss)
 
-    BACKGROUND_E = pygame.image.load(path.join(img_dir, 'earth_land_em_pe.png')).convert()
-    BACKGROUND_E = pygame.transform.scale(BACKGROUND_E, (WIDTH, HEIGHT))
+    BACKGROUND_L = pygame.image.load(path.join(img_dir, 'lava_1.png')).convert_alpha()
+    BACKGROUND_L = pygame.transform.scale(BACKGROUND_L, (WIDTH, HEIGHT))
 
     #cria Vilao
     vilao = Vilao(assets[VILAO_IMG], 1, 5, blocks)
@@ -54,9 +54,9 @@ def game_screen(screen, lives, score):
     
 
     # Cria tiles de acordo com o mapa
-    for row in range(len(MAP)):
-        for column in range(len(MAP[row])):
-            tile_type = MAP[row][column]
+    for row in range(len(MAP2)):
+        for column in range(len(MAP2[row])):
+            tile_type = MAP2[row][column]
             if tile_type == BLOCK:
                 tile = Tile(assets[tile_type], row, column)
                 all_sprites.add(tile)
@@ -75,11 +75,13 @@ def game_screen(screen, lives, score):
     PLAYING = 0
     DONE = 1
     WIN = 2
+    lives = bank2[0]
+    score = bank2[1]
     all_hits = 0
     state = PLAYING
-
-    pygame.mixer.music.play(loops=-1)
     
+    pygame.mixer.music.play(loops=-1)
+
     while state == PLAYING:
 
         # Ajusta a velocidade do jogo.
@@ -160,7 +162,7 @@ def game_screen(screen, lives, score):
 
         # A cada loop, redesenha o fundo e os sprites
         screen.fill(BLACK)
-        screen.blit(BACKGROUND_E, (0,-50))
+        screen.blit(BACKGROUND_L, (0,0))
         all_sprites.draw(screen)
 
         # desenha o score
@@ -177,7 +179,8 @@ def game_screen(screen, lives, score):
 
         # Depois de desenhar tudo, inverte o display.
         pygame.display.flip()
+
     if state == DONE:
-        return 0, [lives, score]
+        return 0
     elif state == WIN:
-        return 1, [lives, score]
+        return 1
