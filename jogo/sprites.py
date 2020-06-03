@@ -1,6 +1,6 @@
 import random
 import pygame
-from config import FPS, WIDTH, inimigo_width, inimigo_height, HEIGHT, BLACK, YELLOW, RED, img_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING, VILAO_WIDHT, VILAO_HEIGHT, ATTACK_HEIGHT, ATTACK_WIDTH
+from config import FPS, WIDTH, inimigo_width, inimigo_height, HEIGHT, BLACK, YELLOW, RED, img_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING, VILAO_WIDHT, VILAO_HEIGHT, ATTACK_HEIGHT, ATTACK_WIDTH, WIDTH_S, HEIGHT_S 
 from assets import load_assets, BACKGROUND_E, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, BLOCK, EMPTY, MAP, TOSHI_ATTACK, FLAG, MAP2, BACKGROUND_L
 
 # Class que representa os blocos do cenário
@@ -362,8 +362,10 @@ class ataque_vilao (pygame.sprite.Sprite):
             self.rect.y = 150
             self.speedx = random.randint(-2, 2)
             self.speedy = random.randint(2, 4)
+
+
 class flag (pygame.sprite.Sprite):
-    
+   
     
     def __init__(self, assets):
 
@@ -385,3 +387,98 @@ class flag (pygame.sprite.Sprite):
         self.speedy = 0
 
 
+
+class Boss(pygame.sprite.Sprite):
+
+    def __init__(self, vilao_img, assets, groups, row, column, blocks):
+
+        # Construtor da classe pai (Sprite).
+        pygame.sprite.Sprite.__init__(self)
+
+        # Define estado atual
+        # Usamos o estado para decidir se o jogador pode ou não pular
+        self.state = STILL
+
+        # Ajusta o tamanho da imagem
+        vilao_img = pygame.transform.scale(vilao_img, (VILAO_WIDHT, VILAO_HEIGHT))
+
+        # Define a imagem do sprite. Nesse exemplo vamos usar uma imagem estática (não teremos animação durante o pulo)
+        self.image = vilao_img
+        # Detalhes sobre o posicionamento.
+        self.rect = self.image.get_rect()
+        self.groups = groups
+        self.assets = assets
+        # Posiciona o personagem
+        # row é o índice da linha embaixo do personagem
+        self.rect.centerx = column * TILE_SIZE
+        self.rect.y = row * TILE_SIZE
+        self.speedx = 0
+        self.speedy = 0
+        self.last_attack = pygame.time.get_ticks()
+        self.attack_ticks = 2000
+
+        self.blocks = blocks
+
+    def update (self):
+
+        self.speedy = 0 
+        self.speedx += random.randint(-5, 5)  
+
+        # Atualizando a posição do inimigo
+        self.rect.x += self.speedx
+        self.rect.y += self.speedy
+        # Se o inimigo bater no final da tela, muda o lado do movimento
+        # Tenta andar em x
+        self.rect.x += self.speedx
+        # Corrige a posição caso tenha passado do tamanho da janela
+        if self.rect.right >= WIDTH_S:
+            self.rect.right = WIDTH_S - 1
+            self.speedx = -1
+        elif self.rect.left < 0:
+            self.rect.left = 0
+            self.speedx = 1
+
+    def ataque_boss(self):
+    # Verifica se pode atirar
+        now = pygame.time.get_ticks()
+    # Verifica quantos ticks se passaram desde o último tiro.
+        elapsed_ticks = now - self.last_attack
+
+    # Se já pode atirar novamente...
+        if elapsed_ticks > self.attack_ticks:
+        # Marca o tick da nova imagem.
+            self.last_attack = now
+        # A nova bala vai ser criada logo acima e no centro horizontal da nave
+            new_attack = ataque_boss(self.assets, self.rect.centerx, self.rect.y)
+            self.groups['all_sprites'].add(new_attack)
+            self.groups['all_toshi_attacks'].add(new_attack)
+
+
+class ataque_boss (pygame.sprite.Sprite):
+
+    def __init__(self, assets, centerx, y):
+
+        # Construtor da classe pai (Sprite).
+        pygame.sprite.Sprite.__init__(self)
+
+        self.image = assets[TOSHI_ATTACK]
+        self.mask = pygame.mask.from_surface(self.image)
+        self.rect = self.image.get_rect()
+        # Posiciona o personagem
+        # row é o índice da linha embaixo do personagem
+        self.rect.x = centerx
+        self.rect.y = y
+        self.speedx = random.randint(-3, 3)
+        self.speedy = random.randint(2, 4)
+
+    def update (self):
+
+        self.rect.x += self.speedx
+        self.rect.y += self.speedy
+         # Se o ataque passar do final da tela, volta para cima e sorteia
+        # novas posições e velocidades
+        if self.rect.top > HEIGHT or self.rect.right < 0 or self.rect.left > WIDTH:
+            self.rect.x = 180
+            self.rect.y = 150
+            self.speedx = random.randint(-2, 2)
+            self.speedy = random.randint(2, 4)

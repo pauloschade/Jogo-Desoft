@@ -9,6 +9,12 @@ WIDTH = 400 # Largura da tela
 HEIGHT = 720 # Altura da tela 
 TILE_SIZE = 40 # Tamanho de cada tile 
 
+# dados da fase boss
+
+WIDTH_S = 1280  # Largura da tela
+HEIGHT_S = 720 # Altura da tela 
+
+
 
 #tamanho jogador
 PLAYER_WIDTH = TILE_SIZE - 1
