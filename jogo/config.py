@@ -11,8 +11,8 @@ TILE_SIZE = 40 # Tamanho de cada tile
 
 # dados da fase boss
 
-WIDTH_S = 1280  # Largura da tela
-HEIGHT_S = 720 # Altura da tela 
+WIDTH_S = 40 * 28  # Largura da tela
+HEIGHT_S = 40 * 15 # Altura da tela 
 
 
 
@@ -63,6 +63,7 @@ GRAVITY = 5
 JUMP_SIZE = TILE_SIZE
 # Define a velocidade em x
 SPEED_X = 5
+SPEED_Y = 2
 
 
 # Define estados possíveis do jogador

@@ -482,3 +482,121 @@ class ataque_boss (pygame.sprite.Sprite):
             self.rect.y = 150
             self.speedx = random.randint(-2, 2)
             self.speedy = random.randint(2, 4)
+
+class Player_b(pygame.sprite.Sprite):
+
+    # Construtor da classe.
+    def __init__(self, player_img, groups, assets, row, column, blocks):
+
+        # Construtor da classe pai (Sprite).
+        pygame.sprite.Sprite.__init__(self)
+
+        # Define estado atual
+        # Usamos o estado para decidir se o jogador pode ou não pular
+        self.state = STILL
+
+        # Define a imagem do sprite. Nesse exemplo vamos usar uma imagem estática (não teremos animação durante o pulo)
+        self.image = player_img
+        # Detalhes sobre o posicionamento.
+        self.rect = self.image.get_rect()
+
+        # Guarda o grupo de blocos para tratar as colisões
+        self.blocks = blocks
+
+        # Posiciona o personagem
+        # row é o índice da linha embaixo do personagem
+        self.rect.y = row * TILE_SIZE
+        self.rect.left = column * TILE_SIZE
+
+        self.speedx = 0
+        self.speedy = 0
+
+        self.groups = groups
+        self.assets = assets
+
+
+        self.last_attack = pygame.time.get_ticks()
+        self.attack_ticks = 1000
+
+
+    # Metodo que atualiza a posição do personagem
+    def update(self):
+        # Vamos tratar os movimentos de maneira independente.
+        # Primeiro tentamos andar no eixo y e depois no x.
+
+        # Tenta andar em y
+        # Atualiza a velocidade aplicando a aceleração da gravidade
+        self.speedx -= GRAVITY/2
+        # Atualiza o estado para caindo
+        if self.speedx > 0:
+            self.state = FALLING
+        # Atualiza a posição y
+        self.rect.x += self.speedx
+        # Se colidiu com algum bloco, volta para o ponto antes da colisão
+        collisions = pygame.sprite.spritecollide(self, self.blocks, False)
+        # Corrige a posição do personagem para antes da colisão
+        for collision in collisions:
+            # Estava indo para baixo
+            if self.speedx < 0:                
+                self.rect.left = collision.rect.right
+                # Se colidiu com algo, para de cair
+                self.speedx = 0
+                # Atualiza o estado para parado
+                self.state = STILL
+            # Estava indo para cima
+            elif self.speedx > 0:
+                self.rect.right = collision.rect.left
+                # Se colidiu com algo, para de cair
+                self.speedx = 0
+                # Atualiza o estado para parado
+                self.state = STILL
+
+        # Tenta andar em x
+        self.rect.y += self.speedy
+        # Corrige a posição caso tenha passado do tamanho da janela
+        if self.rect.top < 0:
+            self.rect.top = 0
+        elif self.rect.bottom >= HEIGHT_S:
+            self.rect.bottom = HEIGHT_S - 1
+        # Se colidiu com algum bloco, volta para o ponto antes da colisão
+        collisions = pygame.sprite.spritecollide(self, self.blocks, False)
+        # Corrige a posição do personagem para antes da colisão
+        for collision in collisions:
+            # Estava indo para a direita
+            if self.speedy > 0:
+                self.rect.bottom = collision.rect.top
+            # Estava indo para a esquerda
+            elif self.speedy < 0:
+                self.rect.top = collision.rect.bottom
+
+    # Método que faz o personagem pular
+    def attack_right(self):
+    # Verifica se pode atirar
+        now = pygame.time.get_ticks()
+    # Verifica quantos ticks se passaram desde o último tiro.
+        elapsed_ticks = now - self.last_attack
+
+    # Se já pode atirar novamente...
+        if elapsed_ticks > self.attack_ticks:
+        # Marca o tick da nova imagem.
+            self.last_attack = now
+        # A nova bala vai ser criada logo acima e no centro horizontal da nave
+            new_attack = Attack_right(self.assets, self.rect.centery, self.rect.right)
+            self.groups['all_sprites'].add(new_attack)
+            self.groups['all_bullets'].add(new_attack)
+
+    def attack_left(self):
+    # Verifica se pode atirar
+        now = pygame.time.get_ticks()
+    # Verifica quantos ticks se passaram desde o último tiro.
+        elapsed_ticks = now - self.last_attack
+
+    # Se já pode atirar novamente...
+        if elapsed_ticks > self.attack_ticks:
+        # Marca o tick da nova imagem.
+            self.last_attack = now
+        # A nova bala vai ser criada logo acima e no centro horizontal da nave
+            new_attack = Attack_left(self.assets, self.rect.centery, self.rect.right)
+            self.groups['all_sprites'].add(new_attack)
+            self.groups['all_bullets'].add(new_attack)
+

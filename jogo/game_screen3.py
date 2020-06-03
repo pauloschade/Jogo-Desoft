@@ -1,7 +1,7 @@
 import pygame
-from config import FPS, WIDTH_S, HEIGHT_S, BLACK, YELLOW, RED, img_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING
+from config import FPS, WIDTH_S, HEIGHT_S, BLACK, YELLOW, RED, img_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING, SPEED_Y
 from assets import load_assets, BACKGROUND_L, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, BLOCK, EMPTY, SCORE_FONT, MAP2, PLAYER_IMG_S_L, PLAYER_IMG_S_R, BACKGROUND_S, MAP3
-from sprites import Tile, Player, inimigo, Vilao, Attack_right, Attack_left, ataque_vilao, flag, Boss, ataque_boss
+from sprites import Tile, Player, Player_b, inimigo, Vilao, Attack_right, Attack_left, ataque_vilao, flag, Boss, ataque_boss
 from os import path
 
 def game_screen3(screen, bank2):
@@ -31,7 +31,7 @@ def game_screen3(screen, bank2):
     groups['all_flags'] = all_flags
 
     # Cria Sprite do jogador
-    player = Player(assets[PLAYER_IMG_S_R], groups, assets, 16, 1, blocks)
+    player = Player_b(assets[PLAYER_IMG_S_R], groups, assets, 2, 8, blocks)
 
     BACKGROUND_S = pygame.image.load(path.join(img_dir, 'space.png')).convert_alpha()
     BACKGROUND_S = pygame.transform.scale(BACKGROUND_S, (WIDTH_S, HEIGHT_S))
@@ -83,27 +83,25 @@ def game_screen3(screen, bank2):
                 keys_down[event.key] = True
                 # Dependendo da tecla, altera o estado do jogador.
                 if event.key == pygame.K_LEFT:
-                    player.speedx -= SPEED_X
                     player.image = assets[PLAYER_IMG_S_L]
                 elif event.key == pygame.K_RIGHT:
-                    player.speedx += SPEED_X
                     player.image = assets[PLAYER_IMG_S_R]
                 elif event.key == pygame.K_UP:
-                    player.jump()
+                    player.speedy -= SPEED_Y
+                elif event.key == pygame.K_DOWN:
+                    player.speedy += SPEED_Y
                 elif event.key == pygame.K_x:
                     player.attack_right()
-                elif event.key == pygame.K_z:
-                    player.attack_left()
 
             # Verifica se soltou alguma tecla.
             if event.type == pygame.KEYUP:
                 # Dependendo da tecla, altera o estado do jogador.
                 if event.key in keys_down and keys_down[event.key]:
-                    if event.key == pygame.K_LEFT:
-                        player.speedx += SPEED_X
+                    if event.key == pygame.K_UP:
+                        player.speedy -= SPEED_Y
                         player.image = assets[PLAYER_IMG_S_L]
-                    elif event.key == pygame.K_RIGHT:
-                        player.speedx -= SPEED_X
+                    elif event.key == pygame.K_DOWN:
+                        player.speedy += SPEED_Y
                         player.image = assets[PLAYER_IMG_S_R]
             
 
@@ -130,7 +128,7 @@ def game_screen3(screen, bank2):
                     state = DONE
                 else:
                     state = PLAYING
-                    player = Player(assets[PLAYER_IMG_S_R], groups, assets, 16, 1, blocks)
+                    player = Player_b(assets[PLAYER_IMG_S_R], groups, assets, 2, 8, blocks)
                     all_sprites.add(player)
             if len(hits4) > 0:
                 state = WIN

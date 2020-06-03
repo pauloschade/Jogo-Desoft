@@ -75,7 +75,7 @@ def game_screen2(screen, bank):
     PLAYING = 0
     DONE = 1
     WIN = 2
-    lives = bank[0] + 10
+    lives = bank[0] + 1
     score = bank[1]
     all_hits = 0
     state = PLAYING
