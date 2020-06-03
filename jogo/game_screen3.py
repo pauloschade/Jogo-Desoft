@@ -1,7 +1,7 @@
 import pygame
-from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, img_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING
-from assets import load_assets, BACKGROUND_L, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, BLOCK, EMPTY, SCORE_FONT, MAP2
-from sprites import Tile, Player, inimigo, Vilao, Attack_right, Attack_left, ataque_vilao, flag 
+from config import FPS, WIDTH_S, HEIGHT_S, BLACK, YELLOW, RED, img_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING
+from assets import load_assets, BACKGROUND_L, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, BLOCK, EMPTY, SCORE_FONT, MAP2, PLAYER_IMG_S_L, PLAYER_IMG_S_R, BACKGROUND_S, MAP3
+from sprites import Tile, Player, inimigo, Vilao, Attack_right, Attack_left, ataque_vilao, flag, Boss, ataque_boss
 from os import path
 
 def game_screen3(screen, bank2):
@@ -31,32 +31,20 @@ def game_screen3(screen, bank2):
     groups['all_flags'] = all_flags
 
     # Cria Sprite do jogador
-    player = Player(assets[PLAYER_IMG_R], groups, assets, 16, 1, blocks)
+    player = Player(assets[PLAYER_IMG_S_R], groups, assets, 16, 1, blocks)
 
-
-    # Criando os inimigos
-    for i in range(4):
-        inimigoss = inimigo(assets[INIMIGO_IMG], 4 + 3 * i , i, blocks)
-        all_sprites.add(inimigoss)
-        all_inimigos.add(inimigoss)
-
-    BACKGROUND_L = pygame.image.load(path.join(img_dir, 'lava_1.png')).convert_alpha()
-    BACKGROUND_L = pygame.transform.scale(BACKGROUND_L, (WIDTH, HEIGHT))
+    BACKGROUND_S = pygame.image.load(path.join(img_dir, 'space.png')).convert_alpha()
+    BACKGROUND_S = pygame.transform.scale(BACKGROUND_S, (WIDTH_S, HEIGHT_S))
 
     #cria Vilao
-    vilao = Vilao(assets[VILAO_IMG], 1, 5, blocks)
-    all_sprites.add(vilao)
+    boss = Boss(assets[VILAO_IMG], assets, groups, 1, 5, blocks)
+    all_sprites.add(boss)
 
-    for i in range(2):
-        ataquess= ataque_vilao(assets)
-        all_sprites.add(ataquess)
-        all_toshi_attacks.add(ataquess)
-    
 
     # Cria tiles de acordo com o mapa
-    for row in range(len(MAP2)):
-        for column in range(len(MAP2[row])):
-            tile_type = MAP2[row][column]
+    for row in range(len(MAP3)):
+        for column in range(len(MAP3[row])):
+            tile_type = MAP3[row][column]
             if tile_type == BLOCK:
                 tile = Tile(assets[tile_type], row, column)
                 all_sprites.add(tile)
@@ -67,10 +55,6 @@ def game_screen3(screen, bank2):
     # all_players.add(player)
     all_sprites.add(player)
 
-    # adiciona bandeira
-    Flag = flag(assets)
-    all_sprites.add(Flag)
-    all_flags.add(Flag)
     keys_down = {}
     PLAYING = 0
     DONE = 1
@@ -100,10 +84,10 @@ def game_screen3(screen, bank2):
                 # Dependendo da tecla, altera o estado do jogador.
                 if event.key == pygame.K_LEFT:
                     player.speedx -= SPEED_X
-                    player.image = assets[PLAYER_IMG_L]
+                    player.image = assets[PLAYER_IMG_S_L]
                 elif event.key == pygame.K_RIGHT:
                     player.speedx += SPEED_X
-                    player.image = assets[PLAYER_IMG_R]
+                    player.image = assets[PLAYER_IMG_S_R]
                 elif event.key == pygame.K_UP:
                     player.jump()
                 elif event.key == pygame.K_x:
@@ -117,10 +101,14 @@ def game_screen3(screen, bank2):
                 if event.key in keys_down and keys_down[event.key]:
                     if event.key == pygame.K_LEFT:
                         player.speedx += SPEED_X
-                        player.image = assets[PLAYER_IMG_L]
+                        player.image = assets[PLAYER_IMG_S_L]
                     elif event.key == pygame.K_RIGHT:
                         player.speedx -= SPEED_X
-                        player.image = assets[PLAYER_IMG_R]
+                        player.image = assets[PLAYER_IMG_S_R]
+            
+
+        for i in range (2):
+            boss.ataque_boss()
 
         # Depois de processar os eventos.
         # Atualiza a acao de cada sprite. O grupo chama o método update() de cada Sprite dentre dele.
@@ -142,7 +130,7 @@ def game_screen3(screen, bank2):
                     state = DONE
                 else:
                     state = PLAYING
-                    player = Player(assets[PLAYER_IMG_R], groups, assets, 16, 1, blocks)
+                    player = Player(assets[PLAYER_IMG_S_R], groups, assets, 16, 1, blocks)
                     all_sprites.add(player)
             if len(hits4) > 0:
                 state = WIN
@@ -162,19 +150,19 @@ def game_screen3(screen, bank2):
 
         # A cada loop, redesenha o fundo e os sprites
         screen.fill(BLACK)
-        screen.blit(BACKGROUND_L, (0,0))
+        screen.blit(BACKGROUND_S, (0,0))
         all_sprites.draw(screen)
 
         # desenha o score
         text_surface = assets[SCORE_FONT].render("{:08d}".format(score), True, YELLOW)
         text_rect = text_surface.get_rect()
-        text_rect.midtop = (WIDTH / 2, 10)
+        text_rect.midtop = (WIDTH_S / 2, 10)
         screen.blit(text_surface, text_rect)
 
         # Desenhando as vidas
         text_surface = assets[SCORE_FONT].render(chr(9829) * lives, True, RED)
         text_rect = text_surface.get_rect()
-        text_rect.bottomleft = (10, HEIGHT - 10)
+        text_rect.bottomleft = (10, HEIGHT_S - 10)
         screen.blit(text_surface, text_rect)
 
         # Depois de desenhar tudo, inverte o display.
