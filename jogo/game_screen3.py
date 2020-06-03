@@ -1,6 +1,6 @@
 import pygame
 from config import FPS, WIDTH_S, HEIGHT_S, BLACK, YELLOW, RED, img_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING, SPEED_Y
-from assets import load_assets, BACKGROUND_L, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, BLOCK, EMPTY, SCORE_FONT, MAP2, PLAYER_IMG_S_L, PLAYER_IMG_S_R, BACKGROUND_S, MAP3
+from assets import load_assets, BACKGROUND_L, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, BLOCK, EMPTY, SCORE_FONT, MAP2, PLAYER_IMG_S_L, PLAYER_IMG_S_R, BACKGROUND_S, MAP3, BOSS
 from sprites import Tile, Player, Player_b, inimigo, Vilao, Attack_right, Attack_left, ataque_vilao, flag, Boss, ataque_boss
 from os import path
 
@@ -31,13 +31,13 @@ def game_screen3(screen, bank2):
     groups['all_flags'] = all_flags
 
     # Cria Sprite do jogador
-    player = Player_b(assets[PLAYER_IMG_S_R], groups, assets, 2, 8, blocks)
+    player = Player_b(assets[PLAYER_IMG_S_R], groups, assets, 10, 8, blocks)
 
     BACKGROUND_S = pygame.image.load(path.join(img_dir, 'space.png')).convert_alpha()
     BACKGROUND_S = pygame.transform.scale(BACKGROUND_S, (WIDTH_S, HEIGHT_S))
 
     #cria Vilao
-    boss = Boss(assets[VILAO_IMG], assets, groups, 1, 5, blocks)
+    boss = Boss(assets[BOSS], assets, groups, 1, WIDTH_S/2, blocks)
     all_sprites.add(boss)
 
 
@@ -46,9 +46,11 @@ def game_screen3(screen, bank2):
         for column in range(len(MAP3[row])):
             tile_type = MAP3[row][column]
             if tile_type == BLOCK:
-                tile = Tile(assets[tile_type], row, column)
+                tile = Tile(pygame.image.load(path.join(img_dir, 'tile_space.png')).convert_alpha(), row, column)
                 all_sprites.add(tile)
                 blocks.add(tile)
+    
+    global GRAVITY
 
     # Adiciona o jogador no grupo de sprites por último para ser desenhado por
     # cima dos blocos
@@ -59,7 +61,7 @@ def game_screen3(screen, bank2):
     PLAYING = 0
     DONE = 1
     WIN = 2
-    lives = bank2[0]
+    lives = bank2[0] + 1
     score = bank2[1]
     all_hits = 0
     state = PLAYING
@@ -83,30 +85,34 @@ def game_screen3(screen, bank2):
                 keys_down[event.key] = True
                 # Dependendo da tecla, altera o estado do jogador.
                 if event.key == pygame.K_LEFT:
-                    player.image = assets[PLAYER_IMG_S_L]
+                    if GRAVITY > 0:
+                        player.gravitation()
+                        player.image = assets[PLAYER_IMG_S_L]
                 elif event.key == pygame.K_RIGHT:
-                    player.image = assets[PLAYER_IMG_S_R]
+                    if GRAVITY < 0:
+                        player.gravitation()
+                        player.image = assets[PLAYER_IMG_S_R]
                 elif event.key == pygame.K_UP:
                     player.speedy -= SPEED_Y
                 elif event.key == pygame.K_DOWN:
                     player.speedy += SPEED_Y
                 elif event.key == pygame.K_x:
-                    player.attack_right()
+                    player.attack_up()
+                elif event.key == pygame.K_SPACE:
+                    player.gravitation()
 
             # Verifica se soltou alguma tecla.
             if event.type == pygame.KEYUP:
                 # Dependendo da tecla, altera o estado do jogador.
                 if event.key in keys_down and keys_down[event.key]:
                     if event.key == pygame.K_UP:
-                        player.speedy -= SPEED_Y
-                        player.image = assets[PLAYER_IMG_S_L]
-                    elif event.key == pygame.K_DOWN:
                         player.speedy += SPEED_Y
-                        player.image = assets[PLAYER_IMG_S_R]
+                    elif event.key == pygame.K_DOWN:
+                        player.speedy -= SPEED_Y
             
 
-        for i in range (2):
-            boss.ataque_boss()
+        # for i in range (2):
+        #     boss.ataque_boss()
 
         # Depois de processar os eventos.
         # Atualiza a acao de cada sprite. O grupo chama o método update() de cada Sprite dentre dele.
@@ -128,7 +134,9 @@ def game_screen3(screen, bank2):
                     state = DONE
                 else:
                     state = PLAYING
-                    player = Player_b(assets[PLAYER_IMG_S_R], groups, assets, 2, 8, blocks)
+                    if GRAVITY < 0:
+                        GRAVITY = - GRAVITY
+                    player = Player_b(assets[PLAYER_IMG_S_R], groups, assets, 10, 8, blocks)
                     all_sprites.add(player)
             if len(hits4) > 0:
                 state = WIN

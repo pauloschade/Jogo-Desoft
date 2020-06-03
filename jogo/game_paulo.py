@@ -34,9 +34,9 @@ print('Utilize as setas do teclado para andar e pular.')
 # Comando para evitar travamentos.
 try:
     sucesso, bank = game_screen(screen, lives, score)
-    #if sucesso != 0:
-        #sucesso2, bank2 = game_screen2(screen, bank)
-        #if sucesso2 != 0:
+    # if sucesso != 0:
+    #     sucesso2, bank2 = game_screen2(screen, bank)
+    #     if sucesso2 != 0:
     screen_s = pygame.display.set_mode((WIDTH_S, HEIGHT_S))
     game_screen3(screen_s, bank)
 

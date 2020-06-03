@@ -47,7 +47,7 @@ def game_screen2(screen, bank):
     vilao = Vilao(assets[VILAO_IMG], 1, 5, blocks)
     all_sprites.add(vilao)
 
-    for i in range(2):
+    for i in range(3):
         ataquess= ataque_vilao(assets)
         all_sprites.add(ataquess)
         all_toshi_attacks.add(ataquess)
