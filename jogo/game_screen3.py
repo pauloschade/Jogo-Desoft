@@ -15,10 +15,8 @@ def game_screen3(screen, bank2):
     # Cria um grupo de todos os sprites.
     all_sprites = pygame.sprite.Group()
     # all_players = pygame.sprite.Group()
-    all_inimigos = pygame.sprite.Group()
     all_bullets = pygame.sprite.Group() 
     all_toshi_attacks = pygame.sprite.Group()  
-    all_flags = pygame.sprite.Group() 
     # Cria um grupo somente com os sprites de bloco.
     # Sprites de block são aqueles que impedem o movimento do jogador
     blocks = pygame.sprite.Group()
@@ -26,9 +24,7 @@ def game_screen3(screen, bank2):
     groups['all_sprites'] = all_sprites
     # groups['all_players'] = all_players
     groups['all_bullets'] = all_bullets
-    groups['all_inimigos'] = all_inimigos
     groups['all_toshi_attacks'] = all_toshi_attacks
-    groups['all_flags'] = all_flags
 
     # Cria Sprite do jogador
     player = Player_b(assets[PLAYER_IMG_S_R], groups, assets, 10, 8, blocks)
@@ -63,7 +59,6 @@ def game_screen3(screen, bank2):
     WIN = 2
     lives = bank2[0] + 1
     score = bank2[1]
-    all_hits = 0
     state = PLAYING
     
     pygame.mixer.music.play(loops=-1)
@@ -120,12 +115,8 @@ def game_screen3(screen, bank2):
 
         if state == PLAYING:
             # Verifica se houve colisão entre tiro e meteoro
-            hits = pygame.sprite.groupcollide(all_inimigos, all_bullets, True, True, pygame.sprite.collide_mask)
-            hits2 = pygame.sprite.spritecollide(player, all_inimigos, True, pygame.sprite.collide_mask)
             hits3 = pygame.sprite.spritecollide(player, all_toshi_attacks, True, pygame.sprite.collide_mask)
-            hits4 = pygame.sprite.spritecollide(player, all_flags, False, pygame.sprite.collide_mask)
-            all_hits = len(hits2) + len(hits3)
-            if all_hits > 0:  
+            if len(hits3) > 0:  
                 lives -= 1
                 score -= 100
                 player.kill()
@@ -138,21 +129,10 @@ def game_screen3(screen, bank2):
                         GRAVITY = - GRAVITY
                     player = Player_b(assets[PLAYER_IMG_S_R], groups, assets, 10, 8, blocks)
                     all_sprites.add(player)
-            if len(hits4) > 0:
-                state = WIN
-            for inimigoss in hits:
-                score += 100
-                if score == 800:
-                    lives += 1
             for ataquess in hits3:
                 ataquess= ataque_vilao(assets)
                 all_sprites.add(ataquess)
                 all_toshi_attacks.add(ataquess)
-            for inimigoss in hits2:
-                inimigoss = inimigo(assets[INIMIGO_IMG], 0 , 0, blocks)
-                all_sprites.add(inimigoss)
-                all_inimigos.add(inimigoss)
-
 
         # A cada loop, redesenha o fundo e os sprites
         screen.fill(BLACK)
