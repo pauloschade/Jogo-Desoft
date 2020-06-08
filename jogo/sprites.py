@@ -1,7 +1,7 @@
 import random
 import pygame
 from config import FPS, WIDTH, inimigo_width, inimigo_height, HEIGHT, BLACK, YELLOW, RED, img_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING, VILAO_WIDHT, VILAO_HEIGHT, ATTACK_HEIGHT, ATTACK_WIDTH, WIDTH_S, HEIGHT_S 
-from assets import load_assets, BACKGROUND_E, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, BLOCK, EMPTY, MAP, TOSHI_ATTACK, FLAG, MAP2, BACKGROUND_L
+from assets import load_assets, BACKGROUND_E, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, BLOCK, EMPTY, MAP, TOSHI_ATTACK, FLAG, MAP2, BACKGROUND_L, PLAYER_IMG_S_L, PLAYER_IMG_S_R, PLAYER_IMG_S_L_DOWN, PLAYER_IMG_S_R_DOWN
 
 # Class que representa os blocos do cenário
 class Tile(pygame.sprite.Sprite):
@@ -404,6 +404,7 @@ class Boss(pygame.sprite.Sprite):
         self.rect.y = row * TILE_SIZE
         self.speedx = 0
         self.speedy = 0
+        self.lives = 5
         self.last_attack = pygame.time.get_ticks()
         self.attack_ticks = 2000
 
@@ -412,7 +413,19 @@ class Boss(pygame.sprite.Sprite):
     def update(self):
 
         self.speedy = 0 
-        self.speedx += random.randint(-5, 5)  
+        self.speedx += random.randint(-5, 5)
+        if self.lives == 4:
+            self.speedx = self.speedx * 1.07
+            self.attack_ticks = 1750
+        elif self.lives == 3:
+            self.speedx = self.speedx * 1.15
+            self.attack_ticks = 1500
+        elif self.lives == 2:
+            self.speedx = self.speedx * 1.22
+            self.attack_ticks = 1250
+        elif self.lives == 1:
+            self.speedx = self.speedx * 1.3
+            self.attack_ticks = 1000
 
         # Atualizando a posição do inimigo
         self.rect.x += self.speedx
@@ -496,6 +509,8 @@ class Player_b(pygame.sprite.Sprite):
         self.rect.y = row * TILE_SIZE
         self.rect.right = (column * TILE_SIZE) + PLAYER_HEIGHT
 
+        self.orientation = 1
+
         self.speedx = 0
         self.speedy = 0
 
@@ -514,29 +529,26 @@ class Player_b(pygame.sprite.Sprite):
 
         # Tenta andar em y
         # Atualiza a velocidade aplicando a aceleração da gravidade
-        self.speedx -= GRAVITY/2
+        self.speedx -= GRAVITY/2 
         # Atualiza o estado para caindo
-        if self.speedx * GRAVITY > 0:
+        if self.speedx * GRAVITY > 0: 
             self.state = FALLING
         # Atualiza a posição x
-        if GRAVITY > 0:
-            self.rect.x -= self.speedx
-        elif GRAVITY < 0:
-            self.speedx += GRAVITY
-            self.rect.x += self.speedx
+        self.rect.x += self.speedx
+
         # Se colidiu com algum bloco, volta para o ponto antes da colisão
         collisions = pygame.sprite.spritecollide(self, self.blocks, False)
         # Corrige a posição do personagem para antes da colisão
         for collision in collisions:
             # Estava indo para baixo
-            if self.speedx < 0:                
-                self.rect.right = collision.rect.left
+            if self.speedx < 0:
+                self.rect.left = collision.rect.right
                 # Se colidiu com algo, para de cair
                 self.speedx = 0
                 # Atualiza o estado para parado
                 self.state = STILL
-            elif self.speedx > 0:                
-                self.rect.left = collision.rect.right
+            elif self.speedx > 0:
+                self.rect.right = collision.rect.left
                 # Se colidiu com algo, para de cair
                 self.speedx = 0
                 # Atualiza o estado para parado
@@ -581,6 +593,16 @@ class Player_b(pygame.sprite.Sprite):
         global GRAVITY
         GRAVITY = - GRAVITY
 
+    def paracima(self):
+        if self.orientation == 0:
+            self.orientation = 1
+            self.image = pygame.transform.flip(self.image, False, True)
+
+    def parabaixo(self):
+        if self.orientation == 1:
+            self.orientation = 0
+            self.image = pygame.transform.flip(self.image, False, True)
+
 class Attack_up(pygame.sprite.Sprite):
     # Construtor da classe.
     def __init__(self, assets, centerx, top):
@@ -593,7 +615,7 @@ class Attack_up(pygame.sprite.Sprite):
 
         # Coloca no lugar inicial definido em x, y do constutor
         self.rect.centerx = centerx
-        self.speedy = 12  
+        self.speedy = 60
         self.rect.y = top - 20
 
     def update(self):
