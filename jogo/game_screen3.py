@@ -40,7 +40,7 @@ def game_screen3(screen, bank2):
     all_sprites.add(boss)
 
     #imagem spawn
-    spawn = Spawn(assets[SPAWN], 13, 1)
+    spawn = Spawn(assets[SPAWN], 12, 1)
     #all_spawn.add(spawn)
     all_sprites.add(spawn)
 
