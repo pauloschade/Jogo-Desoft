@@ -1,7 +1,7 @@
 import random
 import pygame
 from config import FPS, WIDTH, inimigo_width, inimigo_height, HEIGHT, BLACK, YELLOW, RED, img_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING, VILAO_WIDHT, VILAO_HEIGHT, ATTACK_HEIGHT, ATTACK_WIDTH, WIDTH_S, HEIGHT_S 
-from assets import load_assets, BACKGROUND_E, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, BLOCK, EMPTY, MAP, TOSHI_ATTACK, FLAG, MAP2, BACKGROUND_L, PLAYER_IMG_S_L, PLAYER_IMG_S_R, PLAYER_IMG_S_L_DOWN, PLAYER_IMG_S_R_DOWN
+from assets import load_assets, BACKGROUND_E, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, BLOCK, EMPTY, MAP, TOSHI_ATTACK, FLAG, MAP2, BACKGROUND_L, PLAYER_IMG_S_L, PLAYER_IMG_S_R, PLAYER_IMG_S_L_DOWN, PLAYER_IMG_S_R_DOWN, SPAWN
 
 # Class que representa os blocos do cenário
 class Tile(pygame.sprite.Sprite):
@@ -584,9 +584,12 @@ class Player_b(pygame.sprite.Sprite):
         # Marca o tick da nova imagem.
             self.last_attack = now
         # A nova bala vai ser criada logo acima e no centro horizontal da nave
-            new_attack = Attack_up(self.assets, self.rect.centerx, self.rect.top)
-            self.groups['all_sprites'].add(new_attack)
-            self.groups['all_bullets'].add(new_attack)
+            if self.rect.y >= 11.5 * TILE_SIZE and self.rect.x <= 3 * TILE_SIZE:
+                self.last_attack = now
+            else:
+                new_attack = Attack_up(self.assets, self.rect.centerx, self.rect.top)
+                self.groups['all_sprites'].add(new_attack)
+                self.groups['all_bullets'].add(new_attack)
 
     def gravitation(self):
         self.image = pygame.transform.flip(self.image, True, False)
@@ -625,3 +628,19 @@ class Attack_up(pygame.sprite.Sprite):
         # Se o tiro passar do inicio da tela, morre.
         if self.rect.bottom < 0:
             self.kill()
+
+class Spawn(pygame.sprite.Sprite):
+
+    # Construtor da classe.
+    def __init__(self, spawn_img, row, column):
+        # Construtor da classe pai (Sprite).
+        pygame.sprite.Sprite.__init__(self)
+
+        # Define a imagem do tile.
+        self.image = spawn_img
+        # Detalhes sobre o posicionamento.
+        self.rect = self.image.get_rect()
+
+        # Posiciona o tile
+        self.rect.x = TILE_SIZE * column
+        self.rect.y = TILE_SIZE * row
