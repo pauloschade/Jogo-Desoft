@@ -7,6 +7,7 @@ BACKGROUND_E = 'background'
 PLAYER_IMG_R = 'player_img_r'
 PLAYER_IMG_L = 'player_img_l'
 INIMIGO_IMG = 'perry'
+INIMIGO2_IMG = 'bowserjr'
 VILAO_IMG = "vilao_img"
 RIGHT_ATTACK = 'right_attack'
 LEFT_ATTACK = 'left_attack'
@@ -21,6 +22,7 @@ PLAYER_IMG_S_L = 'wakanda_space_left'
 PLAYER_IMG_S_R_DOWN = 'wakanda_space_right_down'
 PLAYER_IMG_S_L_DOWN = 'wakanda_space_left_down'
 BOSS = 'boss_img'
+SQUARE = 'square'
 
 #tipo de tile
 BLOCK = 0
@@ -101,6 +103,8 @@ def load_assets():
     assets[PLAYER_IMG_L] = pygame.transform.scale(player_l, (PLAYER_WIDTH, PLAYER_HEIGHT))
     enemy = pygame.image.load(os.path.join(img_dir, 'perry.png')).convert_alpha()
     assets[INIMIGO_IMG] = pygame.transform.scale(enemy, (inimigo_width, inimigo_height))
+    enemy2 = pygame.image.load(os.path.join(img_dir, 'bowserjr.png')).convert_alpha()
+    assets[INIMIGO2_IMG] = pygame.transform.scale(enemy2, (inimigo_width, inimigo_height))
     assets[BLOCK] = pygame.image.load(os.path.join(img_dir, 'tile.png')).convert_alpha()
     assets[VILAO_IMG] = pygame.image.load(os.path.join(img_dir, 'astrotoshi.png')).convert_alpha()
     right_attack_img = pygame.image.load(os.path.join(img_dir, 'right_attack.png')).convert_alpha()
@@ -124,5 +128,7 @@ def load_assets():
     assets[PLAYER_IMG_S_R] = pygame.transform.scale(player_space_r, (PLAYER_HEIGHT, PLAYER_WIDTH))
     assets[PLAYER_IMG_S_R_DOWN] = pygame.transform.flip(assets[PLAYER_IMG_S_R], False, True)
     assets[BOSS] = pygame.image.load(os.path.join(img_dir, 'boss.png')).convert_alpha()
+    square = pygame.image.load(os.path.join(img_dir, 'square.png')).convert_alpha()
+    assets[SQUARE] = pygame.transform.scale(player_space_r, (2 * TILE_SIZE, 2 * TILE_SIZE))
 
     return assets

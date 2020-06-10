@@ -42,4 +42,3 @@ try:
 
 finally:
     pygame.quit()
-
