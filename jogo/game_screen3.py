@@ -119,7 +119,7 @@ def game_screen3(screen, bank2):
             hits3 = pygame.sprite.spritecollide(player, all_toshi_attacks, True, pygame.sprite.collide_mask)
             hits4 = pygame.sprite.spritecollide(boss, all_bullets, True, pygame.sprite.collide_mask)
             hits5 = pygame.sprite.spritecollide(spawn, all_bullets, True, pygame.sprite.collide_mask)
-            hits5 = pygame.sprite.spritecollide(spawn, all_toshi_attacks, True, pygame.sprite.collide_mask)
+            hits6 = pygame.sprite.spritecollide(spawn, all_toshi_attacks, True, pygame.sprite.collide_mask)
             if len(hits3) > 0:  
                 lives -= 1
                 score -= 100
@@ -129,8 +129,8 @@ def game_screen3(screen, bank2):
                     state = DONE
                 else:
                     state = PLAYING
-                    if GRAVITY < 0:
-                        GRAVITY = - GRAVITY
+                    #if GRAVITY < 0:
+                        #GRAVITY = - GRAVITY
                     player = Player_b(assets[PLAYER_IMG_S_L], groups, assets, 13, 1, blocks)
                     all_sprites.add(player)
             for ataquess in hits3:

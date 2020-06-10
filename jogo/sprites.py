@@ -413,7 +413,7 @@ class Boss(pygame.sprite.Sprite):
     def update(self):
 
         self.speedy = 0 
-        self.speedx += random.randint(-5, 5)
+        self.speedx += random.randint(-3, 3)
         if self.lives == 4:
             self.speedx = self.speedx * 1.07
             self.attack_ticks = 1750
@@ -473,7 +473,7 @@ class ataque_boss (pygame.sprite.Sprite):
         self.rect.x = centerx
         self.rect.y = y + 80
         self.speedx = random.randint(-3, 3)
-        self.speedy = random.randint(2, 4)
+        self.speedy = random.randint(1, 2)
 
     def update (self):
 
@@ -495,7 +495,8 @@ class Player_b(pygame.sprite.Sprite):
         # Define estado atual
         # Usamos o estado para decidir se o jogador pode ou não pular
         self.state = STILL
-
+        #gravidade
+        self.gravity = 5/2
         # Define a imagem do sprite. Nesse exemplo vamos usar uma imagem estática (não teremos animação durante o pulo)
         self.image = player_img
         # Detalhes sobre o posicionamento.
@@ -529,9 +530,9 @@ class Player_b(pygame.sprite.Sprite):
 
         # Tenta andar em y
         # Atualiza a velocidade aplicando a aceleração da gravidade
-        self.speedx -= GRAVITY/2 
+        self.speedx -=  self.gravity/2 #GRAVITY/2 
         # Atualiza o estado para caindo
-        if self.speedx * GRAVITY > 0: 
+        if self.speedx * self.gravity > 0: 
             self.state = FALLING
         # Atualiza a posição x
         self.rect.x += self.speedx
@@ -593,8 +594,9 @@ class Player_b(pygame.sprite.Sprite):
 
     def gravitation(self):
         self.image = pygame.transform.flip(self.image, True, False)
-        global GRAVITY
-        GRAVITY = - GRAVITY
+        #global GRAVITY
+        #GRAVITY = - GRAVITY
+        self.gravity = - self.gravity
 
     def paracima(self):
         if self.orientation == 0:
@@ -618,7 +620,7 @@ class Attack_up(pygame.sprite.Sprite):
 
         # Coloca no lugar inicial definido em x, y do constutor
         self.rect.centerx = centerx
-        self.speedy = 60
+        self.speedy = 30
         self.rect.y = top - 20
 
     def update(self):
