@@ -1,6 +1,6 @@
 import pygame
 from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, img_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING
-from assets import load_assets, BACKGROUND_L, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, BLOCK, EMPTY, SCORE_FONT, MAP2
+from assets import load_assets, BACKGROUND_L, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, INIMIGO2_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, BLOCK, EMPTY, SCORE_FONT, MAP2
 from sprites import Tile, Player, inimigo, Vilao, Attack_right, Attack_left, ataque_vilao, flag 
 from os import path
 
@@ -36,7 +36,7 @@ def game_screen2(screen, bank):
 
     # Criando os inimigos
     for i in range(4):
-        inimigoss = inimigo(assets[INIMIGO_IMG], 4 + 3 * i , i, blocks)
+        inimigoss = inimigo(assets[INIMIGO2_IMG], 4 + 3 * i , i, blocks)
         all_sprites.add(inimigoss)
         all_inimigos.add(inimigoss)
 
