@@ -1,6 +1,6 @@
 import pygame
 import os
-from config import PLAYER_WIDTH, PLAYER_HEIGHT, img_dir, TILE_SIZE, inimigo_height, inimigo_width, VILAO_HEIGHT, VILAO_WIDHT, ATTACK_HEIGHT, ATTACK_WIDTH, T_ATTACK_HEIGHT, T_ATTACK_WIDTH, FLAG_WIDTH, FLAG_HEIGHT
+from config import PLAYER_WIDTH, PLAYER_HEIGHT, img_dir, snd_dir, TILE_SIZE, inimigo_height, inimigo_width, VILAO_HEIGHT, VILAO_WIDHT, ATTACK_HEIGHT, ATTACK_WIDTH, T_ATTACK_HEIGHT, T_ATTACK_WIDTH, FLAG_WIDTH, FLAG_HEIGHT
 
 #imagens
 BACKGROUND_E = 'background'
@@ -118,7 +118,7 @@ def load_assets():
     flag_img = pygame.image.load(os.path.join(img_dir, 'flag-end.png')).convert_alpha()
     assets[FLAG] = pygame.transform.scale(flag_img, (FLAG_WIDTH, FLAG_HEIGHT))
     assets[SCORE_FONT] = pygame.font.Font(os.path.join(img_dir, 'PressStart2P.ttf'), 28)
-    pygame.mixer.music.load(os.path.join(img_dir, 'game.mp3'))
+    pygame.mixer.music.load(os.path.join(snd_dir, 'game.mp3'))
     pygame.mixer.music.set_volume(0.4)
     assets[BACKGROUND_S] =  pygame.image.load(os.path.join(img_dir, 'space.png')).convert_alpha()
     player_space_l =  pygame.image.load(os.path.join(img_dir, 'wakanda_space_l.png')).convert_alpha()

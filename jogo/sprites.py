@@ -1,6 +1,6 @@
 import random
 import pygame
-from config import FPS, WIDTH, inimigo_width, inimigo_height, HEIGHT, BLACK, YELLOW, RED, img_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING, VILAO_WIDHT, VILAO_HEIGHT, ATTACK_HEIGHT, ATTACK_WIDTH, WIDTH_S, HEIGHT_S 
+from config import FPS, WIDTH, inimigo_width, inimigo_height, HEIGHT, BLACK, YELLOW, RED, img_dir, snd_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING, VILAO_WIDHT, VILAO_HEIGHT, ATTACK_HEIGHT, ATTACK_WIDTH, WIDTH_S, HEIGHT_S 
 from assets import load_assets, BACKGROUND_E, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, BLOCK, EMPTY, MAP, TOSHI_ATTACK, FLAG, MAP2, BACKGROUND_L, PLAYER_IMG_S_L, PLAYER_IMG_S_R, PLAYER_IMG_S_L_DOWN, PLAYER_IMG_S_R_DOWN, SPAWN
 
 # Class que representa os blocos do cenário
@@ -342,7 +342,7 @@ class ataque_vilao (pygame.sprite.Sprite):
         self.rect.x = 200
         self.rect.y = 240
         self.speedx = random.randint(-3, 3)
-        self.speedy = random.randint(2, 4)
+        self.speedy = random.randint(1, 3)
 
     def update (self):
 
@@ -354,7 +354,7 @@ class ataque_vilao (pygame.sprite.Sprite):
             self.rect.x = 180
             self.rect.y = 150
             self.speedx = random.randint(-2, 2)
-            self.speedy = random.randint(2, 4)
+            self.speedy = random.randint(1, 3)
 
 class flag (pygame.sprite.Sprite):
    
@@ -413,19 +413,19 @@ class Boss(pygame.sprite.Sprite):
     def update(self):
 
         self.speedy = 0 
-        self.speedx += random.randint(-5, 5)
+        self.speedx += random.randint(-2, 2)
         if self.lives == 4:
             self.speedx = self.speedx * 1.07
-            self.attack_ticks = 1750
-        elif self.lives == 3:
-            self.speedx = self.speedx * 1.15
-            self.attack_ticks = 1500
-        elif self.lives == 2:
-            self.speedx = self.speedx * 1.22
-            self.attack_ticks = 1250
-        elif self.lives == 1:
-            self.speedx = self.speedx * 1.3
             self.attack_ticks = 1000
+        elif self.lives == 3:
+            self.speedx = self.speedx * 1.1
+            self.attack_ticks = 900
+        elif self.lives == 2:
+            self.speedx = self.speedx * 1.1
+            self.attack_ticks = 800
+        elif self.lives == 1:
+            self.speedx = self.speedx * 1.1
+            self.attack_ticks = 500
 
         # Atualizando a posição do inimigo
         self.rect.x += self.speedx
@@ -473,7 +473,7 @@ class ataque_boss (pygame.sprite.Sprite):
         self.rect.x = centerx
         self.rect.y = y + 80
         self.speedx = random.randint(-3, 3)
-        self.speedy = random.randint(2, 4)
+        self.speedy = random.randint(1, 2)
 
     def update (self):
 
@@ -495,7 +495,8 @@ class Player_b(pygame.sprite.Sprite):
         # Define estado atual
         # Usamos o estado para decidir se o jogador pode ou não pular
         self.state = STILL
-
+        #gravidade
+        self.gravity = 5/2
         # Define a imagem do sprite. Nesse exemplo vamos usar uma imagem estática (não teremos animação durante o pulo)
         self.image = player_img
         # Detalhes sobre o posicionamento.
@@ -529,9 +530,9 @@ class Player_b(pygame.sprite.Sprite):
 
         # Tenta andar em y
         # Atualiza a velocidade aplicando a aceleração da gravidade
-        self.speedx -= GRAVITY/2 
+        self.speedx -=  self.gravity/2 #GRAVITY/2 
         # Atualiza o estado para caindo
-        if self.speedx * GRAVITY > 0: 
+        if self.speedx * self.gravity > 0: 
             self.state = FALLING
         # Atualiza a posição x
         self.rect.x += self.speedx
@@ -593,8 +594,9 @@ class Player_b(pygame.sprite.Sprite):
 
     def gravitation(self):
         self.image = pygame.transform.flip(self.image, True, False)
-        global GRAVITY
-        GRAVITY = - GRAVITY
+        #global GRAVITY
+        #GRAVITY = - GRAVITY
+        self.gravity = - self.gravity
 
     def paracima(self):
         if self.orientation == 0:
@@ -618,7 +620,7 @@ class Attack_up(pygame.sprite.Sprite):
 
         # Coloca no lugar inicial definido em x, y do constutor
         self.rect.centerx = centerx
-        self.speedy = 60
+        self.speedy = 30
         self.rect.y = top - 20
 
     def update(self):
