@@ -2,6 +2,7 @@ from os import path
 
 # pasta que contem figuras
 img_dir = path.join(path.dirname(__file__), 'assets', 'img')
+snd_dir = path.join(path.dirname(__file__), 'assets', 'snd')
 
 # Dados gerais do jogo.
 TITULO = 'A jornada do oxi'
