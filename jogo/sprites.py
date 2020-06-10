@@ -625,3 +625,22 @@ class Attack_up(pygame.sprite.Sprite):
         # Se o tiro passar do inicio da tela, morre.
         if self.rect.bottom < 0:
             self.kill()
+
+class Spawn(pygame.sprite.Sprite):
+
+    # Construtor da classe.
+    def __init__(self, assets, row, column):
+        # Construtor da classe pai (Sprite).
+        pygame.sprite.Sprite.__init__(self)
+
+        # Aumenta o tamanho do tile.
+        spawn_img = pygame.transform.scale(tile_img, (SPAWN_SIZE, SPAWN_SIZE))
+
+        # Define a imagem do tile.
+        self.image = spawn_img
+        # Detalhes sobre o posicionamento.
+        self.rect = self.image.get_rect()
+
+        # Posiciona o tile
+        self.rect.x = TILE_SIZE * column
+        self.rect.y = TILE_SIZE * row

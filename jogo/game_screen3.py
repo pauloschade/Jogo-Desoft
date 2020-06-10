@@ -2,7 +2,7 @@ import random
 import pygame
 from config import FPS, WIDTH_S, HEIGHT_S, BLACK, YELLOW, RED, img_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING, SPEED_Y
 from assets import load_assets, BACKGROUND_L, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, BLOCK, EMPTY, SCORE_FONT, MAP2, PLAYER_IMG_S_L, PLAYER_IMG_S_R, BACKGROUND_S, MAP3, BOSS
-from sprites import Tile, Player, Player_b, inimigo, Vilao, Attack_right, Attack_left, ataque_vilao, flag, Boss, ataque_boss
+from sprites import Tile, Player, Player_b, inimigo, Vilao, Attack_right, Attack_left, ataque_vilao, flag, Boss, ataque_boss, Spawn
 from os import path
 
 
@@ -19,7 +19,8 @@ def game_screen3(screen, bank2):
     all_sprites = pygame.sprite.Group()
     # all_players = pygame.sprite.Group()
     all_bullets = pygame.sprite.Group() 
-    all_toshi_attacks = pygame.sprite.Group()  
+    all_toshi_attacks = pygame.sprite.Group()
+    #all_spawn = pygame.sprite.Group()
     # Cria um grupo somente com os sprites de bloco.
     # Sprites de block são aqueles que impedem o movimento do jogador
     blocks = pygame.sprite.Group()
@@ -28,6 +29,8 @@ def game_screen3(screen, bank2):
     # groups['all_players'] = all_players
     groups['all_bullets'] = all_bullets
     groups['all_toshi_attacks'] = all_toshi_attacks
+    #groups["all_spawn"] = all_spawn
+
 
     # Cria Sprite do jogador
     player = Player_b(assets[PLAYER_IMG_S_L], groups, assets, 13, 1, blocks)
@@ -39,6 +42,10 @@ def game_screen3(screen, bank2):
     boss = Boss(assets[BOSS], assets, groups, 1, WIDTH_S/2, blocks)
     all_sprites.add(boss)
 
+    #imagem spawn
+    spawn = Spawn(assets[SPAWN], 13, 1)
+    #all_spawn.add(spawn)
+    all_sprites.add(spawn)
 
     # Cria tiles de acordo com o mapa
     for row in range(len(MAP3)):
@@ -114,6 +121,8 @@ def game_screen3(screen, bank2):
             # Verifica se houve colisão entre tiro e meteoro
             hits3 = pygame.sprite.spritecollide(player, all_toshi_attacks, True, pygame.sprite.collide_mask)
             hits4 = pygame.sprite.spritecollide(boss, all_bullets, True, pygame.sprite.collide_mask)
+            hits5 = pygame.sprite.spritecollide(spawn, all_bullets, True, pygame.sprite.collide_mask)
+            hits5 = pygame.sprite.spritecollide(spawn, all_toshi_attacks, True, pygame.sprite.collide_mask)
             if len(hits3) > 0:  
                 lives -= 1
                 score -= 100
