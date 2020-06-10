@@ -22,7 +22,7 @@ PLAYER_IMG_S_L = 'wakanda_space_left'
 PLAYER_IMG_S_R_DOWN = 'wakanda_space_right_down'
 PLAYER_IMG_S_L_DOWN = 'wakanda_space_left_down'
 BOSS = 'boss_img'
-SQUARE = 'square'
+SPAWN = 'spawn'
 
 #tipo de tile
 BLOCK = 0
@@ -128,7 +128,7 @@ def load_assets():
     assets[PLAYER_IMG_S_R] = pygame.transform.scale(player_space_r, (PLAYER_HEIGHT, PLAYER_WIDTH))
     assets[PLAYER_IMG_S_R_DOWN] = pygame.transform.flip(assets[PLAYER_IMG_S_R], False, True)
     assets[BOSS] = pygame.image.load(os.path.join(img_dir, 'boss.png')).convert_alpha()
-    square = pygame.image.load(os.path.join(img_dir, 'square.png')).convert_alpha()
-    assets[SQUARE] = pygame.transform.scale(player_space_r, (2 * TILE_SIZE, 2 * TILE_SIZE))
+    spawn = pygame.image.load(os.path.join(img_dir, 'spawn.png')).convert_alpha()
+    assets[SPAWN] = pygame.transform.scale(spawn, (2 * TILE_SIZE, 2 * TILE_SIZE))
 
     return assets
