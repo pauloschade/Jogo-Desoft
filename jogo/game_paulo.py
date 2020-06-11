@@ -38,7 +38,7 @@ try:
         sucesso2, bank2 = game_screen2(screen, bank)
         if sucesso2 != 0:
             screen_s = pygame.display.set_mode((WIDTH_S, HEIGHT_S))
-            game_screen3(screen_s, bank)
+            game_screen3(screen_s, bank2)
 
 finally:
     pygame.quit()

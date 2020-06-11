@@ -1,7 +1,7 @@
 import pygame
 from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, img_dir, snd_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING
 from assets import load_assets, BACKGROUND_E, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, BLOCK, EMPTY, MAP, SCORE_FONT
-from sprites import Tile, Player, inimigo, Vilao, Attack_right, Attack_left, ataque_vilao, flag
+from sprites import Tile, Player, inimigo, Vilao, Attack_right, Attack_left, ataque_vilao, flag, Perry_deitado
 from os import path
 
 def game_screen(screen, lives, score):
@@ -126,7 +126,7 @@ def game_screen(screen, lives, score):
 
         if state == PLAYING:
             # Verifica se houve colisão entre tiro e meteoro
-            hits = pygame.sprite.groupcollide(all_inimigos, all_bullets, True, True, pygame.sprite.collide_mask)
+            hits = pygame.sprite.groupcollide(all_inimigos, all_bullets, False, True, pygame.sprite.collide_mask)
             hits2 = pygame.sprite.spritecollide(player, all_inimigos, True, pygame.sprite.collide_mask)
             hits3 = pygame.sprite.spritecollide(player, all_toshi_attacks, True, pygame.sprite.collide_mask)
             hits4 = pygame.sprite.spritecollide(player, all_flags, False, pygame.sprite.collide_mask)
@@ -156,6 +156,12 @@ def game_screen(screen, lives, score):
                 inimigoss = inimigo(assets[INIMIGO_IMG], 0 , 0, blocks)
                 all_sprites.add(inimigoss)
                 all_inimigos.add(inimigoss)
+            for inimigoss in hits:
+                # No lugar do perry antigo, adicionar um perry morto.
+                perry = Perry_deitado(inimigoss.rect.bottom, inimigoss.rect.x, assets)
+                all_sprites.add(perry)
+                inimigoss.kill()
+
 
 
         # A cada loop, redesenha o fundo e os sprites

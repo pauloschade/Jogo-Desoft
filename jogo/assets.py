@@ -23,6 +23,8 @@ PLAYER_IMG_S_R_DOWN = 'wakanda_space_right_down'
 PLAYER_IMG_S_L_DOWN = 'wakanda_space_left_down'
 BOSS = 'boss_img'
 SPAWN = 'spawn'
+PERRY_DEITADO = 'perry_anim'
+BOWSERJR_DEITADO = 'bowser_anim'
 
 #tipo de tile
 BLOCK = 0
@@ -130,5 +132,18 @@ def load_assets():
     assets[BOSS] = pygame.image.load(os.path.join(img_dir, 'boss.png')).convert_alpha()
     spawn = pygame.image.load(os.path.join(img_dir, 'spawn.png')).convert_alpha()
     assets[SPAWN] = pygame.transform.scale(spawn, (2 * TILE_SIZE, 2 * TILE_SIZE))
+    perry_anim = []
+    for i in range(1):
+        filename = pygame.image.load(os.path.join(img_dir, 'perry_deitado.png')).convert_alpha()
+        img = pygame.transform.scale(filename, (inimigo_height, inimigo_width))
+        perry_anim.append(img)
+    assets[PERRY_DEITADO] = perry_anim
+
+    bowser_anim = []
+    for q in range(1):
+        filename1 = pygame.image.load(os.path.join(img_dir, 'bowserjr_deitado.png')).convert_alpha()
+        img1 = pygame.transform.scale(filename1, (inimigo_height, inimigo_width))
+        bowser_anim.append(img1)
+    assets[BOWSERJR_DEITADO] = bowser_anim
 
     return assets
