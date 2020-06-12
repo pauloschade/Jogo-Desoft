@@ -94,10 +94,16 @@ def game_screen3(screen, bank2):
                 elif event.key == pygame.K_DOWN:
                     player.parabaixo()
                     player.speedy += 5
-                elif event.key == pygame.K_x:
-                    player.attack_up()
+                elif event.key == pygame.K_RIGHT:
+                    if player.side == 'left':
+                        player.gravitation()
+                        player.side = 'right'
+                elif event.key == pygame.K_LEFT:
+                    if player.side == 'right':
+                        player.gravitation()
+                        player.side = 'left'
                 elif event.key == pygame.K_SPACE:
-                    player.gravitation()
+                    player.attack_up()
 
             # Verifica se soltou alguma tecla.
             if event.type == pygame.KEYUP:
