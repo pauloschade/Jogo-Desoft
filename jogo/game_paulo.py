@@ -15,7 +15,7 @@ pygame.mixer.init()
 # Define estados possíveis do jogador
 STILL = 0
 JUMPING = 1
-FALLING = 2
+FALLING = 2 
 
 lives = 3
 score = 0
