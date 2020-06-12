@@ -1,9 +1,10 @@
 import pygame
 import os
-from config import PLAYER_WIDTH, PLAYER_HEIGHT, img_dir, snd_dir, TILE_SIZE, inimigo_height, inimigo_width, VILAO_HEIGHT, VILAO_WIDHT, ATTACK_HEIGHT, ATTACK_WIDTH, T_ATTACK_HEIGHT, T_ATTACK_WIDTH, FLAG_WIDTH, FLAG_HEIGHT
+from config import WIDTH, HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT, img_dir, snd_dir, TILE_SIZE, inimigo_height, inimigo_width, VILAO_HEIGHT, VILAO_WIDHT, ATTACK_HEIGHT, ATTACK_WIDTH, T_ATTACK_HEIGHT, T_ATTACK_WIDTH, FLAG_WIDTH, FLAG_HEIGHT
 
 #imagens
 BACKGROUND_E = 'background'
+BACKGROUND_L = "lava"
 PLAYER_IMG_R = 'player_img_r'
 PLAYER_IMG_L = 'player_img_l'
 INIMIGO_IMG = 'perry'
@@ -15,7 +16,6 @@ UP_ATTACK = 'up_attack'
 TOSHI_ATTACK = 'toshi attack'
 FLAG = 'flag'
 SCORE_FONT = 'score_font'
-BACKGROUND_L = "lava_1"
 BACKGROUND_S = "background_space"
 PLAYER_IMG_S_R = 'wakanda_space_right'
 PLAYER_IMG_S_L = 'wakanda_space_left'
@@ -133,8 +133,9 @@ def load_assets():
 
     background_anim = []
     for m in range(8):
-        filename = pygame.image.load(os.path.join(img_dir, 'perry_deitado.png')).convert_alpha()
-        img = pygame.transform.scale(filename, (inimigo_height, inimigo_width))
+        filename = os.path.join(img_dir, 'lava_{}.png'.format(m+1))
+        img = pygame.image.load(filename).convert_alpha()
+        img = pygame.transform.scale(img, (WIDTH, HEIGHT))
         background_anim.append(img)
     assets[BACKGROUND_L] = background_anim
 
