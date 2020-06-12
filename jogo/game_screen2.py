@@ -104,15 +104,19 @@ def game_screen2(screen, bank):
                 if event.key == pygame.K_LEFT:
                     player.speedx -= SPEED_X
                     player.image = assets[PLAYER_IMG_L]
+                    player.orientation = 'left'
                 elif event.key == pygame.K_RIGHT:
                     player.speedx += SPEED_X
                     player.image = assets[PLAYER_IMG_R]
+                    player.orientation = 'right'
                 elif event.key == pygame.K_UP:
                     player.jump()
-                elif event.key == pygame.K_x:
-                    player.attack_right()
-                elif event.key == pygame.K_z:
-                    player.attack_left()
+                elif event.key == pygame.K_SPACE:
+                    if player.orientation == 'right':
+                        player.attack_right()
+                    elif player.orientation == 'left':
+                        player.attack_left()
+
 
             # Verifica se soltou alguma tecla.
             if event.type == pygame.KEYUP:
