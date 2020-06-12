@@ -78,7 +78,10 @@ def game_screen2(screen, bank):
     state = PLAYING
     
     last_update = pygame.time.get_ticks()
-    frame_ticks = 50
+    frame_ticks = 60
+    frame = 0
+    background_anim = assets['lava']
+    BACKGROUND_L = background_anim[0]
 
     pygame.mixer.music.play(loops=-1)
 
