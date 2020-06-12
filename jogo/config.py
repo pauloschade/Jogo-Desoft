@@ -57,6 +57,7 @@ YELLOW = (255, 255, 0)
 INIT = 0
 GAME = 1
 QUIT = 2
+INIT2 = 3
 
 # Define a aceleração da gravidade
 GRAVITY = 5
