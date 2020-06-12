@@ -40,9 +40,6 @@ def game_screen2(screen, bank):
         all_sprites.add(inimigos2)
         all_inimigos.add(inimigos2)
 
-    BACKGROUND_L = pygame.image.load(path.join(img_dir, 'lava_1.png')).convert_alpha()
-    BACKGROUND_L = pygame.transform.scale(BACKGROUND_L, (WIDTH, HEIGHT))
-
     #cria Vilao
     vilao = Vilao(assets[VILAO_IMG], 1, 5, blocks)
     all_sprites.add(vilao)
@@ -80,6 +77,9 @@ def game_screen2(screen, bank):
     all_hits = 0
     state = PLAYING
     
+    last_update = pygame.time.get_ticks()
+    frame_ticks = 50
+
     pygame.mixer.music.play(loops=-1)
 
     while state == PLAYING:
@@ -164,6 +164,25 @@ def game_screen2(screen, bank):
                 all_sprites.add(bowserjr)
                 inimigos2.kill()
 
+        now = pygame.time.get_ticks()
+        # Verifica quantos ticks se passaram desde a ultima mudança de frame.
+        elapsed_ticks = now - last_update
+
+        # Se já está na hora de mudar de imagem...
+        if elapsed_ticks > frame_ticks:
+            # Marca o tick da nova imagem.
+            last_update = now
+
+            # Avança um quadro.
+            frame += 1
+
+            # Verifica se já chegou no final da animação.
+            if frame == len(background_anim):
+                # Se sim, tchau explosão!
+                frame = 0
+            else:
+                # Se ainda não chegou ao fim da explosão, troca de imagem.
+                BACKGROUND_L = background_anim[frame]
 
         # A cada loop, redesenha o fundo e os sprites
         screen.fill(BLACK)  

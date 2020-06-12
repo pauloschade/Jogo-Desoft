@@ -25,6 +25,7 @@ BOSS = 'boss_img'
 SPAWN = 'spawn'
 PERRY_DEITADO = 'perry_anim'
 BOWSERJR_DEITADO = 'bowser_anim'
+PERRY_NOISE = 'grrr'
 
 #tipo de tile
 BLOCK = 0
@@ -98,7 +99,6 @@ MAP3 = [
 def load_assets():
     assets = {}
     assets[BACKGROUND_E] =  pygame.image.load(os.path.join(img_dir, 'earth_land_em_pe.png')).convert_alpha()
-    assets[BACKGROUND_L] =  pygame.image.load(os.path.join(img_dir, 'lava_1.png')).convert_alpha()
     player_r = pygame.image.load(os.path.join(img_dir, 'wakanda.png')).convert_alpha()
     assets[PLAYER_IMG_R] = pygame.transform.scale(player_r, (PLAYER_WIDTH, PLAYER_HEIGHT))
     player_l = pygame.image.load(os.path.join(img_dir, 'wakanda_l.png')).convert_alpha()
@@ -120,8 +120,6 @@ def load_assets():
     flag_img = pygame.image.load(os.path.join(img_dir, 'flag-end.png')).convert_alpha()
     assets[FLAG] = pygame.transform.scale(flag_img, (FLAG_WIDTH, FLAG_HEIGHT))
     assets[SCORE_FONT] = pygame.font.Font(os.path.join(img_dir, 'PressStart2P.ttf'), 28)
-    pygame.mixer.music.load(os.path.join(snd_dir, 'game.mp3'))
-    pygame.mixer.music.set_volume(0.4)
     assets[BACKGROUND_S] =  pygame.image.load(os.path.join(img_dir, 'space.png')).convert_alpha()
     player_space_l =  pygame.image.load(os.path.join(img_dir, 'wakanda_space_l.png')).convert_alpha()
     assets[PLAYER_IMG_S_L] = pygame.transform.scale(player_space_l, (PLAYER_HEIGHT, PLAYER_WIDTH))
@@ -132,6 +130,14 @@ def load_assets():
     assets[BOSS] = pygame.image.load(os.path.join(img_dir, 'boss.png')).convert_alpha()
     spawn = pygame.image.load(os.path.join(img_dir, 'spawn.png')).convert_alpha()
     assets[SPAWN] = pygame.transform.scale(spawn, (2 * TILE_SIZE, 2 * TILE_SIZE))
+
+    background_anim = []
+    for m in range(8):
+        filename = pygame.image.load(os.path.join(img_dir, 'perry_deitado.png')).convert_alpha()
+        img = pygame.transform.scale(filename, (inimigo_height, inimigo_width))
+        background_anim.append(img)
+    assets[BACKGROUND_L] = background_anim
+
     perry_anim = []
     for i in range(1):
         filename = pygame.image.load(os.path.join(img_dir, 'perry_deitado.png')).convert_alpha()
@@ -145,5 +151,10 @@ def load_assets():
         img1 = pygame.transform.scale(filename1, (inimigo_height, inimigo_width))
         bowser_anim.append(img1)
     assets[BOWSERJR_DEITADO] = bowser_anim
+
+
+    pygame.mixer.music.load(os.path.join(snd_dir, 'game.mp3'))
+    pygame.mixer.music.set_volume(0.4)
+    assets[PERRY_NOISE] = pygame.mixer.Sound(os.path.join(snd_dir, 'perry_noise.ogg'))
 
     return assets

@@ -334,7 +334,7 @@ class ataque_vilao (pygame.sprite.Sprite):
         # Construtor da classe pai (Sprite).
         pygame.sprite.Sprite.__init__(self)
 
-        self.image = assets[TOSHI_ATTACK]
+        self.image = pygame.transform.scale(assets[TOSHI_ATTACK], (40, 40))
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
         # Posiciona o personagem
@@ -465,7 +465,7 @@ class ataque_boss (pygame.sprite.Sprite):
         # Construtor da classe pai (Sprite).
         pygame.sprite.Sprite.__init__(self)
 
-        self.image = assets[TOSHI_ATTACK]
+        self.image = pygame.transform.scale(assets[TOSHI_ATTACK], (40, 40))
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
         # Posiciona o personagem
