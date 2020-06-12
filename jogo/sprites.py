@@ -512,6 +512,7 @@ class Player_b(pygame.sprite.Sprite):
         self.rect.right = (column * TILE_SIZE) + PLAYER_HEIGHT
 
         self.orientation = 1
+        self.side = 'left'
 
         self.speedx = 0
         self.speedy = 0
