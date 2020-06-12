@@ -13,7 +13,7 @@ def intro(screen):
 
     #logo
     LOGO = pygame.image.load(path.join(img_dir, 'logo.png')).convert_alpha()
-    LOGO = pygame.transform.scale(LOGO, (int(WIDTH), int(HEIGHT/2)))
+    LOGO = pygame.transform.scale(LOGO, (int(WIDTH), int(HEIGHT/3)))
 
     screen.blit(LOGO,[150, 50])
 
@@ -30,8 +30,7 @@ def intro(screen):
             if event.type == pygame.QUIT:
                 intro = False
                 state = QUIT
-        for event in pygame.event.get():
-            if event.type == pygame.KEYUP:
+            elif event.type == pygame.KEYUP:
                 state = INIT2
                 intro = False
     return state

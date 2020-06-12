@@ -1,5 +1,5 @@
 import pygame
-from config import FPS, TITULO, WIDTH, HEIGHT, BLACK, YELLOW, RED, img_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING, inimigo_height, inimigo_width, WIDTH_S, HEIGHT_S, INIT, QUIT, INIT2
+from config import FPS, TITULO, WIDTH, HEIGHT, BLACK, YELLOW, RED, img_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING, inimigo_height, inimigo_width, WIDTH_S, HEIGHT_S, INIT, QUIT, INIT2, GAME
 from game_screen import game_screen
 from game_screen2 import game_screen2
 from game_screen3 import game_screen3
@@ -35,12 +35,13 @@ print('Utilize as setas do teclado para andar e pular.')
 
 # Comando para evitar travamentos.
 try:
+    sucesso = 1
     state = INIT
-    while state != QUIT:
+    while state != QUIT and sucesso == 1:
         if state == INIT:
-            intro = intro(screen)
+            state = intro(screen)
         elif state == INIT2:
-            instru = instru(screen)
+            state = instru()
         elif state == GAME:    
             sucesso, bank = game_screen(screen, lives, score)
             if sucesso != 0:
@@ -48,6 +49,7 @@ try:
                 if sucesso2 != 0:
                     screen_s = pygame.display.set_mode((WIDTH_S, HEIGHT_S))
                     game_screen3(screen_s, bank2)
+                    sucesso = 0
 
 finally:
     pygame.quit()

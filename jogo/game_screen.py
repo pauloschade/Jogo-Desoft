@@ -5,6 +5,8 @@ from sprites import Tile, Player, inimigo, Vilao, Attack_right, Attack_left, ata
 from os import path
 
 def game_screen(screen, lives, score):
+
+    screen = pygame.display.set_mode([WIDTH, HEIGHT])
     # Variável para o ajuste de velocidade
     clock = pygame.time.Clock()
 
