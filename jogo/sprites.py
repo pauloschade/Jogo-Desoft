@@ -407,7 +407,7 @@ class Boss(pygame.sprite.Sprite):
         self.speedy = 0
         self.lives = 5
         self.last_attack = pygame.time.get_ticks()
-        self.attack_ticks = 2000
+        self.attack_ticks = 1500
 
         self.blocks = blocks
     
@@ -416,16 +416,16 @@ class Boss(pygame.sprite.Sprite):
         self.speedy = 0 
         self.speedx += random.randint(-2, 2)
         if self.lives == 4:
-            self.speedx = self.speedx * 1.07
+            self.speedx = self.speedx
             self.attack_ticks = 1000
         elif self.lives == 3:
-            self.speedx = self.speedx * 1.1
+            self.speedx = self.speedx
             self.attack_ticks = 900
         elif self.lives == 2:
-            self.speedx = self.speedx * 1.1
+            self.speedx = self.speedx 
             self.attack_ticks = 800
         elif self.lives == 1:
-            self.speedx = self.speedx * 1.1
+            self.speedx = self.speedx
             self.attack_ticks = 500
 
         # Atualizando a posição do inimigo
