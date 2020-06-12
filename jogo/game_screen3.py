@@ -67,7 +67,9 @@ def game_screen3(screen, bank2):
     lives = bank2[0] + 1
     score = bank2[1]
     state = PLAYING
-    
+
+    pygame.mixer.music.load(path.join(snd_dir, 'boss.mp3'))
+    pygame.mixer.music.set_volume(0.4)
     pygame.mixer.music.play(loops=-1)
 
     while state == PLAYING:

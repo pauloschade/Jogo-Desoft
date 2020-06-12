@@ -13,13 +13,13 @@ def intro(screen):
 
     #logo
     LOGO = pygame.image.load(path.join(img_dir, 'logo.png')).convert_alpha()
-    LOGO = pygame.transform.scale(LOGO, (int(WIDTH), int(HEIGHT/3)))
+    LOGO = pygame.transform.scale(LOGO, (int(1.5 * WIDTH), int(1.5 * HEIGHT/5)))
 
-    screen.blit(LOGO,[150, 50])
+    screen.blit(LOGO,[70, 70])
 
     font = pygame.font.SysFont(None, 20)
-    start = font.render("pressione qualquer tecla", True, [245,245,220])
-    screen.blit(start,(560,370))
+    start = font.render("Pressione qualquer tecla", True, [245,245,220])
+    screen.blit(start,(520,370))
 
    
 

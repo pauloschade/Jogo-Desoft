@@ -18,8 +18,8 @@ def instru():
         screen.blit(tiro,(20,150))
         screen.blit(instru,(20,50))
         font2 = pygame.font.SysFont(None, 20)
-        start = font2.render("Pressione qualquer tecla para inicias", True, [245,245,220])
-        screen.blit(start,(560,370))
+        start = font2.render("Pressione qualquer tecla para iniciar", True, [245,245,220])
+        screen.blit(start,(460,370))
 
         pygame.display.update()
         #while intro:
