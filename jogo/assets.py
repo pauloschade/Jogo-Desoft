@@ -26,6 +26,9 @@ SPAWN = 'spawn'
 PERRY_DEITADO = 'perry_anim'
 BOWSERJR_DEITADO = 'bowser_anim'
 PERRY_NOISE = 'grrr'
+BSRJR_NOISE = 'uaaa'
+WAKANDA_FOREVER = "wakanda forever"
+FIRE = 'fire'
 
 #tipo de tile
 BLOCK = 0
@@ -157,5 +160,8 @@ def load_assets():
     pygame.mixer.music.load(os.path.join(snd_dir, 'game.mp3'))
     pygame.mixer.music.set_volume(0.4)
     assets[PERRY_NOISE] = pygame.mixer.Sound(os.path.join(snd_dir, 'perry_noise.ogg'))
+    assets[BSRJR_NOISE] = pygame.mixer.Sound(os.path.join(snd_dir, 'bsrjr_noise.ogg'))
+    assets[WAKANDA_FOREVER] = pygame.mixer.Sound(os.path.join(snd_dir, 'wakanda_forever.ogg'))
+    assets[FIRE] = pygame.mixer.Sound(os.path.join(snd_dir, 'fire.ogg'))
 
     return assets

@@ -20,7 +20,7 @@ HEIGHT_S = 40 * 15 # Altura da tela
 #tamanho jogador
 PLAYER_WIDTH = TILE_SIZE - 1
 PLAYER_HEIGHT = int(TILE_SIZE * 1.5)
-FPS = 60 # Frames por segundo
+FPS = 120 # Frames por segundo
 
 
 # dados do inimigo

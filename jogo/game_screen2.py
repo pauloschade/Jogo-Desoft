@@ -1,6 +1,6 @@
 import pygame
 from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, img_dir, snd_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING
-from assets import load_assets, BACKGROUND_L, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, INIMIGO2_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, BLOCK, EMPTY, SCORE_FONT, MAP2, BOWSERJR_DEITADO
+from assets import load_assets, BACKGROUND_L, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, INIMIGO2_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, BLOCK, EMPTY, SCORE_FONT, MAP2, BOWSERJR_DEITADO, BSRJR_NOISE
 from sprites import Tile, Player, inimigo, Vilao, Attack_right, Attack_left, ataque_vilao, flag, Bowserjr_deitado 
 from os import path
 
@@ -169,6 +169,7 @@ def game_screen2(screen, bank):
                 all_sprites.add(inimigos2)
                 all_inimigos.add(inimigos2)
             for inimigos2 in hits:
+                assets[BSRJR_NOISE].play()
                 # No lugar do bowser antigo, adicionar um bowser morto.
                 bowserjr = Bowserjr_deitado(inimigos2.rect.bottom, inimigos2.rect.x, assets)
                 all_sprites.add(bowserjr)

@@ -1,7 +1,7 @@
 import random
 import pygame
 from config import FPS, WIDTH, inimigo_width, inimigo_height, HEIGHT, BLACK, YELLOW, RED, img_dir, snd_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING, VILAO_WIDHT, VILAO_HEIGHT, ATTACK_HEIGHT, ATTACK_WIDTH, WIDTH_S, HEIGHT_S 
-from assets import load_assets, BACKGROUND_E, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, BLOCK, EMPTY, MAP, TOSHI_ATTACK, FLAG, MAP2, BACKGROUND_L, PLAYER_IMG_S_L, PLAYER_IMG_S_R, PLAYER_IMG_S_L_DOWN, PLAYER_IMG_S_R_DOWN, SPAWN, PERRY_DEITADO, BOWSERJR_DEITADO
+from assets import load_assets, BACKGROUND_E, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, BLOCK, EMPTY, MAP, TOSHI_ATTACK, FLAG, MAP2, BACKGROUND_L, PLAYER_IMG_S_L, PLAYER_IMG_S_R, PLAYER_IMG_S_L_DOWN, PLAYER_IMG_S_R_DOWN, SPAWN, PERRY_DEITADO, BOWSERJR_DEITADO, FIRE
 
 # Class que representa os blocos do cenário
 class Tile(pygame.sprite.Sprite):
@@ -125,6 +125,7 @@ class Player(pygame.sprite.Sprite):
 
     # Se já pode atirar novamente...
         if elapsed_ticks > self.attack_ticks:
+            self.assets[FIRE].play()
         # Marca o tick da nova imagem.
             self.last_attack = now
         # A nova bala vai ser criada logo acima e no centro horizontal da nave
@@ -140,6 +141,7 @@ class Player(pygame.sprite.Sprite):
 
     # Se já pode atirar novamente...
         if elapsed_ticks > self.attack_ticks:
+            self.assets[FIRE].play()
         # Marca o tick da nova imagem.
             self.last_attack = now
         # A nova bala vai ser criada logo acima e no centro horizontal da nave

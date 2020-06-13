@@ -15,7 +15,7 @@ pygame.mixer.init()
 # Define estados possíveis do jogador
 STILL = 0
 JUMPING = 1
-FALLING = 2
+FALLING = 2 
 
 lives = 3
 score = 0
@@ -37,19 +37,17 @@ print('Utilize as setas do teclado para andar e pular.')
 try:
     sucesso = 1
     state = INIT
-    while state != QUIT and sucesso == 1:
-        if state == INIT:
-            state = intro(screen)
-        elif state == INIT2:
+    if state == INIT:
+        state = intro(screen)
+        if state == INIT2:
             state = instru()
-        elif state == GAME:    
-            sucesso, bank = game_screen(screen, lives, score)
-            if sucesso != 0:
-                sucesso2, bank2 = game_screen2(screen, bank)
-                if sucesso2 != 0:
-                    screen_s = pygame.display.set_mode((WIDTH_S, HEIGHT_S))
-                    game_screen3(screen_s, bank2)
-                    sucesso = 0
+            if state == GAME:
+                sucesso, bank = game_screen(screen, lives, score)
+                if sucesso != 0:
+                    sucesso2, bank2 = game_screen2(screen, bank)
+                    if sucesso2 != 0:
+                        screen_s = pygame.display.set_mode((WIDTH_S, HEIGHT_S))
+                        game_screen3(screen_s, bank2)
 
 finally:
     pygame.quit()
