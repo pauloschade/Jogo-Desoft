@@ -92,7 +92,6 @@ class Player(pygame.sprite.Sprite):
                 self.speedy = 0
                 # Atualiza o estado para parado
                 self.state = STILL
-
         # Tenta andar em x
         self.rect.x += self.speedx
         # Corrige a posição caso tenha passado do tamanho da janela
@@ -147,6 +146,10 @@ class Player(pygame.sprite.Sprite):
             new_attack = Attack_left(self.assets, self.rect.centery, self.rect.right)
             self.groups['all_sprites'].add(new_attack)
             self.groups['all_bullets'].add(new_attack)
+    def flag(self):
+        if self.state == STILL:
+            self.speedy -= JUMP_SIZE * 1.5 
+            self.state = JUMPING
 
 class Attack_right(pygame.sprite.Sprite):
     # Construtor da classe.
@@ -327,6 +330,10 @@ class Vilao(pygame.sprite.Sprite):
             elif self.speedx < 0:
                 self.rect.left = collision.rect.right
                 self.speedx = 1
+    def flag(self):
+        if self.state == STILL:
+            self.speedy -= JUMP_SIZE * 1.5 
+            self.state = JUMPING
 
 class ataque_vilao (pygame.sprite.Sprite):
 

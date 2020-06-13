@@ -148,6 +148,9 @@ def game_screen(screen, lives, score):
                     player = Player(assets[PLAYER_IMG_R], groups, assets, 16, 1, blocks)
                     all_sprites.add(player)
             if len(hits4) > 0:
+                player.flag()
+                vilao.flag()
+            if vilao.rect.bottom <= 0:
                 state = WIN
             for inimigoss in hits:
                 score += 100
