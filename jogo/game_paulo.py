@@ -44,10 +44,10 @@ try:
             if state == GAME:
                 sucesso, bank = game_screen(screen, lives, score)
                 if sucesso != 0:
-                    sucesso2, bank2 = game_screen2(screen, bank)
-                    if sucesso2 != 0:
+                    sucesso, bank = game_screen2(screen, bank)
+                    if sucesso != 0:
                         screen_s = pygame.display.set_mode((WIDTH_S, HEIGHT_S))
-                        game_screen3(screen_s, bank2)
+                        game_screen3(screen_s, bank)
 
 finally:
     pygame.quit()
