@@ -29,6 +29,7 @@ PERRY_NOISE = 'grrr'
 BSRJR_NOISE = 'uaaa'
 WAKANDA_FOREVER = "wakanda forever"
 FIRE = 'fire'
+TOSHI_INJURED = 'toshi_machucado'
 
 #tipo de tile
 BLOCK = 0
@@ -155,6 +156,15 @@ def load_assets():
         img1 = pygame.transform.scale(filename1, (inimigo_height, inimigo_width))
         bowser_anim.append(img1)
     assets[BOWSERJR_DEITADO] = bowser_anim
+
+    toshi_anim = []
+    for b in range(3):
+        filename = os.path.join(img_dir, 'boss_{}.png'.format(b+1))
+        img = pygame.image.load(filename).convert_alpha()
+        img = pygame.transform.scale(img, (VILAO_WIDHT, VILAO_HEIGHT))
+        toshi_anim.append(img)
+    assets[TOSHI_INJURED] = toshi_anim
+
 
 
     pygame.mixer.music.load(os.path.join(snd_dir, 'game.mp3'))

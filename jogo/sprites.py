@@ -1,7 +1,7 @@
 import random
 import pygame
 from config import FPS, WIDTH, inimigo_width, inimigo_height, HEIGHT, BLACK, YELLOW, RED, img_dir, snd_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING, VILAO_WIDHT, VILAO_HEIGHT, ATTACK_HEIGHT, ATTACK_WIDTH, WIDTH_S, HEIGHT_S 
-from assets import load_assets, BACKGROUND_E, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, BLOCK, EMPTY, MAP, TOSHI_ATTACK, FLAG, MAP2, BACKGROUND_L, PLAYER_IMG_S_L, PLAYER_IMG_S_R, PLAYER_IMG_S_L_DOWN, PLAYER_IMG_S_R_DOWN, SPAWN, PERRY_DEITADO, BOWSERJR_DEITADO, FIRE
+from assets import load_assets, BACKGROUND_E, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, BLOCK, EMPTY, MAP, TOSHI_ATTACK, FLAG, MAP2, BACKGROUND_L, PLAYER_IMG_S_L, PLAYER_IMG_S_R, PLAYER_IMG_S_L_DOWN, PLAYER_IMG_S_R_DOWN, SPAWN, PERRY_DEITADO, BOWSERJR_DEITADO, FIRE, TOSHI_INJURED
 
 # Class que representa os blocos do cenário
 class Tile(pygame.sprite.Sprite):
@@ -680,7 +680,7 @@ class Perry_deitado(pygame.sprite.Sprite):
         # Controle de ticks de animação: troca de imagem a cada self.frame_ticks milissegundos.
         # Quando pygame.time.get_ticks() - self.last_update > self.frame_ticks a
         # próxima imagem da animação será mostrada
-        self.frame_ticks = 200
+        self.frame_ticks = 400
 
     def update(self):
         # Verifica o tick atual.
@@ -759,3 +759,54 @@ class Bowserjr_deitado(pygame.sprite.Sprite):
                 self.rect = self.image.get_rect()
                 self.rect.bottom1 = bottom1
                 self.rect.x1 = x1
+
+class Toshi_machucado(pygame.sprite.Sprite):
+    # Construtor da classe.
+    def __init__(self, bottom, x, assets):
+        # Construtor da classe mãe (Sprite).
+        pygame.sprite.Sprite.__init__(self)
+
+        # Armazena a animação de explosão
+        self.Toshi_machucado = assets[TOSHI_INJURED]
+
+        # Inicia o processo de animação colocando a primeira imagem na tela.
+        self.frame = 0  # Armazena o índice atual na animação
+        self.image = self.Toshi_machucado[self.frame]  # Pega a primeira imagem
+        self.rect = self.image.get_rect()
+        self.rect.bottom = bottom  # Posiciona o centro da imagem
+        self.rect.x = x
+
+        # Guarda o tick da primeira imagem, ou seja, o momento em que a imagem foi mostrada
+        self.last_update = pygame.time.get_ticks()
+
+        # Controle de ticks de animação: troca de imagem a cada self.frame_ticks milissegundos.
+        # Quando pygame.time.get_ticks() - self.last_update > self.frame_ticks a
+        # próxima imagem da animação será mostrada
+        self.frame_ticks = 100
+
+    def update(self):
+        # Verifica o tick atual.
+        now = pygame.time.get_ticks()
+        # Verifica quantos ticks se passaram desde a ultima mudança de frame.
+        elapsed_ticks = now - self.last_update
+
+        # Se já está na hora de mudar de imagem...
+        if elapsed_ticks > self.frame_ticks:
+            # Marca o tick da nova imagem.
+            self.last_update = now
+
+            # Avança um quadro.
+            self.frame += 1
+
+            # Verifica se já chegou no final da animação.
+            if self.frame == len(self.Toshi_machucado):
+                # Se sim, tchau explosão!
+                self.kill()
+            else:
+                # Se ainda não chegou ao fim da explosão, troca de imagem.
+                bottom = self.rect.bottom
+                x = self.rect.x
+                self.image = self.Toshi_machucado[self.frame]
+                self.rect = self.image.get_rect()
+                self.rect.bottom = bottom
+                self.rect.x = x

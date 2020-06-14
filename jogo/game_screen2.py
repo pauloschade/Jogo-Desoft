@@ -1,6 +1,6 @@
 import pygame
 from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, img_dir, snd_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING
-from assets import load_assets, BACKGROUND_L, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, INIMIGO2_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, BLOCK, EMPTY, SCORE_FONT, MAP2, BOWSERJR_DEITADO, BSRJR_NOISE
+from assets import load_assets, BACKGROUND_L, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, INIMIGO2_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, BLOCK, EMPTY, SCORE_FONT, MAP2, BOWSERJR_DEITADO, BSRJR_NOISE, WAKANDA_FOREVER
 from sprites import Tile, Player, inimigo, Vilao, Attack_right, Attack_left, ataque_vilao, flag, Bowserjr_deitado 
 from os import path
 
@@ -140,7 +140,8 @@ def game_screen2(screen, bank):
             hits3 = pygame.sprite.spritecollide(player, all_toshi_attacks, True, pygame.sprite.collide_mask)
             hits4 = pygame.sprite.spritecollide(player, all_flags, False, pygame.sprite.collide_mask)
             all_hits = len(hits2) + len(hits3)
-            if all_hits > 0:  
+            if all_hits > 0: 
+                assets[WAKANDA_FOREVER].play() 
                 lives -= 1
                 score -= 100
                 player.kill()

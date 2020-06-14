@@ -1,6 +1,6 @@
 import pygame
 from config import FPS, WIDTH_S, HEIGHT_S, BLACK, YELLOW, RED, img_dir, snd_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING, SPEED_Y
-from sprites import Tile, Player, Player_b, inimigo, Vilao, Attack_right, Attack_left, ataque_vilao, flag, Boss, ataque_boss, Spawn
+from sprites import Tile, Player, Player_b, inimigo, Vilao, Attack_right, Attack_left, ataque_vilao, flag, Boss, ataque_boss, Spawn, Toshi_machucado
 from assets import load_assets, BACKGROUND_L, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, BLOCK, EMPTY, SCORE_FONT, MAP2, PLAYER_IMG_S_L, PLAYER_IMG_S_R, BACKGROUND_S, MAP3, BOSS, SPAWN
 from os import path
 
@@ -148,6 +148,8 @@ def game_screen3(screen, bank2):
             if len(hits4) > 0:
                 score += 100
                 boss.lives -= 1
+                boss_injured = Toshi_machucado(boss.rect.bottom, boss.rect.x, assets)
+                all_sprites.add(boss_injured)
                 if boss.lives == 0:
                     state = WIN
                     boss.kill()
