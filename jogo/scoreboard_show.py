@@ -1,105 +1,55 @@
 import pygame
+import json
+from config import FPS, TITULO, WIDTH, HEIGHT, BLACK, YELLOW, RED, img_dir, snd_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING, inimigo_height, inimigo_width, WIDTH_S, HEIGHT_S, QUIT, GAME
 from os import path
-from config import FPS, WIDTH_S, HEIGHT_S, BLACK, YELLOW, RED, img_dir, snd_dir, BLACK,WHITE, QUIT, GAME
-
-# pygame.init()
+from assets import load_assets, SCORE_FONT
 
 def scoreboard(score, nome):
+    assets = load_assets()
 
-    with open ('scoreboard.txt', 'r') as arquivo:
+    with open ('scoreboard.json', 'r') as arquivo:
         ranking = arquivo.read()
-    lista_ranking = ranking.split(',')
-    dicionario_ranking = {}
-    i = 0
-    while i < len(lista_ranking):
-        dicionario_ranking[lista_ranking[i]] = int(lista_ranking[i+1])
-        i += 2
-    print(dicionario_ranking)
-    # a = 9
-    # for i in dicionario_ranking.values():
-    #     if score >= i:
-    #         a -= 1
-    #     elif score < i:
-    #         break
-    lista_valores = []
-    lista_nomes = []
-    for j, i in dicionario_ranking.items():
-        print(i)
-        lista_valores.append(i)
-        lista_nomes.append(j)
-    lista_valores_2 = []
-    # lista_valores = lista_valores.sort(reverse=True)
-    for i in range (len(lista_valores)):
-        a = max(lista_valores)
-        lista_valores_2.append(a)
-        lista_valores.remove(a)
-    lista_valores = lista_valores_2
-    for f in lista_valores:
-        if score >= f:
-            lista_valores.append(score)
-            lista_nomes.append(nome)
-    # lista_valores = lista_valores.sort(reverse=True)
-    for i in range (len(lista_valores)):
-        a = max(lista_valores)
-        lista_valores_2.append(a)
-        lista_valores.remove(a)
-    lista_valores = lista_valores_2
-    if len(lista_valores) == 11:
-        del(lista_valores[10])
-    count = 9
-    for c in lista_valores:
-        if c == score:
+    dicionario = json.loads(ranking)
+    dicionario2 = json.loads(ranking)
+    for k, v in dicionario2.items():
+        if score > v[0]:
+            v[0] = score
+            v[1] = nome
+            lugar = int(k)
             break
-        else:
-            count -= 1
-    lista_nomes_2 = []
-    for co in range(len(lista_nomes)):
-        if co < count:
-            lista_nomes_2.append(lista_nomes[co])
-        elif co == count:
-            lista_nomes_2.append(nome)
-        else:
-            lista_nomes_2.append(lista_nomes[co-1])
+    for i in range(lugar+1, 11):
+        dicionario2[str(i)] = dicionario[str(i-1)]
+    dicionario = json.dumps(dicionario2)
+    with open('scoreboard.json', 'w') as arquivo_json:
+        arquivo_json.write(dicionario)
+    with open ('scoreboard.json', 'r') as arquivo:
+        ranking2 = arquivo.read()
+    dicionario_ranking = json.loads(ranking2)
 
-    lista_nomes = lista_nome_2
-
-    lista_final = []
-    for i in range (lista_nomes):
-        lista_final.append(lista_nomes[i])
-        lista_final.append(lista_valores[i])
-
-    with open ('scoreboard.txt', 'w') as arquivo:
-        arquivo.write(lista_final)
-
-    with open ('scoreboard.txt', 'r') as arquivo:
-        conteudo = arquivo.read()
-
-    lista_ranking = conteudo.split(',')
-    dicionario_ranking = {}
-    i = 0
-    while i <= len(lista_ranking):
-        dicionario_ranking[lista_ranking[i]] = lista_ranking[i+1]
-        i += 2
+    keys_down = {}
     scoreboard = True
     while scoreboard:
-        a = 0
-        for j, i in dicionario_ranking.items():
-            a += 1
-            screen = pygame.display.set_mode([HEIGHT, WIDTH])
-            screen.fill(BLACK)
-            font = pygame.Sysfont(None, 50)
-            lugar = font.render('{0}º - {1}: {2}'.format(a, j, i), True, [245,245,220])
-            screen.blit(lugar, (20, 25 + 25 * a))
-            pygame.display.update()
-            for event in pygame.event.get():  
-                if event.type == pygame.QUIT:
-                    scoreboard = False
-                    state = QUIT
-                elif event.type == pygame.KEYUP:
-                    state = GAME
-                    scoreboard = False
-        return state
+        screen = pygame.display.set_mode([WIDTH_S, HEIGHT_S])
+        screen.fill(BLACK)
 
-scoreboard(2817, 'MAT')
-#pygame.quit()
+        font = assets[SCORE_FONT]
+        score_text = font.render('SCOREBOARD', True, YELLOW)
+        screen.blit(score_text, (WIDTH_S/4, 20))
+        for j, i in dicionario_ranking.items():
+            lugar = font.render('{0}º - {1}: {2}'.format(j, i[1], i[0]), True, YELLOW)
+            screen.blit(lugar, (20, 40 + 40 * int(j)))
+
+        pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                scoreboard = False
+                return QUIT
+            if event.type == pygame.KEYDOWN:
+                keys_down[event.key] = True
+                if event.key == pygame.K_SPACE:
+                    scoreboard = False
+                    return QUIT
+                elif event.key == pygame.K_TAB:
+                    scoreboard = False
+                    return GAME
         

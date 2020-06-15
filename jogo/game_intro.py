@@ -1,6 +1,6 @@
 import pygame
 from os import path
-from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, img_dir, snd_dir, BLACK,WHITE, INIT, QUIT
+from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, img_dir, snd_dir, BLACK,WHITE, GAME, QUIT
 
 pygame.init()
 
@@ -23,6 +23,6 @@ def intro(screen):
                 intro = False
                 state = QUIT
             elif event.type == pygame.KEYUP:
-                state = INIT
+                state = GAME
                 intro = False
     return state

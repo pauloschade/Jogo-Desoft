@@ -218,10 +218,10 @@ def game_screen2(screen, bank):
         pygame.display.flip()
 
     if state == DONE:
-        return -1, [lives, score, now]
+        return -1, [lives, score], now
     elif state == OVER:
-        return 0, [lives, score, now]
+        return 0, [lives, score], now
     elif state == WIN:
         assets[JUMP_NOISE].play()
         pygame.mixer.music.stop()
-        return 1, [lives, score, now]
+        return 1, [lives, score], now

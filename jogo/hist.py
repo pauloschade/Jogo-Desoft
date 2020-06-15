@@ -21,7 +21,7 @@ def hist():
                 hist = False
                 state = QUIT
             elif event.type == pygame.KEYUP:
-                state = GAME
                 hist = False
+                state = GAME
     return state
 

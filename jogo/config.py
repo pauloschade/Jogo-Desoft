@@ -54,9 +54,8 @@ BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
 
 # Estados para controle do fluxo da aplicação
-INIT = 0
 GAME = 1
-QUIT = 2
+QUIT = 0
 
 # Define a aceleração da gravidade
 GRAVITY = 5

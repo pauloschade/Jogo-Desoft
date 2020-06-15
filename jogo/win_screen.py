@@ -1,4 +1,5 @@
 import pygame
+from os import path
 from config import img_dir, snd_dir, BLACK, WHITE, HEIGHT_S, WIDTH_S, QUIT, GAME
 from assets import load_assets, SCORE_FONT
 
@@ -12,9 +13,9 @@ def win_screen(bank, times):
         screen = pygame.display.set_mode([WIDTH_S, HEIGHT_S])
         screen.fill(BLACK)
 
-        # WIN = pygame.image.load(path.join(img_dir, 'over.png')).convert_alpha()
-        # WIN = pygame.transform.scale(WIN, (HEIGHT_S, WIDTH_S))
-        # screen.blit(WIN,[0, 0])
+        WIN = pygame.image.load(path.join(img_dir, 'winner.png')).convert_alpha()
+        WIN = pygame.transform.scale(WIN, (WIDTH_S, HEIGHT_S))
+        screen.blit(WIN,[0, 0])
         
         lives = bank[0]
         if lives == 1:
@@ -35,13 +36,13 @@ def win_screen(bank, times):
 
         font = assets[SCORE_FONT]
         score_text = font.render("Score:{}".format(score), True, WHITE)
-        screen.blit(score_text,(20, 20))
+        screen.blit(score_text,(20, 440))
         time_text = font.render("Time:{}".format(time), True, WHITE)
-        screen.blit(time_text,(20, 60))
+        screen.blit(time_text,(20, 480))
         final_text = font.render("Final score:{}".format(final), True, WHITE)
-        screen.blit(final_text,(20, 100))
+        screen.blit(final_text,(20, 520))
         media_text = font.render("Média final:{}".format(media), True, WHITE)
-        screen.blit(media_text,(450, 60))
+        screen.blit(media_text,(20, 560))
 
         name_text = font.render("Gamer name:{}".format(text), True, WHITE)
         screen.blit(name_text, (400, 200))
