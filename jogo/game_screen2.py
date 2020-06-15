@@ -1,6 +1,6 @@
 import pygame
 from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, img_dir, snd_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING
-from assets import load_assets, BACKGROUND_L, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, INIMIGO2_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, BLOCK, EMPTY, SCORE_FONT, MAP2, BOWSERJR_DEITADO, BSRJR_NOISE, WAKANDA_FOREVER
+from assets import load_assets, BACKGROUND_L, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, INIMIGO2_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, BLOCK, EMPTY, SCORE_FONT, MAP2, BOWSERJR_DEITADO, BSRJR_NOISE, WAKANDA_FOREVER, JUMP_NOISE
 from sprites import Tile, Player, inimigo, Vilao, Attack_right, Attack_left, ataque_vilao, flag, Bowserjr_deitado 
 from os import path
 
@@ -69,8 +69,9 @@ def game_screen2(screen, bank):
     all_sprites.add(Flag)
     all_flags.add(Flag)
     keys_down = {}
-    PLAYING = 0
-    DONE = 1
+    DONE = -1
+    OVER = 0
+    PLAYING = 1
     WIN = 2
     lives = bank[0] + 1
     score = bank[1]
@@ -147,7 +148,8 @@ def game_screen2(screen, bank):
                 player.kill()
                 keys_down = {}
                 if lives == 0:
-                    state = DONE
+                    pygame.mixer.music.stop()
+                    state = OVER
                 else:
                     state = PLAYING
                     player = Player(assets[PLAYER_IMG_R], groups, assets, 16, 1, blocks)
@@ -217,6 +219,9 @@ def game_screen2(screen, bank):
         pygame.display.flip()
 
     if state == DONE:
+        return -1, [lives, score]
+    elif state == OVER:
         return 0, [lives, score]
     elif state == WIN:
+        assets[JUMP_NOISE].play()
         return 1, [lives, score]

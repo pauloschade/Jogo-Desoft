@@ -5,7 +5,7 @@ img_dir = path.join(path.dirname(__file__), 'assets', 'img')
 snd_dir = path.join(path.dirname(__file__), 'assets', 'snd')
 
 # Dados gerais do jogo.
-TITULO = 'A jornada do oxi'
+TITULO = 'BLACK PANTERA in WEIRD WORLD'
 WIDTH = 400 # Largura da tela
 HEIGHT = 720 # Altura da tela 
 TILE_SIZE = 40 # Tamanho de cada tile 
@@ -57,7 +57,6 @@ YELLOW = (255, 255, 0)
 INIT = 0
 GAME = 1
 QUIT = 2
-INIT2 = 3
 
 # Define a aceleração da gravidade
 GRAVITY = 5

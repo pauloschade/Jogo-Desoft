@@ -5,6 +5,7 @@ from config import WIDTH, HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT, img_dir, snd_dir,
 #imagens
 BACKGROUND_E = 'background'
 BACKGROUND_L = "lava"
+BACKGROUND_S = "background_space"
 PLAYER_IMG_R = 'player_img_r'
 PLAYER_IMG_L = 'player_img_l'
 INIMIGO_IMG = 'perry'
@@ -16,7 +17,6 @@ UP_ATTACK = 'up_attack'
 TOSHI_ATTACK = 'toshi attack'
 FLAG = 'flag'
 SCORE_FONT = 'score_font'
-BACKGROUND_S = "background_space"
 PLAYER_IMG_S_R = 'wakanda_space_right'
 PLAYER_IMG_S_L = 'wakanda_space_left'
 PLAYER_IMG_S_R_DOWN = 'wakanda_space_right_down'
@@ -30,7 +30,9 @@ BSRJR_NOISE = 'uaaa'
 WAKANDA_FOREVER = "wakanda forever"
 FIRE = 'fire'
 TOSHI_INJURED = 'toshi_machucado'
-BOSS_INJURED_SND = 'toshi machucado som'
+BOSS_NOISE = 'toshi machucado som'
+JUMP_NOISE = 'here we go'
+GAME_OVER = 'game over'
 
 #tipo de tile
 BLOCK = 0
@@ -172,7 +174,10 @@ def load_assets():
     pygame.mixer.music.set_volume(0.4)
     assets[PERRY_NOISE] = pygame.mixer.Sound(os.path.join(snd_dir, 'perry_noise.ogg'))
     assets[BSRJR_NOISE] = pygame.mixer.Sound(os.path.join(snd_dir, 'bsrjr_noise.ogg'))
+    assets[BOSS_NOISE] = pygame.mixer.Sound(os.path.join(snd_dir, 'boss_noise.ogg'))
+    assets[JUMP_NOISE] = pygame.mixer.Sound(os.path.join(snd_dir, 'herewego.ogg'))
     assets[WAKANDA_FOREVER] = pygame.mixer.Sound(os.path.join(snd_dir, 'wakanda_forever.ogg'))
     assets[FIRE] = pygame.mixer.Sound(os.path.join(snd_dir, 'fire.ogg'))
+    assets[GAME_OVER] = pygame.mixer.Sound(os.path.join(snd_dir, 'gameover.ogg'))
 
     return assets

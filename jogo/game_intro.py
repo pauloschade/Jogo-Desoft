@@ -1,6 +1,6 @@
 import pygame
 from os import path
-from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, img_dir, snd_dir, BLACK,WHITE, INIT2, QUIT
+from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, img_dir, snd_dir, BLACK,WHITE, INIT, QUIT
 
 pygame.init()
 
@@ -11,18 +11,10 @@ def intro(screen):
     screen = pygame.display.set_mode([HEIGHT, WIDTH])
     screen.fill(BLACK)
 
-    #logo
-    LOGO = pygame.image.load(path.join(img_dir, 'logo.png')).convert_alpha()
-    LOGO = pygame.transform.scale(LOGO, (int(1.5 * WIDTH), int(1.5 * HEIGHT/5)))
+    LOGO = pygame.image.load(path.join(img_dir, 'initial.png')).convert_alpha()
+    LOGO = pygame.transform.scale(LOGO, (HEIGHT, WIDTH))
 
-    screen.blit(LOGO,[70, 70])
-
-    font = pygame.font.SysFont(None, 20)
-    start = font.render("Pressione qualquer tecla", True, [245,245,220])
-    screen.blit(start,(520,370))
-
-   
-
+    screen.blit(LOGO,[0, 0])
 
     pygame.display.update()
     while intro:
@@ -31,11 +23,6 @@ def intro(screen):
                 intro = False
                 state = QUIT
             elif event.type == pygame.KEYUP:
-                state = INIT2
+                state = INIT
                 intro = False
     return state
-    
-#pygame.init()
-#intro()
-
-

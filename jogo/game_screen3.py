@@ -1,7 +1,7 @@
 import pygame
 from config import FPS, WIDTH_S, HEIGHT_S, BLACK, YELLOW, RED, img_dir, snd_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING, SPEED_Y
 from sprites import Tile, Player, Player_b, inimigo, Vilao, Attack_right, Attack_left, ataque_vilao, flag, Boss, ataque_boss, Spawn, Toshi_machucado
-from assets import load_assets, BACKGROUND_L, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, BLOCK, EMPTY, SCORE_FONT, MAP2, PLAYER_IMG_S_L, PLAYER_IMG_S_R, BACKGROUND_S, MAP3, BOSS, SPAWN, WAKANDA_FOREVER, BOSS_INJURED_SND
+from assets import load_assets, BACKGROUND_L, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, BLOCK, EMPTY, SCORE_FONT, MAP2, PLAYER_IMG_S_L, PLAYER_IMG_S_R, BACKGROUND_S, MAP3, BOSS, SPAWN, WAKANDA_FOREVER, BOSS_NOISE
 from os import path
 
 def game_screen3(screen, bank):
@@ -61,8 +61,9 @@ def game_screen3(screen, bank):
     all_sprites.add(player)
 
     keys_down = {}
-    PLAYING = 0
-    DONE = 1
+    DONE = -1
+    OVER = 0
+    PLAYING = 1
     WIN = 2
     lives = bank[0] + 1
     score = bank[1]
@@ -135,7 +136,8 @@ def game_screen3(screen, bank):
                 player.kill()
                 keys_down = {}
                 if lives == 0:
-                    state = DONE
+                    pygame.mixer.music.stop()
+                    state = OVER
                 else:
                     state = PLAYING
                     #if GRAVITY < 0:
@@ -147,6 +149,7 @@ def game_screen3(screen, bank):
                 all_sprites.add(ataquess)
                 all_toshi_attacks.add(ataquess)
             if len(hits4) > 0:
+                assets[BOSS_NOISE].play()
                 score += 100
                 boss.lives -= 1
                 boss_injured = Toshi_machucado(boss.rect.bottom, boss.rect.x, assets)
@@ -176,6 +179,9 @@ def game_screen3(screen, bank):
         pygame.display.flip()
 
     if state == DONE:
-        return 0
+        return -1, [lives, score]
+    elif state == OVER:
+        return 0, [lives, score]
     elif state == WIN:
-        return 1
+        assets[JUMP_NOISE].play()
+        return 1, [lives, score]
