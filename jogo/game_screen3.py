@@ -179,7 +179,7 @@ def game_screen3(screen, bank):
         if lives == 2:
             text_surface = assets[SCORE_FONT].render('B', True, YELLOW)
         if lives >= 3:
-            text_surface = assets[SCORE_FONT].render('A{}'.format(chr(43) * (lives - 3)), True, GREEN)
+            text_surface = assets[SCORE_FONT].render('A{}'.format('+' * (lives - 3)), True, GREEN)
         text_rect = text_surface.get_rect()
         text_rect.bottomleft = (230, HEIGHT_S - 10)
         screen.blit(text_surface, text_rect)
@@ -193,9 +193,9 @@ def game_screen3(screen, bank):
         elif boss.lives == 2:
             text2_surface = assets[SCORE_FONT].render('1%', True, RED)
         elif boss.lives == 3:
-            text2_surface = assets[SCORE_FONT].render('10%', True, YELLOW)
+            text2_surface = assets[SCORE_FONT].render('10%', True, (255, 128, 0))
         elif boss.lives == 4:
-            text2_surface = assets[SCORE_FONT].render('25%', True, (128, 255, 0))
+            text2_surface = assets[SCORE_FONT].render('25%', True, YELLOW)
         elif boss.lives == 5:
             text2_surface = assets[SCORE_FONT].render('50%', True, GREEN)
         text2_rect = text2_surface.get_rect()

@@ -1,7 +1,7 @@
 import pygame
 from os import path
 from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, img_dir, snd_dir, BLACK,WHITE, QUIT, GAME
-from assets import load_assets, GAME_OVER
+from assets import load_assets, GAME_OVER, SCORE_FONT
 
 
 def game_over(bank):
@@ -18,9 +18,9 @@ def game_over(bank):
 
         screen.blit(OVER,[0, 0])
 
-        font = pygame.font.SysFont(None, 50)
-        score = font.render("Score: {}".format(bank[1]), True, [255,0,0])
-        screen.blit(score,(20, 50))
+        font = assets[SCORE_FONT]
+        score = font.render("Score:{}".format(bank[1]), True, [255,0,0])
+        screen.blit(score,(20, 20))
 
         pygame.display.update()
 

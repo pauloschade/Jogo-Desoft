@@ -209,7 +209,7 @@ def game_screen2(screen, bank):
         elif lives == 2:
             text_surface = assets[SCORE_FONT].render('B', True, YELLOW)
         elif lives >= 3:
-            text_surface = assets[SCORE_FONT].render('A{}'.format(chr(43) * (lives - 3)), True, GREEN)
+            text_surface = assets[SCORE_FONT].render('A{}'.format('+' * (lives - 3)), True, GREEN)
         text_rect = text_surface.get_rect()
         text_rect.bottomleft = (230, HEIGHT - 10)
         screen.blit(text_surface, text_rect)
