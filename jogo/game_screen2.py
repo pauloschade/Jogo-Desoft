@@ -75,6 +75,7 @@ def game_screen2(screen, bank):
     WIN = 2
     lives = bank[0] + 1
     score = bank[1]
+    past = bank[2]
     all_hits = 0
     state = PLAYING
     
@@ -218,9 +219,9 @@ def game_screen2(screen, bank):
         pygame.display.flip()
 
     if state == DONE:
-        return -1, [lives, score]
+        return -1, [lives, score, past + now]
     elif state == OVER:
-        return 0, [lives, score]
+        return 0, [lives, score, past + now]
     elif state == WIN:
         assets[JUMP_NOISE].play()
-        return 1, [lives, score]
+        return 1, [lives, score, past + now]

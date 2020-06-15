@@ -4,6 +4,7 @@ from game_screen import game_screen
 from game_screen2 import game_screen2
 from game_screen3 import game_screen3
 from game_over import game_over
+from win_screen import win_screen
 from os import path
 from random import randint
 from game_intro import intro
@@ -45,7 +46,8 @@ try:
                     screen_s = pygame.display.set_mode((WIDTH_S, HEIGHT_S))
                     sucesso, bank = game_screen3(screen_s, bank)
                     if sucesso == 1:
-                        win_screen(bank)
+                        state, score = win_screen(bank)
+                        state = scoreboard(score)
                     elif sucesso == 0:
                         state = game_over(bank)
                     else:
