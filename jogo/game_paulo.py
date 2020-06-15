@@ -46,8 +46,8 @@ try:
                     screen_s = pygame.display.set_mode((WIDTH_S, HEIGHT_S))
                     sucesso, bank = game_screen3(screen_s, bank)
                     if sucesso == 1:
-                        state, score = win_screen(bank)
-                        state = scoreboard(score)
+                        state, score, nome = win_screen(bank)
+                        state = scoreboard(score, nome)
                     elif sucesso == 0:
                         state = game_over(bank)
                     else:
