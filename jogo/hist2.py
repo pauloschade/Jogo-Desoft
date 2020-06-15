@@ -15,6 +15,12 @@ def hist2():
 
         screen.blit(HIST,[0, 0])
 
+        font = pygame.font.Font(path.join(img_dir, 'PressStart2P.ttf'), 12)
+        tab_text = font.render('Pressione tab', True, (200, 200, 20))
+        tab_text2 = font.render('Press tab', True, (200, 200, 20))
+        screen.blit(tab_text, (HEIGHT-170, WIDTH-50))
+        screen.blit(tab_text2, (HEIGHT-120, WIDTH-30))
+
         pygame.display.update()
         for event in pygame.event.get():  
             if event.type == pygame.QUIT:

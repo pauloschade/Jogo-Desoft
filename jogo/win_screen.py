@@ -35,17 +35,22 @@ def win_screen(bank, times):
         final = score + int(3.6 * 1e8 / gametime)
 
         font = assets[SCORE_FONT]
-        score_text = font.render("Score:{}".format(score), True, WHITE)
-        screen.blit(score_text,(20, 440))
-        time_text = font.render("Time:{}".format(time), True, WHITE)
-        screen.blit(time_text,(20, 480))
-        final_text = font.render("Final score:{}".format(final), True, WHITE)
-        screen.blit(final_text,(20, 520))
-        media_text = font.render("Média final:{}".format(media), True, WHITE)
-        screen.blit(media_text,(20, 560))
-
         name_text = font.render("Gamer name:{}".format(text), True, BLACK)
         screen.blit(name_text, (400, 200))
+
+        score_text = font.render("Score:{}".format(score), True, WHITE)
+        time_text = font.render("Time:{}".format(time), True, WHITE)
+        final_text = font.render("Final score:{}".format(final), True, WHITE)
+        media_text = font.render("Média final:{}".format(media), True, WHITE)
+        enter_text = font.render("Digite nome e ENTER", True, WHITE)
+        enter_text2 = font.render("Type name and ENTER", True, WHITE)
+
+        screen.blit(score_text,(20, 440))
+        screen.blit(time_text,(20, 480))
+        screen.blit(final_text,(20, 520))
+        screen.blit(media_text,(20, 560))
+        screen.blit(media_text,(WIDTH_S-100, 520))
+        screen.blit(media_text2,(WIDTH_S-100, 560))
 
         pygame.display.update()
 
