@@ -30,7 +30,7 @@ def win_screen(bank):
         seconds = (int(bank[2] / 1000)) - (minutes * 60)
         time = "{}'".format(minutes) + '{}"'.format(seconds)
 
-        final = score + int(3,6 * 1e8 / bank[2])
+        final = score + int(3.6 * 1e8 / bank[2])
 
         font = assets[SCORE_FONT]
         score_text = font.render("Score:{}".format(score), True, WHITE)
@@ -43,6 +43,7 @@ def win_screen(bank):
         screen.blit(media_text,(450, 60))
 
         name_text = font.render("Gamer name:{}".format(text), True, WHITE)
+        screen.blit(name_text, (400, 200))
 
         pygame.display.update()
 
@@ -58,7 +59,7 @@ def win_screen(bank):
                 keys_down[event.key] = True
                 if event.key == pygame.K_SPACE:
                     text = ''
-                elif event.key == K_BACKSPACE:
+                elif event.key == pygame.K_BACKSPACE:
                     if len(text)>0:
                         text = text[:-1]
                 else:
