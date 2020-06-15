@@ -27,14 +27,23 @@ def scoreboard(score, nome):
         print(i)
         lista_valores.append(i)
         lista_nomes.append(j)
-    print(lista_valores)
-    lista_valores = lista_valores.sort(reverse=True)
-    print(lista_valores)
+    lista_valores_2 = []
+    # lista_valores = lista_valores.sort(reverse=True)
+    for i in range (len(lista_valores)):
+        a = max(lista_valores)
+        lista_valores_2.append(a)
+        lista_valores.remove(a)
+    lista_valores = lista_valores_2
     for f in lista_valores:
         if score >= f:
             lista_valores.append(score)
             lista_nomes.append(nome)
-    lista_valores = lista_valores.sort(reverse=True)
+    # lista_valores = lista_valores.sort(reverse=True)
+    for i in range (len(lista_valores)):
+        a = max(lista_valores)
+        lista_valores_2.append(a)
+        lista_valores.remove(a)
+    lista_valores = lista_valores_2
     if len(lista_valores) == 11:
         del(lista_valores[10])
     count = 9
@@ -79,7 +88,7 @@ def scoreboard(score, nome):
             screen = pygame.display.set_mode([HEIGHT, WIDTH])
             screen.fill(BLACK)
             font = pygame.Sysfont(None, 50)
-            lugar = font.render('{0} - {1}: {2}'.format(a, j, i), True, [245,245,220])
+            lugar = font.render('{0}º - {1}: {2}'.format(a, j, i), True, [245,245,220])
             screen.blit(lugar, (20, 25 + 25 * a))
             pygame.display.update()
             for event in pygame.event.get():  
@@ -91,6 +100,6 @@ def scoreboard(score, nome):
                     scoreboard = False
         return state
 
-# scoreboard(2817, 'MAT')
-# pygame.quit()
+scoreboard(2817, 'MAT')
+#pygame.quit()
         
