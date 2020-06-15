@@ -1,10 +1,13 @@
 import pygame
 from config import FPS, TITULO, WIDTH, HEIGHT, BLACK, YELLOW, RED, img_dir, snd_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING, inimigo_height, inimigo_width, WIDTH_S, HEIGHT_S, INIT, QUIT, GAME
+from hist import hist
+from hist2 import hist2
 from game_screen import game_screen
 from game_screen2 import game_screen2
 from game_screen3 import game_screen3
 from game_over import game_over
 from win_screen import win_screen
+# from scoreboard_show import scoreboard
 from os import path
 from random import randint
 from game_intro import intro
@@ -19,6 +22,8 @@ pygame.mixer.init()
 STILL = 0
 JUMPING = 1
 FALLING = 2 
+
+bank = [3, 0]
 
 # Tamanho da tela.
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -37,12 +42,15 @@ print('Utilize as setas do teclado para andar e pular.')
 try:
     state = intro(screen)
     if state == INIT:
+        state = hist()
         state = instru()
         while state == GAME:
             sucesso, bank = game_screen(screen)
             if sucesso == 1:
                 sucesso, bank = game_screen2(screen, bank)
                 if sucesso == 1:
+                    state = hist2()
+                    state = instru2()
                     screen_s = pygame.display.set_mode((WIDTH_S, HEIGHT_S))
                     sucesso, bank = game_screen3(screen_s, bank)
                     if sucesso == 1:

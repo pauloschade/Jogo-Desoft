@@ -54,13 +54,16 @@ def win_screen(bank):
         for event in pygame.event.get():  
             if event.type == pygame.QUIT:
                 over = False
-                return QUIT
+                return QUIT, score, text
             if event.type == pygame.KEYDOWN:
                 keys_down[event.key] = True
-                if event.key == pygame.K_SPACE:
-                    text = ''
-                elif event.key == pygame.K_BACKSPACE:
+                if event.key == pygame.K_BACKSPACE:
                     if len(text)>0:
                         text = text[:-1]
                 else:
-                    text += (event.unicode).upper()
+                    if text == '' and event.key == pygame.K_SPACE:
+                        text = ''
+                    elif event.key == pygame.K_RETURN:
+                        return GAME, final, text
+                    elif len(text) <= 10:
+                        text += (event.unicode).upper()

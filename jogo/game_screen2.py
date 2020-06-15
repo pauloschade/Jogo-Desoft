@@ -224,4 +224,5 @@ def game_screen2(screen, bank):
         return 0, [lives, score, past + now]
     elif state == WIN:
         assets[JUMP_NOISE].play()
+        pygame.mixer.music.stop()
         return 1, [lives, score, past + now]
