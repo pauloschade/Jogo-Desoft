@@ -34,5 +34,5 @@ def game_over(bank):
                 return QUIT
             if event.type == pygame.KEYDOWN:
                 keys_down[event.key] = True
-                if event.key == pygame.K_SPACE:
+                if event.key == pygame.K_TAB:
                     return GAME

@@ -4,6 +4,7 @@ from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, img_dir, snd_dir, BLA
 
 
 def instru2():
+    keys_down = {}
     instru = True
     while instru:
         screen = pygame.display.set_mode([HEIGHT, WIDTH])
@@ -17,12 +18,14 @@ def instru2():
         now = pygame.time.get_ticks()
 
         pygame.display.update()
-        #while intro:
         for event in pygame.event.get():  
             if event.type == pygame.QUIT:
                 instru = False
                 state = QUIT
-            elif event.type == pygame.KEYUP:
-                state = GAME
-                instru = False
+            if event.type == pygame.KEYDOWN:
+                keys_down[event.key] = True
+                if event.key == pygame.K_TAB:
+                    instru = False
+                    state = GAME
+    
     return state, now

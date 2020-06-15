@@ -44,7 +44,7 @@ def win_screen(bank, times):
         media_text = font.render("Média final:{}".format(media), True, WHITE)
         screen.blit(media_text,(20, 560))
 
-        name_text = font.render("Gamer name:{}".format(text), True, WHITE)
+        name_text = font.render("Gamer name:{}".format(text), True, BLACK)
         screen.blit(name_text, (400, 200))
 
         pygame.display.update()

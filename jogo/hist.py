@@ -4,6 +4,7 @@ from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, img_dir, snd_dir, BLA
 
 
 def hist():
+    keys_down = {}
     hist = True
     while hist:
         screen = pygame.display.set_mode([HEIGHT, WIDTH])
@@ -15,13 +16,15 @@ def hist():
         screen.blit(HIST,[0, 0])
 
         pygame.display.update()
-        #while intro:
         for event in pygame.event.get():  
             if event.type == pygame.QUIT:
                 hist = False
                 state = QUIT
-            elif event.type == pygame.KEYUP:
-                hist = False
-                state = GAME
+            if event.type == pygame.KEYDOWN:
+                keys_down[event.key] = True
+                if event.key == pygame.K_TAB:
+                    hist = False
+                    state = GAME
+    
     return state
 
