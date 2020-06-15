@@ -593,6 +593,7 @@ class Player_b(pygame.sprite.Sprite):
 
     # Se já pode atirar novamente...
         if elapsed_ticks > self.attack_ticks:
+            self.assets[FIRE].play()
         # Marca o tick da nova imagem.
             self.last_attack = now
         # A nova bala vai ser criada logo acima e no centro horizontal da nave

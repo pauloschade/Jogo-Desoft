@@ -30,6 +30,7 @@ BSRJR_NOISE = 'uaaa'
 WAKANDA_FOREVER = "wakanda forever"
 FIRE = 'fire'
 TOSHI_INJURED = 'toshi_machucado'
+BOSS_INJURED_SND = 'toshi machucado som'
 
 #tipo de tile
 BLOCK = 0

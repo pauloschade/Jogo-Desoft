@@ -1,7 +1,7 @@
 import pygame
 from config import FPS, WIDTH_S, HEIGHT_S, BLACK, YELLOW, RED, img_dir, snd_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING, SPEED_Y
 from sprites import Tile, Player, Player_b, inimigo, Vilao, Attack_right, Attack_left, ataque_vilao, flag, Boss, ataque_boss, Spawn, Toshi_machucado
-from assets import load_assets, BACKGROUND_L, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, BLOCK, EMPTY, SCORE_FONT, MAP2, PLAYER_IMG_S_L, PLAYER_IMG_S_R, BACKGROUND_S, MAP3, BOSS, SPAWN
+from assets import load_assets, BACKGROUND_L, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, BLOCK, EMPTY, SCORE_FONT, MAP2, PLAYER_IMG_S_L, PLAYER_IMG_S_R, BACKGROUND_S, MAP3, BOSS, SPAWN, WAKANDA_FOREVER, BOSS_INJURED_SND
 from os import path
 
 def game_screen3(screen, bank2):
@@ -128,7 +128,8 @@ def game_screen3(screen, bank2):
             hits4 = pygame.sprite.spritecollide(boss, all_bullets, True, pygame.sprite.collide_mask)
             hits5 = pygame.sprite.spritecollide(spawn, all_bullets, True, pygame.sprite.collide_mask)
             hits6 = pygame.sprite.spritecollide(spawn, all_toshi_attacks, True, pygame.sprite.collide_mask)
-            if len(hits3) > 0:  
+            if len(hits3) > 0:
+                assets[WAKANDA_FOREVER].play()   
                 lives -= 1
                 score -= 100
                 player.kill()

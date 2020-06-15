@@ -7,6 +7,7 @@ from os import path
 from random import randint
 from game_intro import intro
 from instru import instru
+from instru2 import instru2
 
 
 pygame.init()
@@ -46,8 +47,9 @@ try:
                 if sucesso != 0:
                     sucesso2, bank2 = game_screen2(screen, bank)
                     if sucesso2 != 0:
-                        screen_s = pygame.display.set_mode((WIDTH_S, HEIGHT_S))
-                        game_screen3(screen_s, bank2)
-
+                        state = instru2()
+                        if state == GAME:
+                            screen_s = pygame.display.set_mode((WIDTH_S, HEIGHT_S))
+                            game_screen3(screen_s, bank2)
 finally:
     pygame.quit()
