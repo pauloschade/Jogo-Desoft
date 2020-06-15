@@ -1,5 +1,5 @@
 import pygame
-from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, img_dir, snd_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING
+from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, BLUE, GREEN, img_dir, snd_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING
 from assets import load_assets, BACKGROUND_E, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, BLOCK, EMPTY, MAP, SCORE_FONT, PERRY_NOISE, WAKANDA_FOREVER, JUMP_NOISE
 from sprites import Tile, Player, inimigo, Vilao, Attack_right, Attack_left, ataque_vilao, flag, Perry_deitado
 from os import path
@@ -184,15 +184,24 @@ def game_screen(screen):
         all_sprites.draw(screen)
 
         # desenha o score
-        text_surface = assets[SCORE_FONT].render("{:08d}".format(score), True, YELLOW)
+        text_surface = assets[SCORE_FONT].render("{:08d}".format(score), True, BLUE)
         text_rect = text_surface.get_rect()
         text_rect.midtop = (WIDTH / 2, 10)
         screen.blit(text_surface, text_rect)
 
         # Desenhando as vidas
-        text_surface = assets[SCORE_FONT].render(chr(9829) * lives, True, RED)
+        media = assets[SCORE_FONT].render('Média = ', True, BLACK)
+        media_rect = media.get_rect()
+        media_rect.bottomleft = (10, HEIGHT - 10)
+        screen.blit(media, media_rect)
+        if lives == 1:
+            text_surface = assets[SCORE_FONT].render('C', True, RED)
+        elif lives == 2:
+            text_surface = assets[SCORE_FONT].render('B', True, YELLOW)
+        elif lives >= 3:
+            text_surface = assets[SCORE_FONT].render('A{}'.format(chr(43) * (lives - 3)), True, GREEN)
         text_rect = text_surface.get_rect()
-        text_rect.bottomleft = (10, HEIGHT - 10)
+        text_rect.bottomleft = (230, HEIGHT - 10)
         screen.blit(text_surface, text_rect)
 
         # Depois de desenhar tudo, inverte o display.

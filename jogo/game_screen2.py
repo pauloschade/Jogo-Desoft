@@ -1,5 +1,5 @@
 import pygame
-from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, img_dir, snd_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING
+from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, BLUE, GREEN, img_dir, snd_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING
 from assets import load_assets, BACKGROUND_L, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, INIMIGO2_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, BLOCK, EMPTY, SCORE_FONT, MAP2, BOWSERJR_DEITADO, BSRJR_NOISE, WAKANDA_FOREVER, JUMP_NOISE
 from sprites import Tile, Player, inimigo, Vilao, Attack_right, Attack_left, ataque_vilao, flag, Bowserjr_deitado 
 from os import path
@@ -179,23 +179,13 @@ def game_screen2(screen, bank):
                 inimigos2.kill()
 
         now = pygame.time.get_ticks()
-        # Verifica quantos ticks se passaram desde a ultima mudança de frame.
         elapsed_ticks = now - last_update
-
-        # Se já está na hora de mudar de imagem...
         if elapsed_ticks > frame_ticks:
-            # Marca o tick da nova imagem.
             last_update = now
-
-            # Avança um quadro.
             frame += 1
-
-            # Verifica se já chegou no final da animação.
             if frame == len(background_anim):
-                # Se sim, tchau explosão!
                 frame = 0
             else:
-                # Se ainda não chegou ao fim da explosão, troca de imagem.
                 BACKGROUND_L = background_anim[frame]
 
         # A cada loop, redesenha o fundo e os sprites
@@ -204,15 +194,24 @@ def game_screen2(screen, bank):
         all_sprites.draw(screen)
 
         # desenha o score
-        text_surface = assets[SCORE_FONT].render("{:08d}".format(score), True, YELLOW)
+        text_surface = assets[SCORE_FONT].render("{:08d}".format(score), True, BLUE)
         text_rect = text_surface.get_rect()
         text_rect.midtop = (WIDTH / 2, 10)
         screen.blit(text_surface, text_rect)
 
         # Desenhando as vidas
-        text_surface = assets[SCORE_FONT].render(chr(9829) * lives, True, RED)
+        media = assets[SCORE_FONT].render('Média = ', True, BLACK)
+        media_rect = media.get_rect()
+        media_rect.bottomleft = (10, HEIGHT - 10)
+        screen.blit(media, media_rect)
+        if lives == 1:
+            text_surface = assets[SCORE_FONT].render('C', True, RED)
+        elif lives == 2:
+            text_surface = assets[SCORE_FONT].render('B', True, YELLOW)
+        elif lives >= 3:
+            text_surface = assets[SCORE_FONT].render('A{}'.format(chr(43) * (lives - 3)), True, GREEN)
         text_rect = text_surface.get_rect()
-        text_rect.bottomleft = (10, HEIGHT - 10)
+        text_rect.bottomleft = (230, HEIGHT - 10)
         screen.blit(text_surface, text_rect)
 
         # Depois de desenhar tudo, inverte o display.

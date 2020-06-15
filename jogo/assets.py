@@ -139,35 +139,34 @@ def load_assets():
     assets[SPAWN] = pygame.transform.scale(spawn, (2 * TILE_SIZE, 2 * TILE_SIZE))
 
     background_anim = []
-    for m in range(8):
-        filename = os.path.join(img_dir, 'lava_{}.png'.format(m+1))
+    for a in range(8):
+        filename = os.path.join(img_dir, 'lava_{}.png'.format(a+1))
         img = pygame.image.load(filename).convert_alpha()
         img = pygame.transform.scale(img, (WIDTH, HEIGHT))
         background_anim.append(img)
     assets[BACKGROUND_L] = background_anim
 
     perry_anim = []
-    for i in range(1):
+    for b in range(1):
         filename = pygame.image.load(os.path.join(img_dir, 'perry_deitado.png')).convert_alpha()
         img = pygame.transform.scale(filename, (inimigo_height, inimigo_width))
         perry_anim.append(img)
     assets[PERRY_DEITADO] = perry_anim
 
     bowser_anim = []
-    for q in range(1):
+    for c in range(1):
         filename1 = pygame.image.load(os.path.join(img_dir, 'bowserjr_deitado.png')).convert_alpha()
         img1 = pygame.transform.scale(filename1, (inimigo_height, inimigo_width))
         bowser_anim.append(img1)
     assets[BOWSERJR_DEITADO] = bowser_anim
 
     toshi_anim = []
-    for b in range(3):
-        filename = os.path.join(img_dir, 'boss_{}.png'.format(b+1))
+    for d in range(3):
+        filename = os.path.join(img_dir, 'boss_{}.png'.format(d+1))
         img = pygame.image.load(filename).convert_alpha()
         img = pygame.transform.scale(img, (VILAO_WIDHT, VILAO_HEIGHT))
         toshi_anim.append(img)
     assets[TOSHI_INJURED] = toshi_anim
-
 
 
     pygame.mixer.music.load(os.path.join(snd_dir, 'game.mp3'))

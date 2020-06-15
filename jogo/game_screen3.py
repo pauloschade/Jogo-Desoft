@@ -1,7 +1,7 @@
 import pygame
-from config import FPS, WIDTH_S, HEIGHT_S, BLACK, YELLOW, RED, img_dir, snd_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING, SPEED_Y
+from config import FPS, WIDTH_S, HEIGHT_S, BLACK, YELLOW, RED, BLUE, GREEN, img_dir, snd_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING, SPEED_Y
 from sprites import Tile, Player, Player_b, inimigo, Vilao, Attack_right, Attack_left, ataque_vilao, flag, Boss, ataque_boss, Spawn, Toshi_machucado
-from assets import load_assets, BACKGROUND_L, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, BLOCK, EMPTY, SCORE_FONT, MAP2, PLAYER_IMG_S_L, PLAYER_IMG_S_R, BACKGROUND_S, MAP3, BOSS, SPAWN, WAKANDA_FOREVER, BOSS_NOISE
+from assets import load_assets, BACKGROUND_L, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, BLOCK, EMPTY, SCORE_FONT, MAP2, PLAYER_IMG_S_L, PLAYER_IMG_S_R, BACKGROUND_S, MAP3, BOSS, SPAWN, WAKANDA_FOREVER, BOSS_NOISE, JUMP_NOISE
 from os import path
 
 def game_screen3(screen, bank):
@@ -164,16 +164,43 @@ def game_screen3(screen, bank):
         all_sprites.draw(screen)
 
         # desenha o score
-        text_surface = assets[SCORE_FONT].render("{:08d}".format(score), True, YELLOW)
+        text_surface = assets[SCORE_FONT].render("{:08d}".format(score), True, BLUE)
         text_rect = text_surface.get_rect()
         text_rect.midtop = (WIDTH_S / 2, 10)
         screen.blit(text_surface, text_rect)
 
         # Desenhando as vidas
-        text_surface = assets[SCORE_FONT].render(chr(9829) * lives, True, RED)
+        media = assets[SCORE_FONT].render('Média = ', True, BLACK)
+        media_rect = media.get_rect()
+        media_rect.bottomleft = (10, HEIGHT_S - 10)
+        screen.blit(media, media_rect)
+        if lives == 1:
+            text_surface = assets[SCORE_FONT].render('C', True, RED)
+        if lives == 2:
+            text_surface = assets[SCORE_FONT].render('B', True, YELLOW)
+        if lives >= 3:
+            text_surface = assets[SCORE_FONT].render('A{}'.format(chr(43) * (lives - 3)), True, GREEN)
         text_rect = text_surface.get_rect()
-        text_rect.bottomleft = (10, HEIGHT_S - 10)
+        text_rect.bottomleft = (230, HEIGHT_S - 10)
         screen.blit(text_surface, text_rect)
+
+        patience = assets[SCORE_FONT].render("Toshi's patience = ", True, BLACK)
+        patience_rect = patience.get_rect()
+        patience_rect.bottomleft = (WIDTH_S - 690, HEIGHT_S - 10)
+        screen.blit(patience, patience_rect)
+        if boss.lives == 1:
+            text2_surface = assets[SCORE_FONT].render('0.01%', True, (192, 0, 128))
+        elif boss.lives == 2:
+            text2_surface = assets[SCORE_FONT].render('1%', True, RED)
+        elif boss.lives == 3:
+            text2_surface = assets[SCORE_FONT].render('10%', True, YELLOW)
+        elif boss.lives == 4:
+            text2_surface = assets[SCORE_FONT].render('25%', True, (128, 255, 0))
+        elif boss.lives == 5:
+            text2_surface = assets[SCORE_FONT].render('50%', True, GREEN)
+        text2_rect = text2_surface.get_rect()
+        text2_rect.bottomleft = (WIDTH_S - 150, HEIGHT_S - 10)
+        screen.blit(text2_surface, text2_rect)
 
         # Depois de desenhar tudo, inverte o display.
         pygame.display.flip()
