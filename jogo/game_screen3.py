@@ -4,7 +4,7 @@ from sprites import Tile, Player, Player_b, inimigo, Vilao, Attack_right, Attack
 from assets import load_assets, BACKGROUND_L, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, BLOCK, EMPTY, SCORE_FONT, MAP2, PLAYER_IMG_S_L, PLAYER_IMG_S_R, BACKGROUND_S, MAP3, BOSS, SPAWN, WAKANDA_FOREVER, BOSS_INJURED_SND
 from os import path
 
-def game_screen3(screen, bank2):
+def game_screen3(screen, bank):
     # Variável para o ajuste de velocidade
     clock = pygame.time.Clock()
 
@@ -64,8 +64,8 @@ def game_screen3(screen, bank2):
     PLAYING = 0
     DONE = 1
     WIN = 2
-    lives = bank2[0] + 1
-    score = bank2[1]
+    lives = bank[0] + 1
+    score = bank[1]
     state = PLAYING
 
     pygame.mixer.music.load(path.join(snd_dir, 'boss.mp3'))
