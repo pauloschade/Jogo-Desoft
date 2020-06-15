@@ -1,7 +1,7 @@
 import pygame
 from config import FPS, WIDTH_S, HEIGHT_S, BLACK, YELLOW, RED, BLUE, GREEN, img_dir, snd_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING, SPEED_Y
 from sprites import Tile, Player, Player_b, inimigo, Vilao, Attack_right, Attack_left, ataque_vilao, flag, Boss, ataque_boss, Spawn, Toshi_machucado
-from assets import load_assets, BACKGROUND_L, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, BLOCK, EMPTY, SCORE_FONT, MAP2, PLAYER_IMG_S_L, PLAYER_IMG_S_R, BACKGROUND_S, MAP3, BOSS, SPAWN, WAKANDA_FOREVER, BOSS_NOISE, JUMP_NOISE
+from assets import load_assets, BACKGROUND_L, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, BLOCK, EMPTY, SCORE_FONT, MAP2, PLAYER_IMG_S_L, PLAYER_IMG_S_R, BACKGROUND_S, MAP3, BOSS, SPAWN, WAKANDA_FOREVER, BOSS_NOISE
 from os import path
 
 def game_screen3(screen, bank):
@@ -14,12 +14,8 @@ def game_screen3(screen, bank):
 
     # Cria um grupo de todos os sprites.
     all_sprites = pygame.sprite.Group()
-    # all_players = pygame.sprite.Group()
     all_bullets = pygame.sprite.Group() 
     all_toshi_attacks = pygame.sprite.Group()
-    #all_spawn = pygame.sprite.Group()
-    # Cria um grupo somente com os sprites de bloco.
-    # Sprites de block são aqueles que impedem o movimento do jogador
     blocks = pygame.sprite.Group()
     groups = {}
     groups['all_sprites'] = all_sprites
@@ -67,6 +63,7 @@ def game_screen3(screen, bank):
     WIN = 2
     lives = bank[0] + 1
     score = bank[1]
+    past = bank[2]
     state = PLAYING
 
     pygame.mixer.music.load(path.join(snd_dir, 'boss.mp3'))
@@ -158,6 +155,8 @@ def game_screen3(screen, bank):
                     state = WIN
                     boss.kill()
 
+        now = pygame.time.get_ticks()
+
         # A cada loop, redesenha o fundo e os sprites
         screen.fill(BLACK)
         screen.blit(BACKGROUND_S, (0,0))
@@ -189,7 +188,7 @@ def game_screen3(screen, bank):
         patience_rect.bottomleft = (WIDTH_S - 690, HEIGHT_S - 10)
         screen.blit(patience, patience_rect)
         if boss.lives == 1:
-            text2_surface = assets[SCORE_FONT].render('0.01%', True, (192, 0, 128))
+            text2_surface = assets[SCORE_FONT].render('0.01%', True, (192, 0, 64))
         elif boss.lives == 2:
             text2_surface = assets[SCORE_FONT].render('1%', True, RED)
         elif boss.lives == 3:
@@ -206,9 +205,8 @@ def game_screen3(screen, bank):
         pygame.display.flip()
 
     if state == DONE:
-        return -1, [lives, score]
+        return -1, [lives, score, past + now]
     elif state == OVER:
-        return 0, [lives, score]
+        return 0, [lives, score, past + now]
     elif state == WIN:
-        assets[JUMP_NOISE].play()
-        return 1, [lives, score]
+        return 1, [lives, score, past + now]
