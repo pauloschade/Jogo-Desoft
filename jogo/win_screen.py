@@ -2,7 +2,7 @@ import pygame
 from config import img_dir, snd_dir, BLACK, WHITE, HEIGHT_S, WIDTH_S, QUIT, GAME
 from assets import load_assets, SCORE_FONT
 
-def win_screen(bank):
+def win_screen(bank, times):
     text = ''
     keys_down = {}
     assets = load_assets()
@@ -26,11 +26,12 @@ def win_screen(bank):
 
         score = bank[1]
 
-        minutes = int(int(bank[2] / 1000) / 60)
-        seconds = (int(bank[2] / 1000)) - (minutes * 60)
+        gametime = times[3] - times[0] - (times[2] - times[1])
+        minutes = int(int(gametime / 1000) / 60)
+        seconds = (int(gametime / 1000)) - (minutes * 60)
         time = "{}'".format(minutes) + '{}"'.format(seconds)
 
-        final = score + int(3.6 * 1e8 / bank[2])
+        final = score + int(3.6 * 1e8 / gametime)
 
         font = assets[SCORE_FONT]
         score_text = font.render("Score:{}".format(score), True, WHITE)

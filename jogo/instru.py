@@ -14,6 +14,8 @@ def instru():
 
         screen.blit(INSTRU,[0, 0])
 
+        now = pygame.time.get_ticks()
+
         pygame.display.update()
         #while intro:
         for event in pygame.event.get():  
@@ -23,4 +25,5 @@ def instru():
             elif event.type == pygame.KEYUP:
                 state = GAME
                 instru = False
-    return state
+
+    return state, now

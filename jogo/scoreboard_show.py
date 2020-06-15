@@ -91,6 +91,6 @@ def scoreboard(score, nome):
                     scoreboard = False
         return state
 
-scoreboard(2817, 'MAT')
+# scoreboard(2817, 'MAT')
 # pygame.quit()
         

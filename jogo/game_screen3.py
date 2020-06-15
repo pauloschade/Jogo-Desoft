@@ -63,7 +63,6 @@ def game_screen3(screen, bank):
     WIN = 2
     lives = bank[0] + 1
     score = bank[1]
-    past = bank[2]
     state = PLAYING
 
     pygame.mixer.music.load(path.join(snd_dir, 'boss.mp3'))
@@ -205,8 +204,8 @@ def game_screen3(screen, bank):
         pygame.display.flip()
 
     if state == DONE:
-        return -1, [lives, score, past + now]
+        return -1, [lives, score], now
     elif state == OVER:
-        return 0, [lives, score, past + now]
+        return 0, [lives, score], now
     elif state == WIN:
-        return 1, [lives, score, past + now]
+        return 1, [lives, score], now

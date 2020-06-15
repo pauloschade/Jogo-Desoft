@@ -43,18 +43,19 @@ try:
     state = intro(screen)
     if state == INIT:
         state = hist()
-        state = instru()
+        state, init_time = instru()
         while state == GAME:
             sucesso, bank = game_screen(screen)
             if sucesso == 1:
-                sucesso, bank = game_screen2(screen, bank)
+                sucesso, bank, midtime1 = game_screen2(screen, bank)
                 if sucesso == 1:
                     state = hist2()
-                    state = instru2()
+                    state, midtime2 = instru2()
                     screen_s = pygame.display.set_mode((WIDTH_S, HEIGHT_S))
-                    sucesso, bank = game_screen3(screen_s, bank)
+                    sucesso, bank, total_time = game_screen3(screen_s, bank)
+                    times = [init_time, midtime1, midtime2, total_time]
                     if sucesso == 1:
-                        state, score, nome = win_screen(bank)
+                        state, score, nome = win_screen(bank, times)
                         state = scoreboard(score, nome)
                     elif sucesso == 0:
                         state = game_over(bank)

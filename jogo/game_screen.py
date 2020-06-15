@@ -176,9 +176,6 @@ def game_screen(screen):
                 all_sprites.add(perry)
                 inimigoss.kill()
 
-
-        now = pygame.time.get_ticks()
-
         # A cada loop, redesenha o fundo e os sprites
         screen.fill(BLACK)
         screen.blit(BACKGROUND_E, (0,-50))
@@ -208,9 +205,9 @@ def game_screen(screen):
         # Depois de desenhar tudo, inverte o display.
         pygame.display.flip()
     if state == DONE:
-        return -1, [lives, score, now]
+        return -1, [lives, score]
     elif state == OVER:
-        return 0, [lives, score, now]
+        return 0, [lives, score]
     elif state == WIN:
         assets[JUMP_NOISE].play()
-        return 1, [lives, score, now]
+        return 1, [lives, score]
