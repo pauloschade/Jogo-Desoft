@@ -1,6 +1,6 @@
 import pygame
 import json
-from config import FPS, TITULO, WIDTH, HEIGHT, BLACK, YELLOW, RED, img_dir, snd_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING, inimigo_height, inimigo_width, WIDTH_S, HEIGHT_S, QUIT, GAME
+from config import FPS, TITULO, WIDTH, HEIGHT, BLACK, YELLOW, RED, BLUE, img_dir, snd_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING, inimigo_height, inimigo_width, WIDTH_S, HEIGHT_S, QUIT, GAME
 from os import path
 from assets import load_assets, SCORE_FONT
 
@@ -32,12 +32,22 @@ def scoreboard(score, nome):
         screen = pygame.display.set_mode([WIDTH_S, HEIGHT_S])
         screen.fill(BLACK)
 
+        BACK = pygame.image.load(path.join(img_dir, 'scoreboard.png')).convert_alpha()
+        BACK = pygame.transform.scale(BACK, (WIDTH_S, HEIGHT_S))
+        screen.blit(BACK,[0, 0])
+
         font = assets[SCORE_FONT]
-        score_text = font.render('SCOREBOARD', True, YELLOW)
-        screen.blit(score_text, (WIDTH_S/4, 20))
         for j, i in dicionario_ranking.items():
-            lugar = font.render('{0}º - {1}: {2}'.format(j, i[1], i[0]), True, YELLOW)
+            lugar = font.render('{0}º - {1}: {2}'.format(j, i[1], i[0]), True, BLACK)
             screen.blit(lugar, (20, 40 + 40 * int(j)))
+
+        font2 = pygame.font.Font(path.join(img_dir, 'PressStart2P.ttf'), 20)
+        next_text = font2.render('restart:TAB quit:SPACE', True, BLACK)
+        screen.blit(next_text, (WIDTH_S/4, 520))
+
+        font3 = pygame.font.Font(path.join(img_dir, 'PressStart2P.ttf'), 32)
+        score_text = font.render('SCOREBOARD', True, BLUE)
+        screen.blit(score_text, (240, 15))
 
         pygame.display.update()
         for event in pygame.event.get():

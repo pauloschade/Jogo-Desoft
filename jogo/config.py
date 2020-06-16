@@ -39,11 +39,6 @@ ATTACK_HEIGHT = 26
 T_ATTACK_WIDTH = 40
 T_ATTACK_HEIGHT = 26
 
-# Bandeira 
-FLAG_WIDTH = PLAYER_WIDTH
-FLAG_HEIGHT = PLAYER_HEIGHT
-
-
 
 # algumas variáveis com as cores básicas
 WHITE = (255, 255, 255)

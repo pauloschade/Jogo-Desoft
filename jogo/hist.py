@@ -10,7 +10,7 @@ def hist():
         screen = pygame.display.set_mode([HEIGHT, WIDTH])
         screen.fill(BLACK)
 
-        HIST = pygame.image.load(path.join(img_dir, 'introtxt.jpg')).convert_alpha()
+        HIST = pygame.image.load(path.join(img_dir, 'introtxt.png')).convert_alpha()
         HIST = pygame.transform.scale(HIST, (HEIGHT, WIDTH))
 
         screen.blit(HIST,[0, 0])

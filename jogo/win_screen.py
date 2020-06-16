@@ -36,21 +36,22 @@ def win_screen(bank, times):
 
         font = assets[SCORE_FONT]
         name_text = font.render("Gamer name:{}".format(text), True, BLACK)
-        screen.blit(name_text, (400, 200))
+        screen.blit(name_text, (400, 180))
 
-        score_text = font.render("Score:{}".format(score), True, WHITE)
-        time_text = font.render("Time:{}".format(time), True, WHITE)
-        final_text = font.render("Final score:{}".format(final), True, WHITE)
-        media_text = font.render("Média final:{}".format(media), True, WHITE)
-        enter_text = font.render("Digite nome e ENTER", True, WHITE)
-        enter_text2 = font.render("Type name and ENTER", True, WHITE)
+        score_text = font.render("Score:{}".format(score), True, BLACK)
+        time_text = font.render("Time:{}".format(time), True, BLACK)
+        final_text = font.render("Final score:{}".format(final), True, BLACK)
+        media_text = font.render("Média final:{}".format(media), True, BLACK)
+        font2 = pygame.font.Font(path.join(img_dir, 'PressStart2P.ttf'), 20)
+        enter_text = font2.render("Digite nome e ENTER", True, WHITE)
+        enter_text2 = font2.render("Type name and ENTER", True, WHITE)
 
         screen.blit(score_text,(20, 440))
         screen.blit(time_text,(20, 480))
         screen.blit(final_text,(20, 520))
         screen.blit(media_text,(20, 560))
-        screen.blit(media_text,(WIDTH_S-100, 520))
-        screen.blit(media_text2,(WIDTH_S-100, 560))
+        screen.blit(enter_text,(WIDTH_S-400, 520))
+        screen.blit(enter_text2,(WIDTH_S-400, 560))
 
         pygame.display.update()
 
@@ -60,7 +61,7 @@ def win_screen(bank, times):
 
         for event in pygame.event.get():  
             if event.type == pygame.QUIT:
-                over = False
+                win = False
                 return QUIT, score, text
             if event.type == pygame.KEYDOWN:
                 keys_down[event.key] = True
