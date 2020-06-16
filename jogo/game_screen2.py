@@ -4,12 +4,13 @@ from assets import load_assets, BACKGROUND_L, PLAYER_IMG_R, PLAYER_IMG_L, INIMIG
 from sprites import Tile, Player, inimigo, Vilao, Attack_right, Attack_left, ataque_vilao, flag, Bowserjr_deitado 
 from os import path
 
+# esse é o arquivo do segundo nível
+
 def game_screen2(screen, bank):
     # Variável para o ajuste de velocidade
     clock = pygame.time.Clock()
 
     # Carrega assets
-    # assets = load_assets(img_dir)
     assets = load_assets()
 
     # Cria um grupo de todos os sprites.
@@ -61,7 +62,6 @@ def game_screen2(screen, bank):
 
     # Adiciona o jogador no grupo de sprites por último para ser desenhado por
     # cima dos blocos
-    # all_players.add(player)
     all_sprites.add(player)
 
     # adiciona bandeira

@@ -4,6 +4,8 @@ from assets import load_assets, BACKGROUND_E, PLAYER_IMG_R, PLAYER_IMG_L, INIMIG
 from sprites import Tile, Player, inimigo, Vilao, Attack_right, Attack_left, ataque_vilao, flag, Perry_deitado
 from os import path
 
+# esse é o arquivo que roda o nível 2 do jogo
+
 def game_screen(screen):
 
     screen = pygame.display.set_mode([WIDTH, HEIGHT])
@@ -11,12 +13,10 @@ def game_screen(screen):
     clock = pygame.time.Clock()
 
     # Carrega assets
-    # assets = load_assets(img_dir)
     assets = load_assets()
 
     # Cria um grupo de todos os sprites.
     all_sprites = pygame.sprite.Group()
-    # all_players = pygame.sprite.Group()
     all_inimigos = pygame.sprite.Group()
     all_bullets = pygame.sprite.Group() 
     all_toshi_attacks = pygame.sprite.Group()  
@@ -26,7 +26,6 @@ def game_screen(screen):
     blocks = pygame.sprite.Group()
     groups = {}
     groups['all_sprites'] = all_sprites
-    # groups['all_players'] = all_players
     groups['all_bullets'] = all_bullets
     groups['all_inimigos'] = all_inimigos
     groups['all_toshi_attacks'] = all_toshi_attacks
@@ -66,7 +65,6 @@ def game_screen(screen):
 
     # Adiciona o jogador no grupo de sprites por último para ser desenhado por
     # cima dos blocos
-    # all_players.add(player)
     all_sprites.add(player)
 
     # adiciona bandeira
@@ -133,7 +131,6 @@ def game_screen(screen):
         all_sprites.update()
 
         if state == PLAYING:
-            # Verifica se houve colisão entre tiro e meteoro
             hits = pygame.sprite.groupcollide(all_inimigos, all_bullets, False, True, pygame.sprite.collide_mask)
             hits2 = pygame.sprite.spritecollide(player, all_inimigos, True, pygame.sprite.collide_mask)
             hits3 = pygame.sprite.spritecollide(player, all_toshi_attacks, True, pygame.sprite.collide_mask)

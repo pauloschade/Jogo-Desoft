@@ -14,6 +14,7 @@ from game_intro import intro
 from instru import instru
 from instru2 import instru2
 
+# esse é o arquivo que roda o jogo
 
 pygame.init()
 pygame.mixer.init()

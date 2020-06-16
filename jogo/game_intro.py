@@ -2,6 +2,7 @@ import pygame
 from os import path
 from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, img_dir, snd_dir, BLACK,WHITE, GAME, QUIT
 
+# esse é o arquivo que roda a tela inicial do jogo
 pygame.init()
 
 

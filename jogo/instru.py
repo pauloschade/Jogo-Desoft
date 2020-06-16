@@ -2,7 +2,7 @@ import pygame
 from os import path
 from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, img_dir, snd_dir, BLACK,WHITE, QUIT, GAME
 
-
+# esse é o arquivo que dá as instruções para os primeiros 2 níveis
 def instru():
     keys_down = {}
     instru = True
