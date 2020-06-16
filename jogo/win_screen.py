@@ -45,8 +45,8 @@ def win_screen(bank, times):
         final_text = font.render("Final score:{}".format(final), True, BLACK)
         media_text = font.render("Média final:{}".format(media), True, BLACK)
         font2 = pygame.font.Font(path.join(img_dir, 'PressStart2P.ttf'), 20)
-        enter_text = font2.render("Digite nome e ENTER", True, WHITE)
-        enter_text2 = font2.render("Type name and ENTER", True, WHITE)
+        enter_text = font2.render("Digite nome e ENTER", True, BLACK)
+        enter_text2 = font2.render("Type name and ENTER", True, BLACK)
 
         screen.blit(score_text,(20, 440))
         screen.blit(time_text,(20, 480))
@@ -70,7 +70,6 @@ def win_screen(bank, times):
                     if name == '' and event.key == pygame.K_SPACE:
                         name = ''
                     elif event.key == pygame.K_RETURN and len(name) > 0:
-                        pygame.mixer.music.stop()
                         return GAME, final, name
                     elif len(name) <= 10:
                         name += (event.unicode).upper()
