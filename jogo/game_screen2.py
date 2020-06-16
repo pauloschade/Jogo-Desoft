@@ -194,7 +194,7 @@ def game_screen2(screen, bank):
         all_sprites.draw(screen)
 
         # desenha o score
-        text_surface = assets[SCORE_FONT].render("{:08d}".format(score), True, BLUE)
+        text_surface = assets[SCORE_FONT].render("{:05d}".format(score), True, RED)
         text_rect = text_surface.get_rect()
         text_rect.midtop = (WIDTH / 2, 10)
         screen.blit(text_surface, text_rect)

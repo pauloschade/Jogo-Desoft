@@ -46,7 +46,7 @@ def scoreboard(score, name):
             screen.blit(lugar, (20, 60 + 40 * int(j)))
 
         font2 = pygame.font.Font(path.join(img_dir, 'PressStart2P.ttf'), 20)
-        next_text = font2.render('restart:TAB quit:SPACE', True, BLACK)
+        next_text = font2.render('restart:TAB quit:SPACE', True, RED)
         screen.blit(next_text, (200, 560))
 
         font3 = pygame.font.Font(path.join(img_dir, 'PressStart2P.ttf'), 32)

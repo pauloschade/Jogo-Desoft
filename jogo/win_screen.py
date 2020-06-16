@@ -4,9 +4,7 @@ from config import img_dir, snd_dir, BLACK, WHITE, HEIGHT_S, WIDTH_S, QUIT, GAME
 from assets import load_assets, SCORE_FONT
 # esse é o arquivo da tela de campeão. a parte do código em que o player digita na tela foi retirada desse site: https://pygame.readthedocs.io/en/latest/4_text/text.html 
 def win_screen(bank, times):
-    pygame.mixer.music.load(path.join(snd_dir, 'winner.ogg'))
-    pygame.mixer.music.set_volume(0.4)
-    pygame.mixer.music.play(loops=-1)
+    i = 0
     name = ''
     keys_down = {}
     assets = load_assets()
@@ -56,6 +54,12 @@ def win_screen(bank, times):
         screen.blit(enter_text2,(WIDTH_S-400, 560))
 
         pygame.display.update()
+
+        if i == 0:
+            pygame.mixer.music.load(path.join(snd_dir, 'winner.ogg'))
+            pygame.mixer.music.set_volume(0.4)
+            pygame.mixer.music.play(loops=-1)
+            i = 1
 
         for event in pygame.event.get():  
             if event.type == pygame.QUIT:
