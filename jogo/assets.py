@@ -1,6 +1,6 @@
 import pygame
 import os
-from config import WIDTH, HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT, img_dir, snd_dir, TILE_SIZE, inimigo_height, inimigo_width, VILAO_HEIGHT, VILAO_WIDHT, ATTACK_HEIGHT, ATTACK_WIDTH, T_ATTACK_HEIGHT, T_ATTACK_WIDTH, FLAG_WIDTH, FLAG_HEIGHT
+from config import WIDTH, HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT, img_dir, snd_dir, TILE_SIZE, inimigo_height, inimigo_width, VILAO_HEIGHT, VILAO_WIDHT, ATTACK_HEIGHT, ATTACK_WIDTH, T_ATTACK_HEIGHT, T_ATTACK_WIDTH
 
 #imagens
 BACKGROUND_E = 'background'
@@ -125,7 +125,7 @@ def load_assets():
     toshi_attack_img = pygame.image.load(os.path.join(img_dir, 'dito.png')).convert_alpha()
     assets[TOSHI_ATTACK] = pygame.transform.scale(toshi_attack_img, (T_ATTACK_WIDTH, T_ATTACK_HEIGHT))
     flag_img = pygame.image.load(os.path.join(img_dir, 'flag-end.png')).convert_alpha()
-    assets[FLAG] = pygame.transform.scale(flag_img, (FLAG_WIDTH, FLAG_HEIGHT))
+    assets[FLAG] = pygame.transform.scale(flag_img, (80, 80))
     assets[SCORE_FONT] = pygame.font.Font(os.path.join(img_dir, 'PressStart2P.ttf'), 28)
     assets[BACKGROUND_S] =  pygame.image.load(os.path.join(img_dir, 'space.png')).convert_alpha()
     player_space_l =  pygame.image.load(os.path.join(img_dir, 'wakanda_space_l.png')).convert_alpha()
