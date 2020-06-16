@@ -20,8 +20,8 @@ def intro(screen):
     while intro:
         for event in pygame.event.get():  
             if event.type == pygame.QUIT:
-                intro = False
                 state = QUIT
+                intro = False
             elif event.type == pygame.KEYUP:
                 state = GAME
                 intro = False

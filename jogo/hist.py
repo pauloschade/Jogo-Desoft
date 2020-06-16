@@ -4,6 +4,9 @@ from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, img_dir, snd_dir, BLA
 
 
 def hist():
+    pygame.mixer.music.load(path.join(snd_dir, 'dark.ogg'))
+    pygame.mixer.music.set_volume(0.4)
+    pygame.mixer.music.play(loops=-1)
     keys_down = {}
     hist = True
     while hist:
@@ -29,6 +32,7 @@ def hist():
             if event.type == pygame.KEYDOWN:
                 keys_down[event.key] = True
                 if event.key == pygame.K_TAB:
+                    pygame.mixer.music.stop()
                     hist = False
                     state = GAME
     
