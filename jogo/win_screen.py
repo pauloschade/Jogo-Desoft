@@ -2,7 +2,7 @@ import pygame
 from os import path
 from config import img_dir, snd_dir, BLACK, WHITE, HEIGHT_S, WIDTH_S, QUIT, GAME
 from assets import load_assets, SCORE_FONT
-
+# esse é o arquivo da tela de campeão. a parte do código em que o player digita na tela foi retirada desse site: https://pygame.readthedocs.io/en/latest/4_text/text.html 
 def win_screen(bank, times):
     pygame.mixer.music.load(path.join(snd_dir, 'winner.ogg'))
     pygame.mixer.music.set_volume(0.4)

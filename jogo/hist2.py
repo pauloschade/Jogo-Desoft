@@ -2,6 +2,7 @@ import pygame
 from os import path
 from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, img_dir, snd_dir, BLACK,WHITE, QUIT, GAME
 
+# esse é o arquivo da segunda historinha
 
 def hist2():
     pygame.mixer.music.load(path.join(snd_dir, 'dark.ogg'))

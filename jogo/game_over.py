@@ -3,6 +3,7 @@ from os import path
 from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, img_dir, snd_dir, BLACK,WHITE, QUIT, GAME
 from assets import load_assets, GAME_OVER, SCORE_FONT
 
+# esse é o arquivo do game over
 
 def game_over(bank):
     keys_down = {}

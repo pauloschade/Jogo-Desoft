@@ -3,13 +3,13 @@ from config import FPS, WIDTH_S, HEIGHT_S, BLACK, YELLOW, RED, BLUE, GREEN, img_
 from sprites import Tile, Player, Player_b, inimigo, Vilao, Attack_right, Attack_left, ataque_vilao, flag, Boss, ataque_boss, Spawn, Toshi_machucado
 from assets import load_assets, BACKGROUND_L, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, BLOCK, EMPTY, SCORE_FONT, MAP2, PLAYER_IMG_S_L, PLAYER_IMG_S_R, BACKGROUND_S, MAP3, BOSS, SPAWN, WAKANDA_FOREVER, BOSS_NOISE
 from os import path
+# esse é o arquivo do terceiro nível
 
 def game_screen3(screen, bank):
     # Variável para o ajuste de velocidade
     clock = pygame.time.Clock()
 
     # Carrega assets
-    # assets = load_assets(img_dir)
     assets = load_assets()
 
     # Cria um grupo de todos os sprites.
@@ -19,10 +19,8 @@ def game_screen3(screen, bank):
     blocks = pygame.sprite.Group()
     groups = {}
     groups['all_sprites'] = all_sprites
-    # groups['all_players'] = all_players
     groups['all_bullets'] = all_bullets
     groups['all_toshi_attacks'] = all_toshi_attacks
-    #groups["all_spawn"] = all_spawn
 
 
     # Cria Sprite do jogador
@@ -37,7 +35,6 @@ def game_screen3(screen, bank):
 
     #imagem spawn
     spawn = Spawn(assets[SPAWN], 12, 1)
-    #all_spawn.add(spawn)
     all_sprites.add(spawn)
 
     # Cria tiles de acordo com o mapa
@@ -53,7 +50,6 @@ def game_screen3(screen, bank):
 
     # Adiciona o jogador no grupo de sprites por último para ser desenhado por
     # cima dos blocos
-    # all_players.add(player)
     all_sprites.add(player)
 
     keys_down = {}
@@ -111,10 +107,6 @@ def game_screen3(screen, bank):
                     elif event.key == pygame.K_DOWN:
                         player.speedy -= 5
             
-
-        # for i in range (2):
-        #     boss.ataque_boss()
-
         # Depois de processar os eventos.
         # Atualiza a acao de cada sprite. O grupo chama o método update() de cada Sprite dentre dele.
         all_sprites.update()
@@ -136,8 +128,6 @@ def game_screen3(screen, bank):
                     state = OVER
                 else:
                     state = PLAYING
-                    #if GRAVITY < 0:
-                        #GRAVITY = - GRAVITY
                     player = Player_b(assets[PLAYER_IMG_S_L], groups, assets, 13, 1, blocks)
                     all_sprites.add(player)
             for ataquess in hits3:
