@@ -50,7 +50,7 @@ def win_screen(bank, times):
         screen.blit(final_text,(20, 520))
         screen.blit(media_text,(20, 560))
         screen.blit(media_text,(WIDTH_S-100, 520))
-        screen.blit(media_text2,(WIDTH_S-100, 560))
+        screen.blit(enter_text2,(WIDTH_S-100, 560))
 
         pygame.display.update()
 
