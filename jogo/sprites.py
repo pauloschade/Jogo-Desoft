@@ -378,13 +378,13 @@ class flag (pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
         self.rect.x = 100
-        self.rect.y = 83
+        self.rect.y = 93
         self.speedx = 0
         self.speedy = 0
     def update (self):
 
         self.rect.x = 100
-        self.rect.y = 83
+        self.rect.y = 93
         self.speedx = 0
         self.speedy = 0
 
