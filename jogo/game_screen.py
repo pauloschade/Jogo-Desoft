@@ -1,7 +1,7 @@
 import pygame
 from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, BLUE, GREEN, img_dir, snd_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING
-from assets import load_assets, BACKGROUND_E, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, BLOCK, EMPTY, MAP, SCORE_FONT, PERRY_NOISE, WAKANDA_FOREVER, JUMP_NOISE
-from sprites import Tile, Player, inimigo, Vilao, Attack_right, Attack_left, ataque_vilao, flag, Perry_deitado
+from assets import load_assets, BACKGROUND_E, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, BLOCK, EMPTY, MAP, SCORE_FONT, PERRY_NOISE, WAKANDA_FOREVER, JUMP_NOISE, PERRY_DEITADO
+from sprites import Tile, Player, inimigo, Vilao, Attack_right, Attack_left, ataque_vilao, flag, inimigoMorto
 from os import path
 
 # esse é o arquivo que roda o nível 2 do jogo
@@ -169,7 +169,7 @@ def game_screen(screen):
             for inimigoss in hits:
                 # No lugar do perry antigo, adicionar um perry morto.
                 assets[PERRY_NOISE].play()
-                perry = Perry_deitado(inimigoss.rect.bottom, inimigoss.rect.x, assets)
+                perry = inimigoMorto(inimigoss.rect.bottom, inimigoss.rect.x, assets, PERRY_DEITADO, 400)
                 all_sprites.add(perry)
                 inimigoss.kill()
 

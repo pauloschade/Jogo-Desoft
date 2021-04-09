@@ -1,7 +1,7 @@
 import pygame
 from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, BLUE, GREEN, img_dir, snd_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING
 from assets import load_assets, BACKGROUND_L, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, INIMIGO2_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, BLOCK, EMPTY, SCORE_FONT, MAP2, BOWSERJR_DEITADO, BSRJR_NOISE, WAKANDA_FOREVER, JUMP_NOISE
-from sprites import Tile, Player, inimigo, Vilao, Attack_right, Attack_left, ataque_vilao, flag, Bowserjr_deitado 
+from sprites import Tile, Player, inimigo, Vilao, Attack_right, Attack_left, ataque_vilao, flag, inimigoMorto
 from os import path
 
 # esse é o arquivo do segundo nível
@@ -174,7 +174,7 @@ def game_screen2(screen, bank):
             for inimigos2 in hits:
                 assets[BSRJR_NOISE].play()
                 # No lugar do bowser antigo, adicionar um bowser morto.
-                bowserjr = Bowserjr_deitado(inimigos2.rect.bottom, inimigos2.rect.x, assets)
+                bowserjr = inimigoMorto(inimigos2.rect.bottom, inimigos2.rect.x, assets, BOWSERJR_DEITADO, 200)
                 all_sprites.add(bowserjr)
                 inimigos2.kill()
 

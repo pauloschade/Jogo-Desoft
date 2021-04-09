@@ -17,7 +17,7 @@ from instru2 import instru2
 # esse é o arquivo que roda o jogo
 
 pygame.init()
-pygame.mixer.init()
+pygame.mixer.init() 
 
 # Define estados possíveis do jogador
 STILL = 0

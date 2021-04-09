@@ -4,6 +4,7 @@ from config import FPS, WIDTH, inimigo_width, inimigo_height, HEIGHT, BLACK, YEL
 from assets import load_assets, BACKGROUND_E, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, BLOCK, EMPTY, MAP, TOSHI_ATTACK, FLAG, MAP2, BACKGROUND_L, PLAYER_IMG_S_L, PLAYER_IMG_S_R, PLAYER_IMG_S_L_DOWN, PLAYER_IMG_S_R_DOWN, SPAWN, PERRY_DEITADO, BOWSERJR_DEITADO, FIRE, TOSHI_INJURED
 
 # Class que representa os blocos do cenário
+
 class Tile(pygame.sprite.Sprite):
 
     # Construtor da classe.
@@ -24,44 +25,74 @@ class Tile(pygame.sprite.Sprite):
         self.rect.y = TILE_SIZE * row
 
 # Classe Jogador que representa o herói
-class Player(pygame.sprite.Sprite):
 
-    # Construtor da classe.
-    def __init__(self, player_img, groups, assets, row, column, blocks):
+class Character(pygame.sprite.Sprite):
+    def __init__(self, characterImg, row, column, blocks, initialSpeed):
 
-        # Construtor da classe pai (Sprite).
         pygame.sprite.Sprite.__init__(self)
 
-        # Define estado atual
-        # Usamos o estado para decidir se o jogador pode ou não pular
-        self.orientation = 'right'
-        self.state = STILL
-
-        # Define a imagem do sprite. Nesse exemplo vamos usar uma imagem estática (não teremos animação durante o pulo)
-        self.image = player_img
-        # Detalhes sobre o posicionamento.
+        self.image = characterImg
         self.rect = self.image.get_rect()
-
-        # Guarda o grupo de blocos para tratar as colisões
-        self.blocks = blocks
-
-        # Posiciona o personagem
-        # row é o índice da linha embaixo do personagem
         self.rect.x = column * TILE_SIZE
         self.rect.bottom = row * TILE_SIZE
-
-        self.speedx = 0
+        self.blocks = blocks
+        self.speedx = initialSpeed
         self.speedy = 0
+    
+    
+    def update (self):
 
+        self.speedy += GRAVITY
+
+        # Atualizando a posição do inimigo
+        self.rect.x += self.speedx
+        self.rect.y += self.speedy
+        # Se o inimigo bater no final da tela, muda o lado do movimento
+        # Tenta andar em x
+        self.rect.x += self.speedx
+        # Corrige a posição caso tenha passado do tamanho da janela
+        if self.rect.right >= WIDTH:
+            self.rect.right = WIDTH - 1
+            self.speedx = -1
+        elif self.rect.left < 0:
+            self.rect.left = 0
+            self.speedx = 1
+
+
+        # Se colidiu com algum bloco, volta para o ponto antes da colisão
+        collisions_ini = pygame.sprite.spritecollide(self, self.blocks, False)
+        # Corrige a posição do personagem para antes da colisão
+        for collision in collisions_ini:
+            # Estava indo para baixo
+            if self.speedy > 0:
+                self.rect.bottom = collision.rect.top
+                # Se colidiu com algo, para de cair
+                self.speedy = 0
+
+         # Se colidiu com algum bloco, volta para o ponto antes da colisão e muda de sentido
+        collisions_ini = pygame.sprite.spritecollide(self, self.blocks, False)
+        # Corrige a posição do personagem para antes da colisão
+        for collision in collisions_ini:
+            # Estava indo para a direita
+            if self.speedx > 0:
+                self.rect.right = collision.rect.left
+                self.speedx = -1
+            # Estava indo para a esquerda
+            elif self.speedx < 0:
+                self.rect.left = collision.rect.right
+                self.speedx = 1
+
+
+class Player(Character):
+    def __init__(self, player_img, groups, assets, row, column, blocks):
+        super().__init__(player_img, row, column, blocks,0)
+        self.orientation = 'right'
+        self.state = STILL
         self.groups = groups
         self.assets = assets
-
-
         self.last_attack = pygame.time.get_ticks()
         self.attack_ticks = 1000
 
-
-    # Metodo que atualiza a posição do personagem
     def update(self):
         # Vamos tratar os movimentos de maneira independente.
         # Primeiro tentamos andar no eixo y e depois no x.
@@ -153,6 +184,18 @@ class Player(pygame.sprite.Sprite):
             self.speedy -= JUMP_SIZE * 1.5 
             self.state = JUMPING
 
+
+class inimigo(Character):
+
+    # Construtor da classe.
+    def __init__(self, inimigo_img, row, column, blocks):
+        super().__init__(inimigo_img, row, column, blocks,1)
+
+        inimigo_img = pygame.transform.scale(inimigo_img, (inimigo_width, inimigo_height))
+        self.mask = pygame.mask.from_surface(self.image)
+        self.rect.y = 0
+        self.rect.bottom = row * TILE_SIZE
+
 class Attack_right(pygame.sprite.Sprite):
     # Construtor da classe.
     def __init__(self, assets, centery, right):
@@ -200,68 +243,6 @@ class Attack_left(pygame.sprite.Sprite):
             self.kill()
 
 # Classe inimigo
-class inimigo(pygame.sprite.Sprite):
-
-    # Construtor da classe.
-    def __init__(self, inimigo_img, row, column, blocks):
-
-        # Construtor da classe (Sprite).
-        pygame.sprite.Sprite.__init__(self)
-
-        self.image = inimigo_img
-        # ajusta o tamanho do inimigo
-        inimigo_img = pygame.transform.scale(inimigo_img, (inimigo_width, inimigo_height))
-        self.mask = pygame.mask.from_surface(self.image)
-        self.rect = self.image.get_rect()
-        self.rect.x = column * TILE_SIZE
-        self.rect.y = 0
-        self.rect.bottom =  row * TILE_SIZE
-        self.speedx = 1
-        self.speedy = 0
-        # Guarda o grupo de blocos para tratar as colisões
-        self.blocks = blocks
-
-    def update (self):
-
-        self.speedy += GRAVITY
-
-        # Atualizando a posição do inimigo
-        self.rect.x += self.speedx
-        self.rect.y += self.speedy
-        # Se o inimigo bater no final da tela, muda o lado do movimento
-        # Tenta andar em x
-        self.rect.x += self.speedx
-        # Corrige a posição caso tenha passado do tamanho da janela
-        if self.rect.right >= WIDTH:
-            self.rect.right = WIDTH - 1
-            self.speedx = -1
-        elif self.rect.left < 0:
-            self.rect.left = 0
-            self.speedx = 1
-
-
-        # Se colidiu com algum bloco, volta para o ponto antes da colisão
-        collisions_ini = pygame.sprite.spritecollide(self, self.blocks, False)
-        # Corrige a posição do personagem para antes da colisão
-        for collision in collisions_ini:
-            # Estava indo para baixo
-            if self.speedy > 0:
-                self.rect.bottom = collision.rect.top
-                # Se colidiu com algo, para de cair
-                self.speedy = 0
-
-         # Se colidiu com algum bloco, volta para o ponto antes da colisão e muda de sentido
-        collisions_ini = pygame.sprite.spritecollide(self, self.blocks, False)
-        # Corrige a posição do personagem para antes da colisão
-        for collision in collisions_ini:
-            # Estava indo para a direita
-            if self.speedx > 0:
-                self.rect.right = collision.rect.left
-                self.speedx = -1
-            # Estava indo para a esquerda
-            elif self.speedx < 0:
-                self.rect.left = collision.rect.right
-                self.speedx = 1
 
 class Vilao(pygame.sprite.Sprite):
 
@@ -659,18 +640,16 @@ class Spawn(pygame.sprite.Sprite):
         self.rect.x = TILE_SIZE * column
         self.rect.y = TILE_SIZE * row
 
-class Perry_deitado(pygame.sprite.Sprite):
-    # Construtor da classe.
-    def __init__(self, bottom, x, assets):
-        # Construtor da classe mãe (Sprite).
+class inimigoMorto(pygame.sprite.Sprite):
+    def __init__(self, bottom, x, assets, personagem, ticks):
         pygame.sprite.Sprite.__init__(self)
 
         # Armazena a animação de explosão
-        self.perry_deitado = assets[PERRY_DEITADO]
+        self.nome = assets[personagem]
 
         # Inicia o processo de animação colocando a primeira imagem na tela.
         self.frame = 0  # Armazena o índice atual na animação
-        self.image = self.perry_deitado[self.frame]  # Pega a primeira imagem
+        self.image = self.nome[self.frame]  # Pega a primeira imagem
         self.rect = self.image.get_rect()
         self.rect.bottom = bottom  # Posiciona o centro da imagem
         self.rect.x = x
@@ -681,7 +660,7 @@ class Perry_deitado(pygame.sprite.Sprite):
         # Controle de ticks de animação: troca de imagem a cada self.frame_ticks milissegundos.
         # Quando pygame.time.get_ticks() - self.last_update > self.frame_ticks a
         # próxima imagem da animação será mostrada
-        self.frame_ticks = 400
+        self.frame_ticks = ticks
 
     def update(self):
         # Verifica o tick atual.
@@ -698,116 +677,15 @@ class Perry_deitado(pygame.sprite.Sprite):
             self.frame += 1
 
             # Verifica se já chegou no final da animação.
-            if self.frame == len(self.perry_deitado):
+            if self.frame == len(self.nome):
                 # Se sim, tchau explosão!
                 self.kill()
             else:
                 # Se ainda não chegou ao fim da explosão, troca de imagem.
                 bottom = self.rect.bottom
                 x = self.rect.x
-                self.image = self.perry_deitado[self.frame]
+                self.image = self.nome[self.frame]
                 self.rect = self.image.get_rect()
                 self.rect.bottom = bottom
                 self.rect.x = x
 
-class Bowserjr_deitado(pygame.sprite.Sprite):
-    # Construtor da classe.
-    def __init__(self, bottom1, x1, assets):
-        # Construtor da classe mãe (Sprite).
-        pygame.sprite.Sprite.__init__(self)
-
-        # Armazena a animação de explosão
-        self.bowserjr_deitado = assets[BOWSERJR_DEITADO]
-
-        # Inicia o processo de animação colocando a primeira imagem na tela.
-        self.frame1 = 0  # Armazena o índice atual na animação
-        self.image = self.bowserjr_deitado[self.frame1]  # Pega a primeira imagem
-        self.rect = self.image.get_rect()
-        self.rect.bottom = bottom1  # Posiciona o centro da imagem
-        self.rect.x = x1
-
-        # Guarda o tick da primeira imagem, ou seja, o momento em que a imagem foi mostrada
-        self.last_update = pygame.time.get_ticks()
-
-        # Controle de ticks de animação: troca de imagem a cada self.frame_ticks milissegundos.
-        # Quando pygame.time.get_ticks() - self.last_update > self.frame_ticks a
-        # próxima imagem da animação será mostrada
-        self.frame_ticks = 200
-
-    def update(self):
-        # Verifica o tick atual.
-        now = pygame.time.get_ticks()
-        # Verifica quantos ticks se passaram desde a ultima mudança de frame.
-        elapsed_ticks = now - self.last_update
-
-        # Se já está na hora de mudar de imagem...
-        if elapsed_ticks > self.frame_ticks:
-            # Marca o tick da nova imagem.
-            self.last_update = now
-
-            # Avança um quadro.
-            self.frame1 += 1
-
-            # Verifica se já chegou no final da animação.
-            if self.frame1 == len(self.bowserjr_deitado):
-                # Se sim, tchau explosão!
-                self.kill()
-            else:
-                # Se ainda não chegou ao fim da explosão, troca de imagem.
-                bottom1 = self.rect.bottom1
-                x1 = self.rect.x1
-                self.image = self.bowserjr_deitado[self.frame1]
-                self.rect = self.image.get_rect()
-                self.rect.bottom1 = bottom1
-                self.rect.x1 = x1
-
-class Toshi_machucado(pygame.sprite.Sprite):
-    # Construtor da classe.
-    def __init__(self, bottom, x, assets):
-        # Construtor da classe mãe (Sprite).
-        pygame.sprite.Sprite.__init__(self)
-
-        # Armazena a animação de explosão
-        self.Toshi_machucado = assets[TOSHI_INJURED]
-
-        # Inicia o processo de animação colocando a primeira imagem na tela.
-        self.frame = 0  # Armazena o índice atual na animação
-        self.image = self.Toshi_machucado[self.frame]  # Pega a primeira imagem
-        self.rect = self.image.get_rect()
-        self.rect.bottom = bottom  # Posiciona o centro da imagem
-        self.rect.x = x
-
-        # Guarda o tick da primeira imagem, ou seja, o momento em que a imagem foi mostrada
-        self.last_update = pygame.time.get_ticks()
-
-        # Controle de ticks de animação: troca de imagem a cada self.frame_ticks milissegundos.
-        # Quando pygame.time.get_ticks() - self.last_update > self.frame_ticks a
-        # próxima imagem da animação será mostrada
-        self.frame_ticks = 100
-
-    def update(self):
-        # Verifica o tick atual.
-        now = pygame.time.get_ticks()
-        # Verifica quantos ticks se passaram desde a ultima mudança de frame.
-        elapsed_ticks = now - self.last_update
-
-        # Se já está na hora de mudar de imagem...
-        if elapsed_ticks > self.frame_ticks:
-            # Marca o tick da nova imagem.
-            self.last_update = now
-
-            # Avança um quadro.
-            self.frame += 1
-
-            # Verifica se já chegou no final da animação.
-            if self.frame == len(self.Toshi_machucado):
-                # Se sim, tchau explosão!
-                self.kill()
-            else:
-                # Se ainda não chegou ao fim da explosão, troca de imagem.
-                bottom = self.rect.bottom
-                x = self.rect.x
-                self.image = self.Toshi_machucado[self.frame]
-                self.rect = self.image.get_rect()
-                self.rect.bottom = bottom
-                self.rect.x = x
