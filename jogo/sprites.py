@@ -1,44 +1,35 @@
 import random
 import pygame
-from config import FPS, WIDTH, inimigo_width, inimigo_height, HEIGHT, BLACK, YELLOW, RED, img_dir, snd_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING, VILAO_WIDHT, VILAO_HEIGHT, ATTACK_HEIGHT, ATTACK_WIDTH, WIDTH_S, HEIGHT_S 
+from config import FPS, WIDTH, inimigo_width, inimigo_height, HEIGHT, BLACK, YELLOW, RED, img_dir, snd_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, VILAO_WIDHT, VILAO_HEIGHT, ATTACK_HEIGHT, ATTACK_WIDTH, WIDTH_S, HEIGHT_S 
 from assets import load_assets, BACKGROUND_E, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, BLOCK, EMPTY, MAP, TOSHI_ATTACK, FLAG, MAP2, BACKGROUND_L, PLAYER_IMG_S_L, PLAYER_IMG_S_R, PLAYER_IMG_S_L_DOWN, PLAYER_IMG_S_R_DOWN, SPAWN, PERRY_DEITADO, BOWSERJR_DEITADO, FIRE, TOSHI_INJURED
 
-# Class que representa os blocos do cenário
-
-class Tile(pygame.sprite.Sprite):
-
-    # Construtor da classe.
-    def __init__(self, tile_img, row, column):
-        # Construtor da classe pai (Sprite).
+class Interactive(pygame.sprite.Sprite):
+    def __init__(self, img, row, column):
         pygame.sprite.Sprite.__init__(self)
-
-        # Aumenta o tamanho do tile.
-        tile_img = pygame.transform.scale(tile_img, (TILE_SIZE, TILE_SIZE))
-
-        # Define a imagem do tile.
-        self.image = tile_img
-        # Detalhes sobre o posicionamento.
+        self.image = img
         self.rect = self.image.get_rect()
-
-        # Posiciona o tile
         self.rect.x = TILE_SIZE * column
+
+class MapElement(Interactive):
+    def __init__(self, img, row, column):
+        super().__init__(img, row, column)
         self.rect.y = TILE_SIZE * row
 
-# Classe Jogador que representa o herói
+class Decoration(MapElement):
+    def __init__(self, img, row, column):
+        super().__init__(img, row, column)
 
-class Character(pygame.sprite.Sprite):
+# Classe Jogador que representa o herói
+class Character(Interactive):
     def __init__(self, characterImg, row, column, blocks, initialSpeed):
 
-        pygame.sprite.Sprite.__init__(self)
-
-        self.image = characterImg
-        self.rect = self.image.get_rect()
-        self.rect.x = column * TILE_SIZE
+        super().__init__(characterImg, row, column)
         self.rect.bottom = row * TILE_SIZE
         self.blocks = blocks
         self.speedx = initialSpeed
         self.speedy = 0
         self.corrigiPosicao = initialSpeed
+        self.state = STILL
     
     
     def update (self):
@@ -51,7 +42,7 @@ class Character(pygame.sprite.Sprite):
         # Se o inimigo bater no final da tela, muda o lado do movimento
         # Tenta andar em x
         if self.speedy > 0:
-            self.state = FALLING
+            self.state = False
         self.rect.x += self.speedx
         # Corrige a posição caso tenha passado do tamanho da janela
         if self.rect.right >= WIDTH:
@@ -65,9 +56,9 @@ class Character(pygame.sprite.Sprite):
 
 
         # Se colidiu com algum bloco, volta para o ponto antes da colisão
-        collisions_ini = pygame.sprite.spritecollide(self, self.blocks, False)
+        collisions = pygame.sprite.spritecollide(self, self.blocks, False)
         # Corrige a posição do personagem para antes da colisão
-        for collision in collisions_ini:
+        for collision in collisions:
             # Estava indo para baixo
             if self.speedy > 0:
                 self.rect.bottom = collision.rect.top
@@ -84,9 +75,9 @@ class Character(pygame.sprite.Sprite):
                 self.state = STILL
 
          # Se colidiu com algum bloco, volta para o ponto antes da colisão e muda de sentido
-        collisions_ini = pygame.sprite.spritecollide(self, self.blocks, False)
+        collisions = pygame.sprite.spritecollide(self, self.blocks, False)
         # Corrige a posição do personagem para antes da colisão
-        for collision in collisions_ini:
+        for collision in collisions:
             # Estava indo para a direita
             if self.speedx > 0:
                 self.rect.right = collision.rect.left
@@ -111,11 +102,11 @@ class Player(Character):
     # Método que faz o personagem pular
     def jump(self):
         # Só pode pular se ainda não estiver pulando ou caindo
-        if self.state == STILL:
+        if self.state:
             self.speedy -= JUMP_SIZE
-            self.state = JUMPING
+            self.state = False
 
-    def attack_right(self):
+    def attack(self, assets, orientation):
     # Verifica se pode atirar
         now = pygame.time.get_ticks()
     # Verifica quantos ticks se passaram desde o último tiro.
@@ -127,29 +118,21 @@ class Player(Character):
         # Marca o tick da nova imagem.
             self.last_attack = now
         # A nova bala vai ser criada logo acima e no centro horizontal da nave
-            new_attack = Attack_right(self.assets, self.rect.centery, self.rect.right)
-            self.groups['all_sprites'].add(new_attack)
-            self.groups['all_bullets'].add(new_attack)
-
-    def attack_left(self):
-    # Verifica se pode atirar
-        now = pygame.time.get_ticks()
-    # Verifica quantos ticks se passaram desde o último tiro.
-        elapsed_ticks = now - self.last_attack
-
-    # Se já pode atirar novamente...
-        if elapsed_ticks > self.attack_ticks:
-            self.assets[FIRE].play()
-        # Marca o tick da nova imagem.
-            self.last_attack = now
-        # A nova bala vai ser criada logo acima e no centro horizontal da nave
-            new_attack = Attack_left(self.assets, self.rect.centery, self.rect.right)
+            new_attack = AttackPlayer(self.assets, self.rect.centery, self.rect.right, orientation)
             self.groups['all_sprites'].add(new_attack)
             self.groups['all_bullets'].add(new_attack)
     def flag(self):
-        if self.state == STILL:
-            self.speedy -= JUMP_SIZE * 1.5 
-            self.state = JUMPING
+        self.speedy -= JUMP_SIZE * 1.5 
+        self.state = False
+
+# Classe inimigo
+class Vilao(Character):
+
+    def __init__(self, vilao_img, row, column, blocks):
+        vilao_img = pygame.transform.scale(vilao_img, (VILAO_WIDHT, VILAO_HEIGHT))
+        super().__init__(vilao_img, row, column, blocks,0)
+    def flag(self):
+        self.speedy -= JUMP_SIZE * 1.5 
 
 
 class inimigo(Character):
@@ -163,20 +146,19 @@ class inimigo(Character):
         self.rect.y = 0
         self.rect.bottom = row * TILE_SIZE
 
-class Attack_right(pygame.sprite.Sprite):
-    # Construtor da classe.
-    def __init__(self, assets, centery, right):
+class AttackPlayer(pygame.sprite.Sprite):
+    def __init__(self, assets, centery, right, orientation):
         # Construtor da classe mãe (Sprite).
         pygame.sprite.Sprite.__init__(self)
-
         self.image = assets[RIGHT_ATTACK]
-        self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
-
-        # Coloca no lugar inicial definido em x, y do constutor
         self.rect.centery = centery
-        self.speedx = 12  
         self.rect.x = right - 20
+        self.speedx = 12
+        if orientation == "left":
+            self.image = assets[LEFT_ATTACK]
+            self.rect.x = right - 50
+            self.speedx = - self.speedx
 
     def update(self):
         # A bala só se move no eixo x
@@ -185,40 +167,6 @@ class Attack_right(pygame.sprite.Sprite):
         # Se o tiro passar do inicio da tela, morre.
         if self.rect.right > WIDTH:
             self.kill()
-
-class Attack_left(pygame.sprite.Sprite):
-    # Construtor da classe.
-    def __init__(self, assets, centery, right):
-        # Construtor da classe mãe (Sprite).
-        pygame.sprite.Sprite.__init__(self)
-
-        self.image = assets[LEFT_ATTACK]
-        self.mask = pygame.mask.from_surface(self.image)
-        self.rect = self.image.get_rect()
-
-        # Coloca no lugar inicial definido em x, y do constutor
-        self.rect.centery = centery
-        self.speedx = 12  
-        self.rect.x = right - 50
-
-    def update(self):
-        # A bala só se move no eixo x
-        self.rect.x -= self.speedx
-
-        # Se o tiro passar do inicio da tela, morre.
-        if self.rect.right > WIDTH:
-            self.kill()
-
-# Classe inimigo
-
-class Vilao(Character):
-
-    def __init__(self, vilao_img, row, column, blocks):
-        vilao_img = pygame.transform.scale(vilao_img, (VILAO_WIDHT, VILAO_HEIGHT))
-        super().__init__(vilao_img, row, column, blocks,0)
-    def flag(self):
-        self.speedy -= JUMP_SIZE * 1.5 
-        self.state = JUMPING
 
 class ataque_vilao (pygame.sprite.Sprite):
 
@@ -249,59 +197,20 @@ class ataque_vilao (pygame.sprite.Sprite):
             self.speedx = random.randint(-2, 2)
             self.speedy = random.randint(1, 3)
 
-class flag (pygame.sprite.Sprite):
-   
-    
-    def __init__(self, assets):
 
-        # Construtor da classe pai (Sprite).
-        pygame.sprite.Sprite.__init__(self)
-
-        self.image = assets[FLAG]
-        self.mask = pygame.mask.from_surface(self.image)
-        self.rect = self.image.get_rect()
-        self.rect.x = 100
-        self.rect.y = 93
-        self.speedx = 0
-        self.speedy = 0
-    def update (self):
-
-        self.rect.x = 100
-        self.rect.y = 93
-        self.speedx = 0
-        self.speedy = 0
-
-class Boss(pygame.sprite.Sprite):
+class Boss(Character):
 
     def __init__(self, vilao_img, assets, groups, row, column, blocks):
-
-        # Construtor da classe pai (Sprite).
-        pygame.sprite.Sprite.__init__(self)
-
-        # Define estado atual
-        # Usamos o estado para decidir se o jogador pode ou não pular
-        self.state = STILL
-
-        # Ajusta o tamanho da imagem
         vilao_img = pygame.transform.scale(vilao_img, (VILAO_WIDHT, VILAO_HEIGHT))
+        super().__init__(vilao_img, row, column, blocks, 0)
 
-        # Define a imagem do sprite. Nesse exemplo vamos usar uma imagem estática (não teremos animação durante o pulo)
-        self.image = vilao_img
-        # Detalhes sobre o posicionamento.
-        self.rect = self.image.get_rect()
         self.groups = groups
         self.assets = assets
-        # Posiciona o personagem
-        # row é o índice da linha embaixo do personagem
         self.rect.centerx = column * TILE_SIZE
         self.rect.y = row * TILE_SIZE
-        self.speedx = 0
-        self.speedy = 0
         self.lives = 5
         self.last_attack = pygame.time.get_ticks()
         self.attack_ticks = 1500
-
-        self.blocks = blocks
     
     def update(self):
 
@@ -359,7 +268,6 @@ class ataque_boss (pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
 
         self.image = pygame.transform.scale(assets[TOSHI_ATTACK], (40, 40))
-        self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
         # Posiciona o personagem
         # row é o índice da linha embaixo do personagem
@@ -385,9 +293,6 @@ class Player_b(pygame.sprite.Sprite):
         # Construtor da classe pai (Sprite).
         pygame.sprite.Sprite.__init__(self)
 
-        # Define estado atual
-        # Usamos o estado para decidir se o jogador pode ou não pular
-        self.state = STILL
         #gravidade
         self.gravity = 5/2
         # Define a imagem do sprite. Nesse exemplo vamos usar uma imagem estática (não teremos animação durante o pulo)
@@ -424,10 +329,7 @@ class Player_b(pygame.sprite.Sprite):
 
         # Tenta andar em y
         # Atualiza a velocidade aplicando a aceleração da gravidade
-        self.speedx -=  self.gravity/2 #GRAVITY/2 
-        # Atualiza o estado para caindo
-        if self.speedx * self.gravity > 0: 
-            self.state = FALLING
+        self.speedx -=  self.gravity/2 #GRAVITY/2
         # Atualiza a posição x
         self.rect.x += self.speedx
 
@@ -440,14 +342,10 @@ class Player_b(pygame.sprite.Sprite):
                 self.rect.left = collision.rect.right
                 # Se colidiu com algo, para de cair
                 self.speedx = 0
-                # Atualiza o estado para parado
-                self.state = STILL
             elif self.speedx > 0:
                 self.rect.right = collision.rect.left
                 # Se colidiu com algo, para de cair
                 self.speedx = 0
-                # Atualiza o estado para parado
-                self.state = STILL
 
         # Tenta andar em x
         self.rect.y += self.speedy
@@ -525,22 +423,6 @@ class Attack_up(pygame.sprite.Sprite):
         # Se o tiro passar do inicio da tela, morre.
         if self.rect.bottom < 0:
             self.kill()
-
-class Spawn(pygame.sprite.Sprite):
-
-    # Construtor da classe.
-    def __init__(self, spawn_img, row, column):
-        # Construtor da classe pai (Sprite).
-        pygame.sprite.Sprite.__init__(self)
-
-        # Define a imagem do tile.
-        self.image = spawn_img
-        # Detalhes sobre o posicionamento.
-        self.rect = self.image.get_rect()
-
-        # Posiciona o tile
-        self.rect.x = TILE_SIZE * column
-        self.rect.y = TILE_SIZE * row
 
 class inimigoMorto(pygame.sprite.Sprite):
     def __init__(self, bottom, x, assets, personagem, ticks):

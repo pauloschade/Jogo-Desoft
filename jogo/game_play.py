@@ -1,5 +1,5 @@
 import pygame
-from config import FPS, TITULO, WIDTH, HEIGHT, BLACK, YELLOW, RED, img_dir, snd_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING, inimigo_height, inimigo_width, WIDTH_S, HEIGHT_S, QUIT, GAME
+from config import FPS, TITULO, WIDTH, HEIGHT, BLACK, YELLOW, RED, img_dir, snd_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, inimigo_height, inimigo_width, WIDTH_S, HEIGHT_S, QUIT, GAME
 from hist import hist
 from hist2 import hist2
 from game_screen import game_screen

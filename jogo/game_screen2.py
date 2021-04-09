@@ -1,7 +1,7 @@
 import pygame
-from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, BLUE, GREEN, img_dir, snd_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING
-from assets import load_assets, BACKGROUND_L, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, INIMIGO2_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, BLOCK, EMPTY, SCORE_FONT, MAP2, BOWSERJR_DEITADO, BSRJR_NOISE, WAKANDA_FOREVER, JUMP_NOISE
-from sprites import Tile, Player, inimigo, Vilao, Attack_right, Attack_left, ataque_vilao, flag, inimigoMorto
+from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, BLUE, GREEN, img_dir, snd_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL
+from assets import load_assets, BACKGROUND_L, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, INIMIGO2_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, BLOCK, EMPTY, SCORE_FONT, MAP2, BOWSERJR_DEITADO, BSRJR_NOISE, WAKANDA_FOREVER, JUMP_NOISE, FLAG
+from sprites import Decoration, Player, inimigo, Vilao, AttackPlayer, ataque_vilao, inimigoMorto
 from os import path
 
 # esse é o arquivo do segundo nível
@@ -56,7 +56,8 @@ def game_screen2(screen, bank):
         for column in range(len(MAP2[row])):
             tile_type = MAP2[row][column]
             if tile_type == BLOCK:
-                tile = Tile(assets[tile_type], row, column)
+                block = pygame.transform.scale(assets[tile_type], (TILE_SIZE, TILE_SIZE))
+                tile = Decoration(block, row, column)
                 all_sprites.add(tile)
                 blocks.add(tile)
 
@@ -65,7 +66,7 @@ def game_screen2(screen, bank):
     all_sprites.add(player)
 
     # adiciona bandeira
-    Flag = flag(assets)
+    Flag = Decoration(assets[FLAG], 2.3, 2.5)
     all_sprites.add(Flag)
     all_flags.add(Flag)
     keys_down = {}
@@ -113,10 +114,7 @@ def game_screen2(screen, bank):
                 elif event.key == pygame.K_UP:
                     player.jump()
                 elif event.key == pygame.K_SPACE:
-                    if player.orientation == 'right':
-                        player.attack_right()
-                    elif player.orientation == 'left':
-                        player.attack_left()
+                    player.attack(assets, player.orientation)
 
 
             # Verifica se soltou alguma tecla.
