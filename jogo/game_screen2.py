@@ -1,7 +1,7 @@
 import pygame
-from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, BLUE, GREEN, img_dir, snd_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING
-from assets import load_assets, BACKGROUND_L, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, INIMIGO2_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, BLOCK, EMPTY, SCORE_FONT, MAP2, BOWSERJR_DEITADO, BSRJR_NOISE, WAKANDA_FOREVER, JUMP_NOISE
-from sprites import Tile, Player, inimigo, Vilao, Attack_right, Attack_left, ataque_vilao, flag, Bowserjr_deitado 
+from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, BLUE, GREEN, img_dir, snd_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL
+from assets import load_assets, BACKGROUND_L, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, INIMIGO2_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, BLOCK, EMPTY, SCORE_FONT, MAP2, BOWSERJR_DEITADO, BSRJR_NOISE, WAKANDA_FOREVER, JUMP_NOISE, FLAG
+from sprites import Decoration, Player, Inimigo, Vilao, AttackPlayer, AttackVilao, InimigoMorto
 from os import path
 
 # esse é o arquivo do segundo nível
@@ -37,7 +37,7 @@ def game_screen2(screen, bank):
 
     # Criando os inimigos
     for i in range(4):
-        inimigos2 = inimigo(assets[INIMIGO2_IMG], 4 + 3 * i , i, blocks)
+        inimigos2 = Inimigo(assets[INIMIGO2_IMG], 4 + 3 * i , i, blocks)
         all_sprites.add(inimigos2)
         all_inimigos.add(inimigos2)
 
@@ -46,7 +46,7 @@ def game_screen2(screen, bank):
     all_sprites.add(vilao)
 
     for i in range(3):
-        ataquess= ataque_vilao(assets)
+        ataquess= AttackVilao(assets)
         all_sprites.add(ataquess)
         all_toshi_attacks.add(ataquess)
     
@@ -56,7 +56,8 @@ def game_screen2(screen, bank):
         for column in range(len(MAP2[row])):
             tile_type = MAP2[row][column]
             if tile_type == BLOCK:
-                tile = Tile(assets[tile_type], row, column)
+                block = pygame.transform.scale(assets[tile_type], (TILE_SIZE, TILE_SIZE))
+                tile = Decoration(block, row, column)
                 all_sprites.add(tile)
                 blocks.add(tile)
 
@@ -65,7 +66,7 @@ def game_screen2(screen, bank):
     all_sprites.add(player)
 
     # adiciona bandeira
-    Flag = flag(assets)
+    Flag = Decoration(assets[FLAG], 2.3, 2.5)
     all_sprites.add(Flag)
     all_flags.add(Flag)
     keys_down = {}
@@ -113,10 +114,7 @@ def game_screen2(screen, bank):
                 elif event.key == pygame.K_UP:
                     player.jump()
                 elif event.key == pygame.K_SPACE:
-                    if player.orientation == 'right':
-                        player.attack_right()
-                    elif player.orientation == 'left':
-                        player.attack_left()
+                    player.attack(assets, player.orientation)
 
 
             # Verifica se soltou alguma tecla.
@@ -164,17 +162,17 @@ def game_screen2(screen, bank):
                 if score == 800:
                     lives += 1
             for ataquess in hits3:
-                ataquess= ataque_vilao(assets)
+                ataquess= AttackVilao(assets)
                 all_sprites.add(ataquess)
                 all_toshi_attacks.add(ataquess)
             for inimigos2 in hits2:
-                inimigos2 = inimigo(assets[INIMIGO2_IMG], 0 , 0, blocks)
+                inimigos2 = Inimigo(assets[INIMIGO2_IMG], 0 , 0, blocks)
                 all_sprites.add(inimigos2)
                 all_inimigos.add(inimigos2)
             for inimigos2 in hits:
                 assets[BSRJR_NOISE].play()
                 # No lugar do bowser antigo, adicionar um bowser morto.
-                bowserjr = Bowserjr_deitado(inimigos2.rect.bottom, inimigos2.rect.x, assets)
+                bowserjr = InimigoMorto(inimigos2.rect.bottom, inimigos2.rect.x, assets, BOWSERJR_DEITADO, 200)
                 all_sprites.add(bowserjr)
                 inimigos2.kill()
 
