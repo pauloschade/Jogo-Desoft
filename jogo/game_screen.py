@@ -1,7 +1,7 @@
 import pygame
-from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, BLUE, GREEN, img_dir, snd_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING
-from assets import load_assets, BACKGROUND_E, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, BLOCK, EMPTY, MAP, SCORE_FONT, PERRY_NOISE, WAKANDA_FOREVER, JUMP_NOISE
-from sprites import Tile, Player, inimigo, Vilao, Attack_right, Attack_left, ataque_vilao, flag, Perry_deitado
+from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, BLUE, GREEN, img_dir, snd_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL
+from assets import load_assets, BACKGROUND_E, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, BLOCK, EMPTY, MAP, SCORE_FONT, PERRY_NOISE, WAKANDA_FOREVER, JUMP_NOISE, PERRY_DEITADO, FLAG
+from sprites import Decoration, Player, Inimigo, Vilao, AttackPlayer, AttackVilao, InimigoMorto
 from os import path
 
 # esse é o arquivo que roda o nível 2 do jogo
@@ -37,7 +37,7 @@ def game_screen(screen):
 
     # Criando os inimigos
     for i in range(4):
-        inimigoss = inimigo(assets[INIMIGO_IMG], 4 + 3 * i , -1, blocks)
+        inimigoss = Inimigo(assets[INIMIGO_IMG], 4 + 3 * i , -1, blocks)
         all_sprites.add(inimigoss)
         all_inimigos.add(inimigoss)
 
@@ -49,7 +49,7 @@ def game_screen(screen):
     all_sprites.add(vilao)
 
     for i in range(2):
-        ataquess= ataque_vilao(assets)
+        ataquess= AttackVilao(assets)
         all_sprites.add(ataquess)
         all_toshi_attacks.add(ataquess)
     
@@ -59,7 +59,8 @@ def game_screen(screen):
         for column in range(len(MAP[row])):
             tile_type = MAP[row][column]
             if tile_type == BLOCK:
-                tile = Tile(assets[tile_type], row, column)
+                block = pygame.transform.scale(assets[tile_type], (TILE_SIZE, TILE_SIZE))
+                tile = Decoration(block, row, column)
                 all_sprites.add(tile)
                 blocks.add(tile)
 
@@ -68,7 +69,7 @@ def game_screen(screen):
     all_sprites.add(player)
 
     # adiciona bandeira
-    Flag = flag(assets)
+    Flag = Decoration(assets[FLAG], 2.3, 2.5)
     all_sprites.add(Flag)
     all_flags.add(Flag)
     keys_down = {}
@@ -110,10 +111,7 @@ def game_screen(screen):
                 elif event.key == pygame.K_UP:
                     player.jump()
                 elif event.key == pygame.K_SPACE:
-                    if player.orientation == 'right':
-                        player.attack_right()
-                    elif player.orientation == 'left':
-                        player.attack_left()
+                    player.attack(assets, player.orientation)
 
             # Verifica se soltou alguma tecla.
             if event.type == pygame.KEYUP:
@@ -159,17 +157,17 @@ def game_screen(screen):
                 if score == 800:
                     lives += 1
             for ataquess in hits3:
-                ataquess= ataque_vilao(assets)
+                ataquess= AttackVilao(assets)
                 all_sprites.add(ataquess)
                 all_toshi_attacks.add(ataquess)
             for inimigoss in hits2:
-                inimigoss = inimigo(assets[INIMIGO_IMG], 0 , 0, blocks)
+                inimigoss = Inimigo(assets[INIMIGO_IMG], 0 , 0, blocks)
                 all_sprites.add(inimigoss)
                 all_inimigos.add(inimigoss)
             for inimigoss in hits:
                 # No lugar do perry antigo, adicionar um perry morto.
                 assets[PERRY_NOISE].play()
-                perry = Perry_deitado(inimigoss.rect.bottom, inimigoss.rect.x, assets)
+                perry = InimigoMorto(inimigoss.rect.bottom, inimigoss.rect.x, assets, PERRY_DEITADO, 400)
                 all_sprites.add(perry)
                 inimigoss.kill()
 

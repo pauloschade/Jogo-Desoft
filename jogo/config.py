@@ -62,6 +62,4 @@ SPEED_Y = 2
 
 
 # Define estados possíveis do jogador
-STILL = 0
-JUMPING = 1
-FALLING = 2
+STILL = True
