@@ -1,6 +1,6 @@
 import pygame
 import json
-from config import FPS, TITULO, WIDTH, HEIGHT, BLACK, YELLOW, RED, BLUE, img_dir, snd_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, inimigo_height, inimigo_width, WIDTH_S, HEIGHT_S, QUIT, GAME
+from config import FPS, TITULO, WIDTH, HEIGHT, BLACK, YELLOW, RED, BLUE, img_dir, snd_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING, inimigo_height, inimigo_width, WIDTH_S, HEIGHT_S, QUIT, GAME
 from os import path
 from assets import load_assets, SCORE_FONT
 

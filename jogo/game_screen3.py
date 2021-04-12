@@ -1,7 +1,7 @@
 import pygame
-from config import FPS, WIDTH_S, HEIGHT_S, BLACK, YELLOW, RED, BLUE, GREEN, img_dir, snd_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, SPEED_Y
-from sprites import Decoration, Player, PlayerBoss, Inimigo, Vilao, AttackPlayer, AttackVilao, Boss, InimigoMorto
-from assets import load_assets, BACKGROUND_L, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, BLOCK, EMPTY, SCORE_FONT, MAP2, PLAYER_IMG_S_L, PLAYER_IMG_S_R, BACKGROUND_S, MAP3, BOSS, SPAWN, WAKANDA_FOREVER, BOSS_NOISE, TOSHI_INJURED
+from config import FPS, WIDTH_S, HEIGHT_S, BLACK, YELLOW, RED, BLUE, GREEN, img_dir, snd_dir, PLAYER_WIDTH, PLAYER_HEIGHT, TILE_SIZE, GRAVITY, JUMP_SIZE, SPEED_X, STILL, JUMPING, FALLING, SPEED_Y
+from sprites import Tile, Player, Player_b, inimigo, Vilao, Attack_right, Attack_left, ataque_vilao, flag, Boss, ataque_boss, Spawn, Toshi_machucado
+from assets import load_assets, BACKGROUND_L, PLAYER_IMG_R, PLAYER_IMG_L, INIMIGO_IMG, VILAO_IMG, RIGHT_ATTACK, LEFT_ATTACK, UP_ATTACK, BLOCK, EMPTY, SCORE_FONT, MAP2, PLAYER_IMG_S_L, PLAYER_IMG_S_R, BACKGROUND_S, MAP3, BOSS, SPAWN, WAKANDA_FOREVER, BOSS_NOISE
 from os import path
 # esse é o arquivo do terceiro nível
 
@@ -24,7 +24,7 @@ def game_screen3(screen, bank):
 
 
     # Cria Sprite do jogador
-    player = PlayerBoss(assets[PLAYER_IMG_S_L], groups, assets, 13, 1, blocks)
+    player = Player_b(assets[PLAYER_IMG_S_L], groups, assets, 13, 1, blocks)
 
     BACKGROUND_S = pygame.image.load(path.join(img_dir, 'space.png')).convert_alpha()
     BACKGROUND_S = pygame.transform.scale(BACKGROUND_S, (WIDTH_S, HEIGHT_S))
@@ -34,7 +34,7 @@ def game_screen3(screen, bank):
     all_sprites.add(boss)
 
     #imagem spawn
-    spawn = Decoration(assets[SPAWN], 12, 1)
+    spawn = Spawn(assets[SPAWN], 12, 1)
     all_sprites.add(spawn)
 
     # Cria tiles de acordo com o mapa
@@ -42,9 +42,7 @@ def game_screen3(screen, bank):
         for column in range(len(MAP3[row])):
             tile_type = MAP3[row][column]
             if tile_type == BLOCK:
-                block = pygame.image.load(path.join(img_dir, 'tile_space.png')).convert_alpha()
-                block = pygame.transform.scale(block, (TILE_SIZE, TILE_SIZE))
-                tile = Decoration(block, row, column)
+                tile = Tile(pygame.image.load(path.join(img_dir, 'tile_space.png')).convert_alpha(), row, column)
                 all_sprites.add(tile)
                 blocks.add(tile)
     
@@ -117,6 +115,8 @@ def game_screen3(screen, bank):
             # Verifica se houve colisão entre tiro e meteoro
             hits3 = pygame.sprite.spritecollide(player, all_toshi_attacks, True, pygame.sprite.collide_mask)
             hits4 = pygame.sprite.spritecollide(boss, all_bullets, True, pygame.sprite.collide_mask)
+            hits5 = pygame.sprite.spritecollide(spawn, all_bullets, True, pygame.sprite.collide_mask)
+            hits6 = pygame.sprite.spritecollide(spawn, all_toshi_attacks, True, pygame.sprite.collide_mask)
             if len(hits3) > 0:
                 assets[WAKANDA_FOREVER].play()   
                 lives -= 1
@@ -128,17 +128,17 @@ def game_screen3(screen, bank):
                     state = OVER
                 else:
                     state = PLAYING
-                    player = PlayerBoss(assets[PLAYER_IMG_S_L], groups, assets, 13, 1, blocks)
+                    player = Player_b(assets[PLAYER_IMG_S_L], groups, assets, 13, 1, blocks)
                     all_sprites.add(player)
             for ataquess in hits3:
-                ataquess= AttackVilao(assets)
+                ataquess= ataque_vilao(assets)
                 all_sprites.add(ataquess)
                 all_toshi_attacks.add(ataquess)
             if len(hits4) > 0:
                 assets[BOSS_NOISE].play()
                 score += 100
                 boss.lives -= 1
-                boss_injured = InimigoMorto(boss.rect.bottom, boss.rect.x, assets, TOSHI_INJURED, 100)
+                boss_injured = Toshi_machucado(boss.rect.bottom, boss.rect.x, assets)
                 all_sprites.add(boss_injured)
                 if boss.lives == 0:
                     state = WIN
