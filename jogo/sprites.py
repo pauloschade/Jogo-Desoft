@@ -32,10 +32,53 @@ class Character(Interactive):
         self.speedy = 0
         self.correctPosition = initialSpeed
         self.state = STILL
-        
-    def update(self):
-        updateCharacter(self)
 
+    def inmap(self):
+        if self.rect.right >= WIDTH:
+            self.rect.right = WIDTH - 1
+            if self.correctPosition == 1:
+                self.speedx = -1
+        elif self.rect.left < 0:
+            self.rect.left = 0
+            if self.correctPosition == 1:
+                self.speedx = 1
+
+    def colisaoVertical(self):
+        collisions = pygame.sprite.spritecollide(self, self.blocks, False)
+        for collision in collisions:
+            if self.speedy > 0:
+                self.rect.bottom = collision.rect.top
+                self.speedy = 0
+                self.state = STILL
+            elif self.speedy < 0:
+                self.rect.top = collision.rect.bottom
+                self.speedy = 0
+                self.state = STILL
+
+    def colisaoHorizontal(self):
+        collisions = pygame.sprite.spritecollide(self, self.blocks, False)
+        for collision in collisions:
+            if self.speedx > 0:
+                self.rect.right = collision.rect.left
+                if self.correctPosition != 0:
+                    self.speedx = -self.correctPosition
+            elif self.speedx < 0:
+                self.rect.left = collision.rect.right
+                if self.correctPosition != 0:
+                    self.speedx = self.correctPosition
+    def colisao(self):
+        self.colisaoVertical()
+        self.colisaoHorizontal()
+
+    def update (self):
+        self.speedy += GRAVITY
+        self.rect.x += self.speedx
+        self.rect.y += self.speedy
+        if self.speedy > 0:
+            self.state = False
+        self.rect.x += self.speedx
+        self.inmap()
+        self.colisao()
 
 class Player(Character):
     def __init__(self, player_img, groups, assets, row, column, blocks):
@@ -95,9 +138,11 @@ class AttackPlayer(pygame.sprite.Sprite):
             self.image = assets[LEFT_ATTACK]
             self.rect.x = right - 50
             self.speedx = - self.speedx
-
     def update(self):
-        updateAttackPlayer(self)
+        self.rect.x += self.speedx
+        if self.rect.right > WIDTH:
+            self.kill()
+
 
 
 class AttackVilao (pygame.sprite.Sprite):
@@ -194,9 +239,31 @@ class PlayerBoss(pygame.sprite.Sprite):
         self.attack_ticks = 1000
 
     def update(self):
-        updatePlayerBoss(self)
+        self.speedx -=  self.gravity/2
+        self.rect.x += self.speedx
+        collisions = pygame.sprite.spritecollide(self, self.blocks, False)
+        for collision in collisions:
+            if self.speedx < 0:
+                self.rect.left = collision.rect.right
+                self.speedx = 0
+            elif self.speedx > 0:
+                self.rect.right = collision.rect.left
+                self.speedx = 0
 
-    def attackUp(self):
+        self.rect.y += self.speedy
+        if self.rect.top < 0:
+            self.rect.top = 0
+        elif self.rect.bottom >= HEIGHT_S:
+            self.rect.bottom = HEIGHT_S - 1
+
+        collisions = pygame.sprite.spritecollide(self, self.blocks, False)
+        for collision in collisions:
+            if self.speedy > 0:
+                self.rect.bottom = collision.rect.top
+            elif self.speedy < 0:
+                self.rect.top = collision.rect.bottom
+
+    def attack_up(self):
         now = pygame.time.get_ticks()
         elapsed_ticks = now - self.last_attack
         if elapsed_ticks > self.attack_ticks:
@@ -268,80 +335,4 @@ class InimigoMorto(pygame.sprite.Sprite):
                 self.rect.x = x
 
 
-def updateCharacter (objeto):
-    objeto.speedy += GRAVITY
-    objeto.rect.x += objeto.speedx
-    objeto.rect.y += objeto.speedy
-    if objeto.speedy > 0:
-        objeto.state = False
-    objeto.rect.x += objeto.speedx
-    inmap(objeto)
-    colisao(objeto)
-
-def inmap(objeto):
-    if objeto.rect.right >= WIDTH:
-        objeto.rect.right = WIDTH - 1
-        if objeto.correctPosition == 1:
-            objeto.speedx = -1
-    elif objeto.rect.left < 0:
-        objeto.rect.left = 0
-        if objeto.correctPosition == 1:
-            objeto.speedx = 1
-
-def colisao(objeto):
-    colisaoVertical(objeto)
-    colisaoHorizontal(objeto)
-
-def colisaoVertical(objeto):
-    collisions = pygame.sprite.spritecollide(objeto, objeto.blocks, False)
-    for collision in collisions:
-        if objeto.speedy > 0:
-            objeto.rect.bottom = collision.rect.top
-            objeto.speedy = 0
-            objeto.state = STILL
-        elif objeto.speedy < 0:
-            objeto.rect.top = collision.rect.bottom
-            objeto.speedy = 0
-            objeto.state = STILL
-
-def colisaoHorizontal(objeto):
-    collisions = pygame.sprite.spritecollide(objeto, objeto.blocks, False)
-    for collision in collisions:
-        if objeto.speedx > 0:
-            objeto.rect.right = collision.rect.left
-            if objeto.correctPosition != 0:
-                objeto.speedx = -objeto.correctPosition
-        elif objeto.speedx < 0:
-            objeto.rect.left = collision.rect.right
-            if objeto.correctPosition != 0:
-                objeto.speedx = objeto.correctPosition
-
-def updateAttackPlayer(objeto):
-    objeto.rect.x += objeto.speedx
-    if objeto.rect.right > WIDTH:
-        objeto.kill()
-
-def updatePlayerBoss(objeto):
-    objeto.speedx -=  objeto.gravity/2
-    objeto.rect.x += objeto.speedx
-    collisions = pygame.sprite.spritecollide(objeto, objeto.blocks, False)
-    for collision in collisions:
-        if objeto.speedx < 0:
-            objeto.rect.left = collision.rect.right
-            objeto.speedx = 0
-        elif objeto.speedx > 0:
-            objeto.rect.right = collision.rect.left
-            objeto.speedx = 0
-
-    objeto.rect.y += objeto.speedy
-    if objeto.rect.top < 0:
-        objeto.rect.top = 0
-    elif objeto.rect.bottom >= HEIGHT_S:
-        objeto.rect.bottom = HEIGHT_S - 1
-
-    collisions = pygame.sprite.spritecollide(objeto, objeto.blocks, False)
-    for collision in collisions:
-        if objeto.speedy > 0:
-            objeto.rect.bottom = collision.rect.top
-        elif objeto.speedy < 0:
-            objeto.rect.top = collision.rect.bottom
+    
